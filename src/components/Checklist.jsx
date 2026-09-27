@@ -55,7 +55,7 @@ export default function Checklist() {
 
       {items.length === 0 && (
         <div style={{ fontSize: 12.5, color: 'var(--subtle)', fontStyle: 'italic', padding: '2px 0 8px' }}>
-          No tasks yet — add one below and pick a color to organise.
+          No tasks yet. Add one below and pick a color to organise.
         </div>
       )}
 

@@ -465,8 +465,8 @@ function QuickRow({ user, nav, onGreen }) {
   // ---- circle bloom: grows from the tapped circle into a full-screen, half-and-half coloured panel ----
   const { setBar } = useTheme();
   const MORALE = {
-    countdown: ['Small steps every day add up to big results.', 'Trust the process — keep showing up.', 'The date is fixed; your effort compounds.'],
-    streak: ['Consistency beats intensity.', 'Discipline today, freedom tomorrow.', 'Show up again — that is the whole secret.'],
+    countdown: ['Small steps every day add up to big results.', 'Trust the process. Keep showing up.', 'The date is fixed; your effort compounds.'],
+    streak: ['Consistency beats intensity.', 'Discipline today, freedom tomorrow.', 'Show up again. That is the whole secret.'],
     qbank: ['Every question makes you sharper.', 'Progress, not perfection.', 'Wrong answers today, right ones on the day.'],
     flashcards: ['Review beats re-reading, every time.', 'Spaced repetition is quiet superpower.', 'A few cards now saves hours later.'],
   };
@@ -627,7 +627,7 @@ function QuickRow({ user, nav, onGreen }) {
               </div>
               <div style={{ display: 'inline-block', fontSize: 12, fontWeight: 700, color: 'var(--forest)', background: 'var(--paper-2)', borderRadius: 999, padding: '5px 14px', margin: '14px 0 2px' }}>{line}</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 8 }}>
-                {studiedToday ? '🔥 Today is logged — see you tomorrow' : '🔥 Tap the flame on Home to log today'}
+                {studiedToday ? '🔥 Today is logged, see you tomorrow' : '🔥 Tap the flame on Home to log today'}
               </div>
               {!studiedToday && (
                 <button className="btn btn-cta" style={{ marginTop: 12 }} disabled={marking} onClick={markStudy}>
@@ -739,7 +739,7 @@ function QuickRow({ user, nav, onGreen }) {
                       </div>
                     </div>
                     <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 16 }}>
-                      {studiedToday ? '🔥 Today is logged — see you tomorrow' : '🔥 Tap below to log today'}
+                      {studiedToday ? '🔥 Today is logged, see you tomorrow' : '🔥 Tap below to log today'}
                     </div>
                     {!studiedToday && (
                       <button className="btn btn-cta" style={{ maxWidth: 220, margin: '0 auto' }} disabled={marking} onClick={markStudy}>{marking ? '…' : 'Mark today ✓'}</button>
@@ -916,7 +916,7 @@ export default function Home() {
   const inviteFriend = async () => {
     const data = {
       title: 'MedConnect',
-      text: "I'm using MedConnect to find study partners for medical exams — doctors only, matched by exam. Join me:",
+      text: "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me:",
       url: 'https://med-connect3-0.vercel.app',
     };
     try {
@@ -938,7 +938,7 @@ export default function Home() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ flex: 1, fontFamily: "'Newsreader', Georgia, serif", fontSize: 18, fontWeight: 500, lineHeight: 1.42 }}>
               <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 25, fontWeight: 700, color: 'var(--gold)', verticalAlign: '-9px', lineHeight: 0, marginRight: 1 }}>“</span>{quote.text}<span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 25, fontWeight: 700, color: 'var(--gold)', verticalAlign: '-9px', lineHeight: 0, marginLeft: 1 }}>”</span>
-              {quote.author && <span style={{ display: 'block', fontFamily: "'Newsreader', Georgia, serif", fontSize: 13, fontStyle: 'italic', color: 'var(--gold)', marginTop: 6 }}>— {quote.author}</span>}
+              {quote.author && <span style={{ display: 'block', fontFamily: "'Newsreader', Georgia, serif", fontSize: 13, fontStyle: 'italic', color: 'var(--gold)', marginTop: 6 }}>{quote.author}</span>}
             </div>
             <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.14)', display: 'grid', placeItems: 'center', fontSize: 16, flexShrink: 0 }}>›</div>
           </div>
@@ -990,7 +990,7 @@ export default function Home() {
             return (
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'rgba(224,179,65,.16)', border: '1px solid rgba(224,179,65,.3)', borderRadius: 14, padding: '11px 14px', marginTop: 14, color: '#fff' }}>
                 <span style={{ fontSize: 15 }}>✨</span>
-                <span style={{ flex: 1, fontSize: 12.5, fontWeight: 700, color: 'var(--gold)' }}>Today's plan complete — nice work!</span>
+                <span style={{ flex: 1, fontSize: 12.5, fontWeight: 700, color: 'var(--gold)' }}>Today's plan complete. Nice work!</span>
               </div>
             );
           }

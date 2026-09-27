@@ -166,7 +166,7 @@ export default function Qbank() {
         <div style={{ position: 'absolute', right: -8, bottom: -16, fontSize: 88, opacity: .1, lineHeight: 1, pointerEvents: 'none' }}>📊</div>
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7, position: 'relative' }}>✦ Progress</div>
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 24, lineHeight: 1, position: 'relative' }}>Qbank Tracker</h1>
-        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, position: 'relative' }}>Track your question-bank progress — solo or shared with a partner.</p>
+        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, position: 'relative' }}>Track your question-bank progress, solo or shared with a partner.</p>
       </div>
       <div style={{ background: 'var(--paper)', borderRadius: '26px 26px 0 0', marginTop: -20, position: 'relative', padding: '20px 16px 90px', minHeight: '60vh' }}>
 
@@ -233,8 +233,8 @@ export default function Qbank() {
       {/* INLINE sharing panel — part of the page, scrolls naturally, no modal */}
       {shareSection && (
         <div style={{ background: 'var(--card)', border: '1.5px solid var(--line)', borderRadius: 16, padding: '14px 15px', marginBottom: 18 }}>
-          <p className="sub" style={{ fontSize: 12.5, marginBottom: 4 }}>Private by default. Turn a partner on to let them see your chapter accuracy for “{bank}”. Off anytime — stops instantly.</p>
-          <p className="sub" style={{ fontSize: 11, color: 'var(--subtle)', marginBottom: 10 }}>🔒 Shows accuracy only — never your actual questions.</p>
+          <p className="sub" style={{ fontSize: 12.5, marginBottom: 4 }}>Private by default. Turn a partner on to let them see your chapter accuracy for “{bank}”. Off anytime: stops instantly.</p>
+          <p className="sub" style={{ fontSize: 11, color: 'var(--subtle)', marginBottom: 10 }}>🔒 Shows accuracy only: never your actual questions.</p>
           {partnersLoading && <div className="spinner" style={{ margin: '18px auto' }} />}
           {!partnersLoading && partners.length === 0 && <p className="sub" style={{ padding: '6px 0' }}>No connected partners yet.</p>}
           {partners.map((p) => {

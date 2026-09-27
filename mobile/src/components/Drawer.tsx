@@ -45,7 +45,7 @@ export default function DrawerHost() {
       await Share.share({
         title: 'MedConnect',
         message:
-          "I'm using MedConnect to find study partners for medical exams — doctors only, matched by exam. Join me: " +
+          "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me: " +
           SHARE_URL,
         url: SHARE_URL,
       });
@@ -133,7 +133,7 @@ export default function DrawerHost() {
         {/* checklist — TODO(wave B): port src/components/Checklist.jsx */}
         <View style={styles.scroll}>
           <View style={styles.checklistTodo}>
-            <Text style={{ fontSize: 13, color: colors.subtle }}>Checklist — coming in Wave B</Text>
+            <Text style={{ fontSize: 13, color: colors.subtle }}>Checklist: coming in Wave B</Text>
           </View>
 
           {sections.map((sect, i) => (

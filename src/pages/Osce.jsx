@@ -59,11 +59,11 @@ const TOTAL_STATIONS = {
 const SCENARIOS = {
   // ---- MRCP PACES ----
   'Breathlessness history': 'You are seeing Mr Khan, a 58-year-old retired teacher, in the medical clinic. Over the past three months he has noticed he becomes breathless walking up the stairs at home, and now stops twice on the way up. He has a long smoking history. Take a focused history from him, then summarise your findings and outline your differential and initial investigations.',
-  'Thyroid eye disease': 'A 42-year-old office worker attends clinic concerned about her appearance — she feels her eyes have started "bulging" and they often feel gritty and watery. She has also lost some weight recently. Take a focused history and assess her thyroid status and eye involvement, then explain your impression and the next steps to her.',
+  'Thyroid eye disease': 'A 42-year-old office worker attends clinic concerned about her appearance. She feels her eyes have started "bulging" and they often feel gritty and watery. She has also lost some weight recently. Take a focused history and assess her thyroid status and eye involvement, then explain your impression and the next steps to her.',
   'Breaking bad news': 'You are in a quiet side room with a 62-year-old whose recent CT scan shows what is almost certainly metastatic cancer. They have come in expecting "the results." Sensitively share the news, respond to their reaction, address their immediate concerns and questions, and agree the next steps together.',
   // ---- MRCS Part B ----
   'Anatomy — brachial plexus': 'At this anatomy station you are shown a labelled diagram of the brachial plexus. Describe its structure from roots to terminal branches, and explain the clinical consequences of injury at two different points along its course.',
-  'Consent for chole': 'A 45-year-old with symptomatic gallstones is on the list for an elective laparoscopic cholecystectomy tomorrow. Take informed consent: explain the procedure in plain terms, the benefits, the common and serious risks, the alternatives, and what recovery involves — and respond to their questions.',
+  'Consent for chole': 'A 45-year-old with symptomatic gallstones is on the list for an elective laparoscopic cholecystectomy tomorrow. Take informed consent: explain the procedure in plain terms, the benefits, the common and serious risks, the alternatives, and what recovery involves, then respond to their questions.',
   'Examine neck lump': 'A 35-year-old presents having noticed a lump at the front of the neck. Carry out a focused examination of the neck lump as you would in the exam, commenting on your findings as you go, then present your findings and your differential diagnosis.',
   // ---- PLAB 2 / UKMLA ----
   'Chest pain history': 'A 45-year-old has presented to the Emergency Department with central chest pain that began two hours ago. Take a focused history to characterise the pain and screen for red flags and cardiac risk factors, then summarise and give your differential and immediate plan.',
@@ -72,7 +72,7 @@ const SCENARIOS = {
   // ---- FCPS — IMM / Clinical ----
   'Examine the cardiovascular system': 'A 55-year-old has been admitted with exertional breathlessness and ankle swelling. Perform a focused cardiovascular examination, commenting on your findings as you proceed, then present your findings and your differential to the examiner.',
   'Take a fever history': 'A 28-year-old presents with a two-week history of intermittent fever, night sweats and weight loss. Take a focused history to build a differential, paying attention to TB, enteric fever and other locally relevant causes, then summarise and outline your initial investigations.',
-  'Counsel on warfarin': 'A patient is being started on warfarin after a diagnosis of atrial fibrillation. Counsel them: explain why it is needed, how INR monitoring works, key dietary and drug interactions, signs of bleeding, and what to do if a dose is missed — and answer their questions.',
+  'Counsel on warfarin': 'A patient is being started on warfarin after a diagnosis of atrial fibrillation. Counsel them: explain why it is needed, how INR monitoring works, key dietary and drug interactions, signs of bleeding, and what to do if a dose is missed, then answer their questions.',
   // ---- MRCEM / FRCEM — OSCE ----
   'Manage the breathless patient': 'A 64-year-old is brought to resus acutely breathless and unable to speak in full sentences. Assess them using an ABCDE approach, narrating your actions and the immediate management you would initiate at each step, and state the investigations you would request.',
   'ECG interpretation': 'You are handed the ECG of a 70-year-old with chest pain. Interpret it systematically, state your diagnosis, and outline the immediate management and disposition for this patient in the Emergency Department.',
@@ -83,8 +83,8 @@ const SCENARIOS = {
   'Contraception counselling': 'A 24-year-old attends to discuss starting contraception. Explore their needs and preferences, take a relevant history including any contraindications, explain the suitable options in a balanced way, and support them to reach a shared decision.',
   // ---- ORE Part 2 (Clinical) ----
   'Examine a carious lower molar': 'A 34-year-old patient attends complaining of pain in their lower left back tooth when eating something cold. Take a focused dental history, then examine the tooth and surrounding structures, and outline your likely diagnosis and initial management options to the examiner.',
-  'Explain root canal treatment': 'A 29-year-old has been told they need root canal treatment on an upper incisor following a diagnosis of irreversible pulpitis. Explain the procedure in plain terms — including what it involves, the risks and benefits, the alternatives, and what to expect afterwards — and respond to their questions.',
-  'Extraction consent': 'A 40-year-old has been advised to have a lower wisdom tooth extracted due to recurrent infection. Take informed consent: explain the procedure, the common and serious risks including nerve injury, the alternatives, and what recovery involves — and answer their questions.',
+  'Explain root canal treatment': 'A 29-year-old has been told they need root canal treatment on an upper incisor following a diagnosis of irreversible pulpitis. Explain the procedure in plain terms, including what it involves, the risks and benefits, the alternatives, and what to expect afterwards, and respond to their questions.',
+  'Extraction consent': 'A 40-year-old has been advised to have a lower wisdom tooth extracted due to recurrent infection. Take informed consent: explain the procedure, the common and serious risks including nerve injury, the alternatives, and what recovery involves, then answer their questions.',
   'Assess a swollen face': 'A 27-year-old attends urgently with a swollen, painful right cheek that has developed over two days, alongside fever and difficulty opening their mouth fully. Take a focused history, examine the swelling and the likely dental source, and outline your immediate management and when same-day referral is needed.',
   'Denture fitting review': 'A 68-year-old returns for review two weeks after being fitted with a new upper complete denture, reporting soreness and looseness when eating. Assess the fit and their symptoms, identify likely causes, and explain the adjustments and advice you would offer.',
   'Child dental trauma history': 'A parent brings in their 8-year-old who fell at the playground an hour ago and has a chipped, slightly loose front tooth. Take a focused history from the parent and child, assess the injury, and explain your immediate management and follow-up plan.',
@@ -140,7 +140,7 @@ export default function Osce() {
       <div style={{ background: 'var(--section-hero)', color: '#fff', padding: '18px 20px 32px', minHeight: 150, boxSizing: 'border-box', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: .1, lineHeight: 1, pointerEvents: 'none' }}>🩺</div>
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 26, fontWeight: 900, lineHeight: 1 }}>OSCE Practice</h1>
-        <p style={{ fontSize: 12.5, opacity: 0.85, marginTop: 5 }}>Timed station practice — solo or with a partner.</p>
+        <p style={{ fontSize: 12.5, opacity: 0.85, marginTop: 5 }}>Timed station practice, solo or with a partner.</p>
         <div style={{ display: 'flex', gap: 22, marginTop: 16 }}>
           <div><div style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 22, fontWeight: 900, lineHeight: 1, color: 'var(--gold)' }}>{stations.length}</div><div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.5, opacity: 0.82, marginTop: 3 }}>stations</div></div>
           <div><div style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 22, fontWeight: 900, lineHeight: 1, color: 'var(--gold)' }}>{exams.length}</div><div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.5, opacity: 0.82, marginTop: 3 }}>exams</div></div>
@@ -272,7 +272,7 @@ function Station({ name, minutes, onBack }) {
   const [sentTo, setSentTo] = useState(null);
   const shareTo = async (friendId) => {
     try {
-      await api.sendMessage(friendId, `📹 Join me for OSCE practice — "${name}". Private video room: ${meetUrl}`);
+      await api.sendMessage(friendId, `📹 Join me for OSCE practice ("${name}"). Private video room: ${meetUrl}`);
       setSentTo(friendId);
       setTimeout(() => setSentTo(null), 2500);
     } catch (e) {}
@@ -293,7 +293,7 @@ function Station({ name, minutes, onBack }) {
           <div className="card" onClick={(e) => e.stopPropagation()} style={{ maxWidth:340, width:'100%' }}>
             <h2 className="serif" style={{ fontSize:18, fontWeight:700, marginBottom:6 }}>📹 Practise with a partner</h2>
             <p className="sub" style={{ fontSize:13, marginBottom:6 }}>Your private video room is ready. Invite a partner first, then join when you're both set.</p>
-            <p className="sub" style={{ fontSize:11.5, marginBottom:14, color:'var(--subtle)' }}>🔒 Free, private room — no sign-up or app needed.</p>
+            <p className="sub" style={{ fontSize:11.5, marginBottom:14, color:'var(--subtle)' }}>🔒 Free, private room: no sign-up or app needed.</p>
 
             {friends.length > 0 && (
               <>
@@ -332,7 +332,7 @@ function Station({ name, minutes, onBack }) {
         </div>
       </div>
       <button className="btn" style={{ background:"var(--violet)", marginTop: 28, opacity: creatingRoom ? 0.7 : 1 }} onClick={startVideo} disabled={creatingRoom}>{creatingRoom ? "Starting room…" : "📹 Practise live with a partner"}</button>
-      <p className="sub" style={{ fontSize:12, marginTop:8 }}>Opens a free, private video room and lets you send the link to a connected partner — one of you plays candidate, the other examiner.</p>
+      <p className="sub" style={{ fontSize:12, marginTop:8 }}>Opens a free, private video room and lets you send the link to a connected partner. One of you plays candidate, the other examiner.</p>
     </div>
   );
 }

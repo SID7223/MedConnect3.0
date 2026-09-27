@@ -113,7 +113,7 @@ function ConversationList({ nav, me }) {
               No conversations yet. Connect with a partner, then start chatting from the Connections tab.
             </p>
           )}
-          {convos.length > 0 && <p className="sub" style={{ fontSize: 11, marginBottom: 8 }}>Swipe a chat left — or hold it — to delete.</p>}
+          {convos.length > 0 && <p className="sub" style={{ fontSize: 11, marginBottom: 8 }}>Swipe a chat left, or hold it, to delete.</p>}
           {convos.length > 0 && (
           <div style={{ background: 'var(--card)', border: '1.5px solid var(--line)', borderRadius: 18, overflow: 'hidden' }}>
           {convos.map((c, idx) => {

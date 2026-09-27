@@ -60,7 +60,7 @@ const EXAMS = [
     tint: '#fde0d8',
     topics: [
       { name: 'Anatomy', detail: 'Applied anatomy, nerve injuries, surface anatomy, embryology', fire: true, tag: 'Highest yield' },
-      { name: 'Physiology', detail: 'Renal, CVS, respiratory — especially numerical calculations' },
+      { name: 'Physiology', detail: 'Renal, CVS and respiratory: especially numerical calculations' },
       { name: 'Biochemistry', detail: 'Enzyme kinetics, metabolic disorders, vitamins, hormones' },
       { name: 'Pharmacology', detail: 'Drug mechanisms, dose-response curves, side effects, antidotes' },
       { name: 'Pathology', detail: 'General pathology, inflammation, healing, neoplasia' },
@@ -78,7 +78,7 @@ const EXAMS = [
       { name: 'Emergency', detail: 'Trauma, toxicology, shock states, ABCDE approach' },
       { name: 'Mental Health', detail: 'MHA, risk assessment, common disorders, duty of care' },
       { name: 'Indigenous Health', detail: 'Culturally appropriate care, close-the-gap priorities', fire: true, tag: 'Unique to AMC' },
-      { name: 'Chronic Disease', detail: 'Diabetes, COPD, CKD — long-term GP management' },
+      { name: 'Chronic Disease', detail: 'Diabetes, COPD, CKD: long-term GP management' },
     ],
   },
 ];
@@ -137,7 +137,7 @@ function ProTeaser() {
         <div style={{ position: 'absolute', right: 16, bottom: 8, fontSize: 42, opacity: .18, color: 'var(--gold)', fontFamily: "'Fraunces',serif", fontWeight: 900 }}>✦</div>
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7, position: 'relative' }}>Unlock more</div>
         <div style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 17, position: 'relative', marginBottom: 5 }}>Clinical Insights Pro</div>
-        <div style={{ fontSize: 13, opacity: .88, lineHeight: 1.6, position: 'relative' }}>Go deeper on every topic — flash summaries, high-yield mnemonics, and SBA-style questions across 12+ exams.</div>
+        <div style={{ fontSize: 13, opacity: .88, lineHeight: 1.6, position: 'relative' }}>Go deeper on every topic: flash summaries, high-yield mnemonics, and SBA-style questions across 12+ exams.</div>
       </div>
       <button
         onClick={() => nav('/pro')}
@@ -163,7 +163,7 @@ export default function ClinicalInsights() {
         <div style={{ position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: .1, lineHeight: 1, pointerEvents: 'none' }}>🧠</div>
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7, position: 'relative' }}>✦ Clinical Insights</div>
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1, position: 'relative' }}>High-Yield Topics</h1>
-        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, maxWidth: '82%', position: 'relative' }}>Top tested subjects for your exam — curated, minimal, exam-ready.</p>
+        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, maxWidth: '82%', position: 'relative' }}>Top tested subjects for your exam: curated, minimal, exam-ready.</p>
       </div>
 
       {/* content sheet */}

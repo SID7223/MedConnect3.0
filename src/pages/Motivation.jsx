@@ -68,7 +68,7 @@ export default function Motivation({ onBack }) {
     // author (if any)
     if (author) {
       x.fillStyle = theme.accent; x.font = 'italic 36px Georgia, serif';
-      x.fillText('— ' + author, 540, startY + lines.length * 70 + 30);
+      x.fillText(author, 540, startY + lines.length * 70 + 30);
     }
     // footer brand
     x.fillStyle = theme.accent; x.font = '700 34px Georgia, serif';
@@ -85,7 +85,7 @@ export default function Motivation({ onBack }) {
         <div style={{ position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: .1, lineHeight: 1, pointerEvents: 'none' }}>✦</div>
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7, position: 'relative' }}>✦ Daily Motivation</div>
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1, position: 'relative' }}>Motivation</h1>
-        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, position: 'relative' }}>Your daily thought — save the ones that move you.</p>
+        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5, position: 'relative' }}>Your daily thought. Save the ones that move you.</p>
       </div>
       <div style={{ background: 'var(--paper)', borderRadius: '26px 26px 0 0', marginTop: -20, position: 'relative', padding: '20px 16px 100px', minHeight: '100vh' }}>
       <div className="tabs" style={{ marginBottom: 18 }}>
@@ -100,7 +100,7 @@ export default function Motivation({ onBack }) {
             <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 21, fontWeight: 500, lineHeight: 1.45, marginBottom: today.author ? 10 : 18, color: theme.ink, transition: 'color .3s ease' }}>
               <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 30, fontWeight: 700, color: theme.accent, verticalAlign: '-11px', lineHeight: 0, marginRight: 2 }}>“</span>{today.text}<span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 30, fontWeight: 700, color: theme.accent, verticalAlign: '-11px', lineHeight: 0, marginLeft: 2 }}>”</span>
             </p>
-            {today.author && <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 14, fontStyle: 'italic', color: theme.accent, marginBottom: 16 }}>— {today.author}</p>}
+            {today.author && <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 14, fontStyle: 'italic', color: theme.accent, marginBottom: 16 }}>{today.author}</p>}
             <div style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 13, fontWeight: 700, color: theme.accent, opacity: 0.85 }}>MedConnect</div>
           </div>
 
@@ -141,7 +141,7 @@ export default function Motivation({ onBack }) {
                     <div style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 16, lineHeight: 1.5 }}>
                       <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 20, fontWeight: 700, color: 'var(--gold)', verticalAlign: '-7px', lineHeight: 0, marginRight: 1 }}>“</span>{q.text}<span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 20, fontWeight: 700, color: 'var(--gold)', verticalAlign: '-7px', lineHeight: 0, marginLeft: 1 }}>”</span>
                     </div>
-                    {q.author && <div style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 12.5, fontStyle: 'italic', color: 'var(--muted)', marginTop: 5 }}>— {q.author}</div>}
+                    {q.author && <div style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 12.5, fontStyle: 'italic', color: 'var(--muted)', marginTop: 5 }}>{q.author}</div>}
                   </div>
                   <Star id={id} />
                 </div>

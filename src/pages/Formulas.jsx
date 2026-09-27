@@ -45,7 +45,7 @@ const DATA = [
   ]],
   ['Paediatrics', [
     ['Estimated Weight (APLS)', '(age + 4) × 2', 'For children 1–10 years.'],
-    ['ETT Internal Diameter', '(age ÷ 4) + 4 mm (uncuffed)', 'Reference only — airway decisions need clinical judgement.'],
+    ['ETT Internal Diameter', '(age ÷ 4) + 4 mm (uncuffed)', 'Reference only: airway decisions need clinical judgement.'],
     ['Fluid Bolus', '10–20 mL/kg crystalloid', 'Reassess after each bolus.'],
   ]],
 ];
@@ -77,12 +77,12 @@ export default function Formulas() {
         <div style={{ position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: .1, lineHeight: 1, pointerEvents: 'none' }}>🧮</div>
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7 }}>✦ Reference</div>
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1 }}>Formulas</h1>
-        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5 }}>Common clinical calculations — reference only.</p>
+        <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.5 }}>Common clinical calculations for reference only.</p>
       </div>
       <div style={{ background: 'var(--paper)', borderRadius: '26px 26px 0 0', marginTop: -20, position: 'relative', padding: '20px 16px 24px', minHeight: '60vh' }}>
       <p className="sub" style={{ marginBottom: 12 }}>Common clinical formulas for quick recall.</p>
 
-      <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search — e.g. BMI, anion gap, EDD…" style={{ marginBottom: 8, borderRadius: 999, padding: "12px 18px" }} />
+      <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search: e.g. BMI, anion gap, EDD…" style={{ marginBottom: 8, borderRadius: 999, padding: "12px 18px" }} />
       <p className="sub" style={{ fontSize: 10.5, fontStyle: 'italic', textAlign: 'center', marginBottom: 16, color: 'var(--subtle)' }}>
         For study & reference only. Always verify before any clinical use.
       </p>

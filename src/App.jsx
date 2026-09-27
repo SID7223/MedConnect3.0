@@ -68,7 +68,7 @@ function Drawer({ open, onClose, user }) {
   const inviteFriend = async () => {
     const data = {
       title: 'MedConnect',
-      text: "I'm using MedConnect to find study partners for medical exams — doctors only, matched by exam. Join me:",
+      text: "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me:",
       url: 'https://med-connect3-0.vercel.app',
     };
     try { if (navigator.share) { await navigator.share(data); return; } }

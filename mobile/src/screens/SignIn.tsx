@@ -69,7 +69,7 @@ export default function SignInScreen() {
 
         <Image source={LOGO} style={styles.logo} />
         <Text style={[styles.h1, { color: colors.ink }]}>MedConnect</Text>
-        <Text style={[styles.tag, { color: colors.muted }]}>— Connect. Study. Succeed. —</Text>
+        <Text style={[styles.tag, { color: colors.muted }]}>Connect. Study. Succeed.</Text>
 
         <View style={styles.pitch}>
           <Text style={[styles.pitchLabel, { color: colors.forest }]}>
@@ -79,7 +79,7 @@ export default function SignInScreen() {
             Find your study partner for board exams.
           </Text>
           <Text style={[styles.pitchSub, { color: colors.muted }]}>
-            Matched by exam, timeline, and country — worldwide.
+            Matched worldwide by exam, timeline, and country.
           </Text>
         </View>
 
@@ -146,7 +146,7 @@ export default function SignInScreen() {
         {/* TODO(phase 4): Google Sign-In via expo-auth-session + Android OAuth client */}
         <Pressable style={[styles.google, { borderColor: colors.line, backgroundColor: colors.card }]}>
           <Text style={{ fontWeight: '600', color: colors.muted }}>
-            Google Sign-In — coming soon
+            Google Sign-In: coming soon
           </Text>
         </Pressable>
 

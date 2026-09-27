@@ -47,7 +47,7 @@ function DeckList({ user, onOpen, onStudy }) {
 
       {creating && (
         <div className="card" style={{ marginBottom: 14 }}>
-          <input className="input" autoFocus placeholder="Deck name (e.g. Cardiology — Arrhythmias)" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') create(); }} style={{ marginBottom: 8, borderRadius: 999 }} />
+          <input className="input" autoFocus placeholder="Deck name (e.g. Cardiology: Arrhythmias)" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') create(); }} style={{ marginBottom: 8, borderRadius: 999 }} />
           <input className="input" placeholder="Exam tag (optional, e.g. MRCP)" value={tag} onChange={(e) => setTag(e.target.value)} style={{ marginBottom: 10, borderRadius: 999 }} />
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={create} className="btn bouncy" style={{ flex: 1, background: 'var(--forest)' }}>Create deck</button>
@@ -243,7 +243,7 @@ function DeckDetail({ deck, onBack, onStudy }) {
 
       <div onClick={() => nav('/pro')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 18, cursor: 'pointer', color: 'var(--subtle)' }}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></svg>
-        <span style={{ fontSize: 11.5, fontWeight: 600 }}>Export &amp; deck sharing — <span style={{ color: 'var(--gold)', fontWeight: 800 }}>Pro</span></span>
+        <span style={{ fontSize: 11.5, fontWeight: 600 }}>Export &amp; deck sharing · <span style={{ color: 'var(--gold)', fontWeight: 800 }}>Pro</span></span>
       </div>
     </>
   );

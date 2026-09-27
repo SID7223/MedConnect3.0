@@ -66,7 +66,7 @@ export default function SignIn() {
     <div className="screen" style={{ paddingTop: 44, textAlign: 'center' }}>
       <img src="/pwa-192.png" alt="MedConnect" style={{ width: 72, height: 72, borderRadius: 16, margin: '0 auto 16px', display: 'block' }} />
       <h1 className="h1">MedConnect</h1>
-      <p className="sub" style={{ marginBottom: 18 }}>— Connect. Study. Succeed. —</p>
+      <p className="sub" style={{ marginBottom: 18 }}>Connect. Study. Succeed.</p>
 
       <div style={{ marginBottom: 26 }}>
         <div style={{ fontWeight: 700, color: 'var(--teal)', fontSize: 13, letterSpacing: '.5px', textTransform: 'uppercase', marginBottom: 8 }}>
@@ -76,7 +76,7 @@ export default function SignIn() {
           Find your study partner for board exams.
         </p>
         <p className="sub" style={{ fontSize: 13.5, lineHeight: 1.5, marginTop: 0 }}>
-          Matched by exam, timeline, and country — worldwide.
+          Matched worldwide by exam, timeline, and country.
         </p>
       </div>
 
@@ -119,7 +119,7 @@ export default function SignIn() {
         </button>
       )}
       <p className="sub" style={{ fontSize: 11, marginTop: 24 }}>
-        Your clinical data stays private — never sold, never advertised against.{' '}
+        Your clinical data stays private: never sold, never advertised against.{' '}
         <button className="link" style={{ fontSize: 11, padding: 0 }} onClick={() => nav('/legal')}>Privacy & Terms</button>
       </p>
     </div>

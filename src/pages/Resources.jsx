@@ -4,13 +4,13 @@
 const RESOURCES = [
   { section: 'Clinical references',
     items: [
-      { name: 'Drugs.com',      icon: '💊', url: 'https://www.drugs.com/',          desc: 'Drug doses, interactions & prescribing info — free and global.' },
+      { name: 'Drugs.com',      icon: '💊', url: 'https://www.drugs.com/',          desc: 'Drug doses, interactions & prescribing info, free and global.' },
       { name: 'NICE Guidelines', icon: '📋', url: 'https://www.nice.org.uk/guidance', desc: 'UK clinical guidelines and pathways for almost every condition.' },
-      { name: 'MDCalc',          icon: '🩺', url: 'https://www.mdcalc.com/',           desc: 'Medical calculators — CHA₂DS₂-VASc, Wells, GCS, eGFR, hundreds more.' },
+      { name: 'MDCalc',          icon: '🩺', url: 'https://www.mdcalc.com/',           desc: 'Medical calculators: CHA₂DS₂-VASc, Wells, GCS, eGFR, hundreds more.' },
     ] },
   { section: 'Exam prep & revision',
     items: [
-      { name: 'Geeky Medics', icon: '🎓', url: 'https://geekymedics.com/',  desc: 'OSCE guides, history-taking, examinations — with videos.' },
+      { name: 'Geeky Medics', icon: '🎓', url: 'https://geekymedics.com/',  desc: 'OSCE guides with videos for history-taking and examinations.' },
       { name: 'Radiopaedia',  icon: '📖', url: 'https://radiopaedia.org/',  desc: 'Radiology cases, images, and quizzes by specialty.' },
     ] },
 ];

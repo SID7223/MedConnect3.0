@@ -83,7 +83,7 @@ export default function Partners() {
   const connect = async (id) => {
     const person = matches.find((x) => x.user.id === id);
     setMatches((m) => m.filter((x) => x.user.id !== id));
-    try { await api.sendRequest(id); loadConns(); showToast(`Request sent to ${person?.user?.name || 'them'} ✓`); } catch (e) { showToast('Could not send request — try again'); }
+    try { await api.sendRequest(id); loadConns(); showToast(`Request sent to ${person?.user?.name || 'them'} ✓`); } catch (e) { showToast('Could not send request. Try again.'); }
   };
   const [respondingId, setRespondingId] = useState(null);
   const respond = async (id, action) => {
@@ -182,7 +182,7 @@ export default function Partners() {
           {mStatus === 'ok' && visibleMatches.length === 0 && (
             <EmptyState
               title={examLabel ? `No ${examLabel} partners yet 🌱` : 'No new partners right now'}
-              sub={examLabel ? "You're early! Be the first — or invite a colleague to study with you." : 'As more doctors join, new matches will show up here.'}
+              sub={examLabel ? "You're early! Be the first, or invite a colleague to study with you." : 'As more doctors join, new matches will show up here.'}
             />
           )}
           {mStatus === 'ok' && visibleMatches.length > 0 && (

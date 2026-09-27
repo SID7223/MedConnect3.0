@@ -73,7 +73,7 @@ function Breathe() {
     <div className="card tint-green" onClick={() => !on && setBig(true)} style={{ textAlign: 'center', cursor: 'pointer' }}>
       <p className="voice sub" style={{ fontSize: 14, marginTop: 2 }}>60 seconds of calm. No side effects.</p>
       <p className="sub" style={{ fontSize: 11, marginTop: 2 }}>
-        Box breathing — in 4, hold 4, out 4, hold 4. Tap for full-screen.
+        Box breathing: in 4, hold 4, out 4, hold 4. Tap for full-screen.
       </p>
       <div style={{ display: 'flex', justifyContent: 'center' }}><Lungs grow={grow} size={120} /></div>
       {on ? (

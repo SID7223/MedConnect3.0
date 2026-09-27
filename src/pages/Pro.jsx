@@ -6,11 +6,11 @@ const LockIcon = ({ size = 13 }) => (
 );
 
 const FEATURES = [
-  ['🧠', 'Clinical Insights — 12+ exams', 'Full high-yield summaries, mnemonics, and SBA-style questions for MRCP, PLAB, USMLE, FCPS, AMC, SMLE, MRCS and more.', true],
+  ['🧠', 'Clinical Insights for 12+ exams', 'Full high-yield summaries, mnemonics, and SBA-style questions for MRCP, PLAB, USMLE, FCPS, AMC, SMLE, MRCS and more.', true],
   ['🌈', 'More colours & themes', 'Exclusive wallpaper backgrounds and fonts for your quotes.'],
   ['🩺', 'Full OSCE station bank', 'Every station for your exam, with marking schemes and timed mocks.'],
   ['🌿', 'More Take a Break exercises', 'New guided breathing patterns and quick reset routines.'],
-  ['⬇', 'Export your flashcards', 'Download any deck as CSV — import straight into Anki, Excel, or Sheets.'],
+  ['⬇', 'Export your flashcards', 'Download any deck as CSV and import straight into Anki, Excel, or Sheets.'],
 ];
 
 export default function Pro() {
@@ -35,8 +35,8 @@ export default function Pro() {
         <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1, position: 'relative' }}>MedConnect Pro</h1>
         <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.55, maxWidth: '84%', position: 'relative' }}>
           {isPro
-            ? "You're a Pro member — thank you for supporting MedConnect 💛"
-            : 'Built for doctors who are serious about their exams — more tools, deeper content, no compromises.'}
+            ? "You're a Pro member. Thank you for supporting MedConnect 💛"
+            : 'Built for doctors who are serious about their exams: more tools, deeper content, no compromises.'}
         </p>
       </div>
 

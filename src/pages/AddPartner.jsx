@@ -23,7 +23,7 @@ export default function AddPartner() {
 
   const send = async () => {
     try { await api.sendRequest(target); setStatus('sent'); }
-    catch (e) { window.alert('Could not send — you may already be connected.'); nav('/home'); }
+    catch (e) { window.alert('Could not send: you may already be connected.'); nav('/home'); }
   };
 
   return (
@@ -64,7 +64,7 @@ export default function AddPartner() {
           <>
             <div style={{ fontSize: 34, marginBottom: 8 }}>🤝</div>
             <h2 style={{ fontSize: 17, fontWeight: 700 }}>Request sent!</h2>
-            <p className="sub" style={{ fontSize: 13, margin: '6px 0 14px' }}>Over to {card?.name?.split(' ')[0] || 'them'} now — you'll connect once they accept.</p>
+            <p className="sub" style={{ fontSize: 13, margin: '6px 0 14px' }}>Over to {card?.name?.split(' ')[0] || 'them'} now. You'll connect once they accept.</p>
             <button className="btn" onClick={() => nav('/home')}>Done</button>
           </>
         )}

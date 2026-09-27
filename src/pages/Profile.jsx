@@ -79,7 +79,7 @@ export default function Profile() {
   const shareLink = `https://med-connect3-0.vercel.app/add/${user?.id}`;
   const shareProfile = async () => {
     try {
-      if (navigator.share) { await navigator.share({ title: 'Add me on MedConnect', text: `Add me as a study partner on MedConnect — ${user?.name}`, url: shareLink }); return; }
+      if (navigator.share) { await navigator.share({ title: 'Add me on MedConnect', text: `Hi, it's ${user?.name}. Add me as a study partner on MedConnect`, url: shareLink }); return; }
     } catch (e) { if (e?.name === 'AbortError') return; }
     try { await navigator.clipboard.writeText(shareLink); window.alert('Profile link copied!'); } catch (e) {}
   };

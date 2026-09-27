@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 // Pure localStorage (private to the user, no backend, works offline).
 
 const REST_LEVELS = [
-  { em: '😴', lb: 'Running on empty', tip: "Running on empty is a warning sign, not a badge. Protect tonight's sleep — tomorrow's recall depends on it. Go lighter on revision this evening." },
+  { em: '😴', lb: 'Running on empty', tip: "Running on empty is a warning sign, not a badge. Protect tonight's sleep: tomorrow's recall depends on it. Go lighter on revision this evening." },
   { em: '😐', lb: 'So-so',            tip: "Feeling so-so? Even a 20-minute nap before evening revision can lift recall. Try to wrap up by 11pm tonight." },
-  { em: '🙂', lb: 'Decent',           tip: "Decent rest — good. This is when spaced repetition sticks best. Make the most of a clear head." },
-  { em: '⚡', lb: 'Sharp',            tip: "Sharp today! Use this peak for your hardest topics — tackle the questions you've been avoiding while focus is high." },
+  { em: '🙂', lb: 'Decent',           tip: "Decent rest: good. This is when spaced repetition sticks best. Make the most of a clear head." },
+  { em: '⚡', lb: 'Sharp',            tip: "Sharp today! Use this peak for your hardest topics: tackle the questions you've been avoiding while focus is high." },
 ];
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -82,7 +82,7 @@ export default function RestReset() {
       `}</style>
 
       <h1 className="h1">Rest &amp; reset 🌙</h1>
-      <p className="sub" style={{ marginBottom: 18 }}>A 5-second daily check-in. Sleep fuels memory — guard it like revision.</p>
+      <p className="sub" style={{ marginBottom: 18 }}>A 5-second daily check-in. Sleep fuels memory: guard it like revision.</p>
 
       {/* rest check-in */}
       <div className="card tint-green" style={{ marginBottom: 14 }}>
