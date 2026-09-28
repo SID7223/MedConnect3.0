@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+mobile/node_modules
+
+# mobile app (separate EAS build, not part of web deploy)
+mobile
+
+# build artifacts
+medconnect.apk
+dist
+
+# temp / tooling
+.testdata
+.git
+*.log

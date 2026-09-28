@@ -170,6 +170,9 @@ export const api = {
     req('/profile', { method: 'POST', body: { action: 'note_update', id, title, body, tags } }),
   noteDelete: (id: string | number) =>
     req('/profile', { method: 'POST', body: { action: 'note_delete', id } }),
+  settingsGet: () => req('/profile?settings=1'),
+  settingsSave: (settings: unknown) =>
+    req('/profile', { method: 'POST', body: { action: 'settings_save', settings } }),
   blocks: (from: string, to: string) => req(`/profile?blocks=1&from=${from}&to=${to}`),
   blockCreate: (day: string, time: string, topic: string, duration: number, note: string, color: string) =>
     req('/profile', { method: 'POST', body: { action: 'block_create', day, time, topic, duration, note, color } }),

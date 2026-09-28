@@ -93,6 +93,16 @@ export default async function handler(req, res) {
         return res.status(200).json({ blocks });
       } catch (e) { return res.status(500).json({ error: 'Could not load blocks' }); }
     }
+    // ---- User settings: GET /api/profile?settings=1 ----
+    if (req.query.settings) {
+      try {
+        await ensureSettingsTable();
+        const rows = await sql`SELECT key, value FROM user_settings WHERE user_id = ${uid}`;
+        const settings = {};
+        for (const r of rows) settings[r.key] = r.value;
+        return res.status(200).json({ settings });
+      } catch (e) { return res.status(500).json({ error: 'Could not load settings' }); }
+    }
 
     const target = req.query.user;
     if (!target) return res.status(400).json({ error: 'user id required' });
@@ -218,6 +228,23 @@ export default async function handler(req, res) {
           }
           return res.status(200).json({ ok: true, nextDays });
         }
+      }
+
+      // ── User settings blob: POST /api/profile { action: 'settings_save', settings: {...} } ──
+      if (body.action === 'settings_save') {
+        const incoming = body.settings;
+        if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
+          return res.status(400).json({ error: 'settings object required' });
+        }
+        await ensureSettingsTable();
+        for (const [key, value] of Object.entries(incoming)) {
+          const v = JSON.stringify(value ?? null);
+          await sql`
+            INSERT INTO user_settings (user_id, key, value, updated_at)
+            VALUES (${uid}, ${String(key).slice(0, 80)}, ${v}::jsonb, now())
+            ON CONFLICT (user_id, key) DO UPDATE SET value = ${v}::jsonb, updated_at = now()`;
+        }
+        return res.status(200).json({ ok: true });
       }
 
       // ── Notes CRUD ──────────────────────────────────────────────────────────
@@ -378,6 +405,17 @@ async function ensureBlocksTable() {
       color TEXT DEFAULT 'c1',
       done BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMPTZ DEFAULT now()
+    )`;
+}
+
+async function ensureSettingsTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_settings (
+      user_id INTEGER NOT NULL,
+      key TEXT NOT NULL,
+      value JSONB NOT NULL DEFAULT '{}'::jsonb,
+      updated_at TIMESTAMPTZ DEFAULT now(),
+      PRIMARY KEY (user_id, key)
     )`;
 }
 

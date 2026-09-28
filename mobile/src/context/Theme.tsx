@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useMemo } from 'react';
 import { ThemeColors, ThemeMode, darkColors, lightColors } from '../theme/tokens';
+import { useSettings } from './Settings';
 
 interface ThemeValue {
   mode: ThemeMode;
@@ -11,23 +11,19 @@ interface ThemeValue {
 const ThemeCtx = createContext<ThemeValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>('light');
+  const { settings, set } = useSettings();
 
-  useEffect(() => {
-    AsyncStorage.getItem('theme').then((v) => {
-      if (v === 'dark' || v === 'light') setMode(v);
-    });
-  }, []);
+  // derive from settings so the saved theme applies once settings finish loading
+  const mode: ThemeMode = settings.theme === 'dark' ? 'dark' : 'light';
 
-  useEffect(() => {
-    AsyncStorage.setItem('theme', mode);
-  }, [mode]);
-
-  const value: ThemeValue = {
-    mode,
-    colors: mode === 'dark' ? darkColors : lightColors,
-    toggle: () => setMode((m) => (m === 'dark' ? 'light' : 'dark')),
-  };
+  const value = useMemo<ThemeValue>(
+    () => ({
+      mode,
+      colors: mode === 'dark' ? darkColors : lightColors,
+      toggle: () => set('theme', mode === 'dark' ? 'light' : 'dark'),
+    }),
+    [mode, set]
+  );
 
   return <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;
 }

@@ -3,21 +3,26 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Stack, useSegments, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider, useTheme } from '../context/Theme';
+import { ThemeProvider } from '../context/Theme';
 import { AuthProvider, useAuth } from '../context/Auth';
 import { DrawerProvider } from '../context/Drawer';
+import { FocusLockProvider } from '../context/FocusLock';
+import { NotificationsProvider } from '../context/Notifications';
+import { TimerStatusProvider } from '../context/TimerStatus';
+import { SettingsProvider } from '../context/Settings';
 import DrawerHost from '../components/Drawer';
+import { FocusLockOverlay } from '../components/FocusLockOverlay';
+import NotificationsPanel from '../components/Notifications';
 
 const LOGO = require('../../assets/icon.png');
 
 function Splash() {
-  const { colors } = useTheme();
   return (
-    <View style={[styles.splash, { backgroundColor: colors.paper }]}>
+    <View style={[styles.splash, { backgroundColor: '#1f4d3f' }]}>
       <Image source={LOGO} style={styles.splashLogo} />
-      <Text style={[styles.splashBrand, { color: colors.ink }]}>MedConnect</Text>
-      <Text style={[styles.splashTag, { color: colors.muted }]}>Connect. Study. Succeed.</Text>
-      <ActivityIndicator style={{ marginTop: 24 }} color={colors.forest} />
+      <Text style={[styles.splashBrand, { color: '#ffffff' }]}>MedConnect</Text>
+      <Text style={[styles.splashTag, { color: 'rgba(255,255,255,.85)' }]}>Connect. Study. Succeed.</Text>
+      <ActivityIndicator style={{ marginTop: 24 }} color="#d8a84a" />
     </View>
   );
 }
@@ -60,15 +65,25 @@ function Gate() {
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <DrawerProvider>
-            <StatusBar style="light" />
-            <Gate />
-            <DrawerHost />
-          </DrawerProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <SettingsProvider>
+          <ThemeProvider>
+            <DrawerProvider>
+              <FocusLockProvider>
+                <NotificationsProvider>
+                  <TimerStatusProvider>
+                    <StatusBar style="light" />
+                    <Gate />
+                    <DrawerHost />
+                    <FocusLockOverlay />
+                    <NotificationsPanel />
+                  </TimerStatusProvider>
+                </NotificationsProvider>
+              </FocusLockProvider>
+            </DrawerProvider>
+          </ThemeProvider>
+        </SettingsProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

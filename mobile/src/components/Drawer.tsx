@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Animated, Alert, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Animated, Alert, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/Auth';
@@ -8,6 +8,7 @@ import { useTheme } from '../context/Theme';
 import { APP_VERSION } from '../lib/version';
 import { SHARE_URL } from '../lib/config';
 import Icon, { IconName } from './Icon';
+import Checklist from './Checklist';
 
 interface Item {
   icon: IconName;
@@ -130,11 +131,9 @@ export default function DrawerHost() {
           </View>
         </View>
 
-        {/* checklist — TODO(wave B): port src/components/Checklist.jsx */}
-        <View style={styles.scroll}>
-          <View style={styles.checklistTodo}>
-            <Text style={{ fontSize: 13, color: colors.subtle }}>Checklist: coming in Wave B</Text>
-          </View>
+        {/* checklist + sections (mirrors web .drawer-scroll) */}
+        <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 8 }}>
+          <Checklist />
 
           {sections.map((sect, i) => (
             <View key={i}>
@@ -166,7 +165,7 @@ export default function DrawerHost() {
               ))}
             </View>
           ))}
-        </View>
+        </ScrollView>
 
         <Text style={[styles.foot, { color: colors.subtle, borderTopColor: colors.line }]}>
           MedConnect v{APP_VERSION} · Connect. Study. Succeed.
@@ -220,8 +219,7 @@ const styles = StyleSheet.create({
   },
   headName: { color: '#fff', fontSize: 15, fontWeight: '800' },
   headExam: { color: 'rgba(255,255,255,.85)', fontSize: 11, marginTop: 1 },
-  scroll: { flex: 1, paddingBottom: 8 },
-  checklistTodo: { padding: 18 },
+  scroll: { flex: 1 },
   div: { height: 1, marginVertical: 4 },
   sect: {
     fontSize: 10.5,

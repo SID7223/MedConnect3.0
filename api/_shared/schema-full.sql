@@ -273,3 +273,12 @@ CREATE TABLE IF NOT EXISTS note_shares (
   created_at  TIMESTAMPTZ DEFAULT now(),
   UNIQUE (note_id, shared_by, shared_with)
 );
+
+-- per-user key-value settings (theme, checklist, prefs, markers — replaces device-local storage)
+CREATE TABLE IF NOT EXISTS user_settings (
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  key        TEXT NOT NULL,
+  value      JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY (user_id, key)
+);
