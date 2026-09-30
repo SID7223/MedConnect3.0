@@ -5,7 +5,6 @@ import {
   Modal,
   Pressable,
   ScrollView,
-  Share,
   StatusBar,
   StyleSheet,
   Text,
@@ -25,7 +24,6 @@ import { User, useAuth } from '../context/Auth';
 import { useSettings } from '../context/Settings';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
-import { SHARE_URL } from '../lib/config';
 import { quoteOfTheDay } from '../lib/quotes';
 import { SERIF } from '../theme/fonts';
 
@@ -450,7 +448,7 @@ function Circle({
         )}
         {children}
       </View>
-      <Text style={[styles.circleLabel, { color: onGreen ? 'rgba(255,255,255,.85)' : colors.muted }]}>
+      <Text style={[styles.circleLabel, { color: onGreen ? '#fff' : colors.ink }]}>
         {label}
       </Text>
     </Pressable>
@@ -493,7 +491,7 @@ const MORALE: Record<string, string[]> = {
 
 // Quick row: Qbank · Flashcards · Countdown · Streak (circles). Stats open the fullscreen bloom panel.
 function QuickRow({ user }: { user: User | null }) {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const insets = useSafeAreaInsets();
   const { setUser } = useAuth();
 
@@ -697,7 +695,7 @@ function QuickRow({ user }: { user: User | null }) {
         {!hideQb && (
           <Circle
             tint="#a8e6c1" color="#087a4f" glow="#087a4f" glowOpacity={0.4} glowRadius={16}
-            label="Qbank" onPress={() => launchBloom('#147a8a', 'qbank')}
+            label="Qbank" onGreen onPress={() => launchBloom('#147a8a', 'qbank')}
           >
             <Svg width={27} height={27} viewBox="0 0 24 24" fill="none" stroke="#087a4f"
               strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
@@ -713,7 +711,7 @@ function QuickRow({ user }: { user: User | null }) {
         {!hideFc && (
           <Circle
             tint="#fbe3da" color="#e8916b" glow="#e8916b" glowOpacity={0.22} glowRadius={14}
-            label="Flashcards" badge={due && due > 0 ? due : null}
+            label="Flashcards" onGreen badge={due && due > 0 ? due : null}
             onPress={() => launchBloom('#e8916b', 'flashcards')}
           >
             <Svg width={27} height={27} viewBox="0 0 24 24" fill="none" stroke="#e8916b"
@@ -727,7 +725,7 @@ function QuickRow({ user }: { user: User | null }) {
 
         {/* Countdown — opens bloom; always shows when toggle is on */}
         {!hideCd && (
-          <Circle tint="transparent" color="#1f9bb8" label="Countdown"
+          <Circle tint="transparent" color="#1f9bb8" label="Countdown" onGreen
             onPress={() => launchBloom('#4a5bb8', 'countdown')}>
             <View style={[styles.cdSvg, { transform: [{ rotate: '-90deg' }] }]}>
               <Svg width={64} height={64} viewBox="0 0 64 64">
@@ -753,7 +751,7 @@ function QuickRow({ user }: { user: User | null }) {
         {/* Streak — fire is the mark-today tap; circle body opens detail */}
         {!hideSt && (
           <Circle tint="#ffb8a0" color="#d63a1a" glow="#d63a1a" glowOpacity={0.42} glowRadius={16}
-            label="Streak" onPress={() => launchBloom('#d24a30', 'streak')}>
+            label="Streak" onGreen onPress={() => launchBloom('#d24a30', 'streak')}>
             <Pressable
               style={styles.fire}
               hitSlop={8}
@@ -850,7 +848,7 @@ function QuickRow({ user }: { user: User | null }) {
 
             {/* light sheet */}
             <ScrollView
-              style={styles.bloomSheet}
+              style={[styles.bloomSheet, { backgroundColor: colors.paper }]}
               contentContainerStyle={[styles.bloomSheetContent, { paddingBottom: insets.bottom + 24 }]}
             >
               {bloom.key === 'countdown' && (
@@ -1137,7 +1135,10 @@ function QuickRow({ user }: { user: User | null }) {
                                 >
                                   <Text style={[styles.qTopicName, { color: colors.ink }]} numberOfLines={1}>{d.name}</Text>
                                   {Number(d.due_count) > 0 ? (
-                                    <Text style={[styles.dueBadge, { backgroundColor: '#fbe4df' }]}>
+                                    <Text style={[styles.dueBadge, {
+                                      backgroundColor: mode === 'dark' ? 'rgba(210,116,90,.18)' : '#fbe4df',
+                                      color: mode === 'dark' ? colors.rust : '#c0392b',
+                                    }]}>
                                       {d.due_count} due
                                     </Text>
                                   ) : (
@@ -1270,21 +1271,6 @@ export default function HomeScreen() {
 
   const openChat = (n: Nudge) =>
     router.push({ pathname: '/chat', params: { with: String(n.id), name: n.name, av: n.avatar || '' } });
-
-  // native share sheet (web calls navigator.share with the same payload)
-  const inviteFriend = async () => {
-    try {
-      await Share.share({
-        title: 'MedConnect',
-        message:
-          "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me: " +
-          SHARE_URL,
-        url: SHARE_URL,
-      });
-    } catch {
-      // user dismissed the share sheet
-    }
-  };
 
   return (
     <Screen>
@@ -1442,30 +1428,11 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* ===== CURVED LIGHT SHEET: Explore + invite ===== */}
+        {/* ===== CURVED LIGHT SHEET: Explore ===== */}
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
           <Text style={[styles.sheetTitle, { color: colors.forest }]}>Explore Study Partners</Text>
 
           <ExploreBrowse />
-
-          {/* invite/share — web keeps inviteFriend on Home (navigator.share) */}
-          <Pressable
-            style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}
-            onPress={inviteFriend}
-          >
-            <View style={[styles.cardIcon, { backgroundColor: colors.paper2 }]}>
-              <Icon name="invite" size={22} color={colors.forest} strokeWidth={1.8} />
-            </View>
-            <View style={styles.cardBody}>
-              <Text style={[styles.cardTitle, { color: colors.ink }]}>Invite a colleague</Text>
-              <Text style={[styles.cardSub, { color: colors.muted }]}>
-                I&apos;m using MedConnect to find study partners for medical exams. Doctors only, matched by exam.
-              </Text>
-            </View>
-            <View style={[styles.cardChevron, { backgroundColor: colors.paper2 }]}>
-              <Text style={[styles.cardChevronText, { color: colors.forest }]}>›</Text>
-            </View>
-          </Pressable>
         </View>
       </ScrollView>
     </Screen>
@@ -1574,11 +1541,11 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   circleBadgeText: { fontSize: 9, fontWeight: '800', color: '#fff' },
-  circleLabel: { fontSize: 11, fontWeight: '700', textAlign: 'center', lineHeight: 13 },
+  circleLabel: { fontSize: 11.5, fontWeight: '800', textAlign: 'center', lineHeight: 14 },
   cdSvg: { position: 'absolute', top: 0, left: 0 },
   cdText: { alignItems: 'center', justifyContent: 'center' },
   cdNum: { fontFamily: SERIF, fontWeight: '900', lineHeight: 21, textAlign: 'center' },
-  cdLabel: { fontSize: 7.5, fontWeight: '800', letterSpacing: 1, color: '#5a8a7a', marginTop: 1 },
+  cdLabel: { fontSize: 7.5, fontWeight: '800', letterSpacing: 1, color: '#1e5b50', marginTop: 1 },
   fire: { position: 'absolute', top: -6, right: -6, zIndex: 4 },
   fireText: { fontSize: 17 },
   streakNum: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, color: '#d24a30', lineHeight: 26 },
@@ -1611,7 +1578,7 @@ const styles = StyleSheet.create({
     fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.5, opacity: 0.85, marginTop: 3, color: '#fff',
   },
   bloomSheet: {
-    flex: 1, backgroundColor: '#f1f4f0', borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: -16,
+    flex: 1, borderTopLeftRadius: 24, borderTopRightRadius: 24, marginTop: -16,
   },
   bloomSheetContent: { flexGrow: 1 },
   bloomPad: { paddingHorizontal: 22, paddingTop: 26, alignItems: 'center' },
@@ -1751,18 +1718,4 @@ const styles = StyleSheet.create({
     paddingVertical: 11, paddingRight: 18, paddingBottom: 11, paddingLeft: 40,
   },
   partName: { flex: 1, fontWeight: '600', fontSize: 14, minWidth: 0 },
-
-  // invite card
-  card: {
-    width: '100%', borderWidth: 1.5, borderRadius: 16, padding: 15,
-    marginTop: 4, marginBottom: 6, flexDirection: 'row', alignItems: 'center', gap: 13,
-    shadowColor: '#14281e', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
-  },
-  cardIcon: { width: 42, height: 42, borderRadius: 12, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  cardBody: { flex: 1, minWidth: 0 },
-  cardTitle: { fontWeight: '800', fontSize: 14.5 },
-  cardSub: { fontSize: 12, marginTop: 1, lineHeight: 17 },
-  cardChevron: { width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  cardChevronText: { fontSize: 15, fontWeight: '800', lineHeight: 17 },
 });

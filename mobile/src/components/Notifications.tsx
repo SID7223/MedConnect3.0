@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useNotifications, RequestRow, UnreadRow } from '../context/Notifications';
 import { useTheme } from '../context/Theme';
+import EcgIcon from './EcgIcon';
 
 type Colors = ReturnType<typeof useTheme>['colors'];
 
@@ -83,7 +84,10 @@ export default function NotificationsPanel() {
       <Pressable style={styles.scrim} onPress={close} />
       <View style={[styles.panel, { top: insets.top + 58, backgroundColor: colors.card }]}>
         <View style={[styles.head, { borderBottomColor: colors.line }]}>
-          <Text style={[styles.headTitle, { color: colors.ink }]}>Notifications</Text>
+          <View style={styles.headLeft}>
+            <EcgIcon width={34} height={15} color={colors.forest} />
+            <Text style={[styles.headTitle, { color: colors.ink }]}>Notifications</Text>
+          </View>
           {totalCount > 0 && (
             <Pressable onPress={markAllRead} hitSlop={8}>
               <Text style={[styles.markAll, { color: colors.forest }]}>Mark all read</Text>
@@ -184,7 +188,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderBottomWidth: 1,
   },
-  headTitle: { flex: 1, fontWeight: '800', fontSize: 15 },
+  headLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  headTitle: { fontWeight: '800', fontSize: 15 },
   markAll: { fontSize: 11.5, fontWeight: '700' },
   body: { flexGrow: 0, flexShrink: 1 },
   emptyWrap: { alignItems: 'center', paddingVertical: 44, paddingHorizontal: 18 },

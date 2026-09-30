@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Animated, Alert, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Animated, Alert, Easing, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/Auth';
@@ -30,8 +30,13 @@ export default function DrawerHost() {
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(x, { toValue: open ? 0 : -310, duration: 320, useNativeDriver: true }),
-      Animated.timing(scrim, { toValue: open ? 1 : 0, duration: 300, useNativeDriver: true }),
+      Animated.timing(x, {
+        toValue: open ? 0 : -310,
+        duration: 200,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(scrim, { toValue: open ? 1 : 0, duration: 150, useNativeDriver: true }),
     ]).start();
   }, [open, x, scrim]);
 
@@ -107,15 +112,14 @@ export default function DrawerHost() {
           styles.drawer,
           {
             transform: [{ translateX: x }],
-            paddingTop: insets.top,
             paddingBottom: insets.bottom,
             backgroundColor: colors.paper,
           },
         ]}
         pointerEvents={open ? 'auto' : 'none'}
       >
-        {/* head */}
-        <View style={styles.head}>
+        {/* head — green runs all the way under the status bar (no white strip above it) */}
+        <View style={[styles.head, { paddingTop: insets.top + 14 }]}>
           <Pressable style={styles.themeBtn} onPress={toggle} accessibility-label="Toggle theme">
             <Text style={{ fontSize: 18 }}>{mode === 'dark' ? '🌙' : '☀️'}</Text>
           </Pressable>

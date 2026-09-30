@@ -59,24 +59,8 @@ const EXAM_MINUTES: Record<string, number> = {
   'ADC Exam': 8,
 };
 
-// what MedConnect Pro unlocks (shown under locked stations)
-const PRO_FEATURES = [
-  'All OSCE stations for every exam (not just 3)',
-  'Full marking schemes & model answers',
-  'Timed mock circuits',
-  'Priority partner matching',
-];
-// total stations promised per exam (shown on the Pro lock)
-const TOTAL_STATIONS: Record<string, string> = {
-  'MRCP — PACES': '200+',
-  'MRCS — Part B (OSCE)': '150+',
-  'PLAB 2 / UKMLA CPSA': '250+',
-  'FCPS — IMM / Clinical': '120+',
-  'MRCEM / FRCEM — OSCE': '150+',
-  'MRCGP — SCA / CSA': '180+',
-  'ORE — Part 2 (Clinical)': '80+',
-  'ADC Exam': '70+',
-};
+// universal headline for the Pro lock — same promise on every exam
+const UNLOCK_HEADLINE = 'Unlock 50+ Stations';
 
 // fuller scenario text — sets the scene and the task clearly (still the candidate's task only)
 const SCENARIOS: Record<string, string> = {
@@ -266,25 +250,14 @@ export default function OsceScreen() {
                 style={[styles.card, styles.proCard, { backgroundColor: colors.card, borderColor: colors.line }]}
                 onPress={() => {}}
               >
-                <View style={styles.proLock}>
-                  <Icon name="pro" size={34} color={colors.forest} strokeWidth={1.8} />
+                <View style={[styles.proLock, { backgroundColor: colors.paper2 }]}>
+                  <Icon name="pro" size={32} color={colors.forest} strokeWidth={1.9} />
                 </View>
-                <Text style={[styles.proTitle, { color: colors.ink }]}>This is a Pro station</Text>
+                <Text style={[styles.proTitle, { color: colors.ink }]}>{UNLOCK_HEADLINE}</Text>
                 <Text style={[styles.proSub, { color: colors.muted }]}>
-                  You&apos;ve got {FREE} free stations. MedConnect Pro unlocks{' '}
-                  <Text style={{ fontWeight: '800' }}>
-                    {TOTAL_STATIONS[exam] || '200+'} {exam.split('—')[0].trim()} stations
-                  </Text>{' '}
-                  plus:
+                  You&apos;ve got {FREE} free stations. MedConnect Pro opens the rest — plus full
+                  marking schemes, model answers and timed mock circuits.
                 </Text>
-                <View style={styles.proFeatures}>
-                  {PRO_FEATURES.map((f) => (
-                    <View key={f} style={styles.proFeatureRow}>
-                      <Text style={{ color: colors.forest }}>✓</Text>
-                      <Text style={{ flex: 1, color: colors.ink }}>{f}</Text>
-                    </View>
-                  ))}
-                </View>
                 <Text style={[styles.proFine, { color: colors.muted }]}>Coming soon.</Text>
                 <Pressable
                   style={[styles.btn, { backgroundColor: colors.forest, marginTop: 16 }]}
@@ -653,18 +626,22 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   proCard: { maxWidth: 340, alignItems: 'center' },
-  proLock: { alignItems: 'center', justifyContent: 'center' },
+  proLock: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   proTitle: {
     fontFamily: SERIF,
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: '700',
-    marginTop: 8,
+    marginTop: 14,
     marginBottom: 8,
     textAlign: 'center',
   },
-  proSub: { fontSize: 14, lineHeight: 21, marginBottom: 12 },
-  proFeatures: { width: '100%', maxWidth: 260, marginBottom: 4, alignSelf: 'center' },
-  proFeatureRow: { flexDirection: 'row', gap: 8, fontSize: 13.5, marginBottom: 7 },
+  proSub: { fontSize: 14, lineHeight: 21, marginBottom: 8, textAlign: 'center' },
   proFine: { fontSize: 12, fontStyle: 'italic' },
   // station detail
   stationScroll: { paddingHorizontal: 18, paddingTop: 14, paddingBottom: 20 },

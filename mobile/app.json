@@ -39,7 +39,13 @@
       "expo-audio",
       "@react-native-community/datetimepicker",
       "expo-sharing",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#1f4d3f"
+        }
+      ],
       "expo-asset",
       [
         "expo-splash-screen",
