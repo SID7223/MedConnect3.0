@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../lib/api';
 import { isOnline } from '../lib/presence';
+import { useKeyboardLift } from '../lib/keyboard';
 import { useTheme } from '../context/Theme';
 import { useSettings } from '../context/Settings';
 import { User } from '../context/Auth';
@@ -76,6 +77,7 @@ const initials = (name?: string): string =>
 export default function DirectChat({ me, withId, withName, withAv, onBack }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const lift = useKeyboardLift();
 
   const [messages, setMessages] = useState<Msg[]>([]);
   const [avatars, setAvatars] = useState<Record<string, string>>({});
@@ -227,7 +229,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.paper }}
+      style={{ flex: 1, backgroundColor: colors.paper, paddingBottom: lift }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={[styles.root, { paddingTop: insets.top + 14 }]}>

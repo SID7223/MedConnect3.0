@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../lib/api';
+import { useKeyboardLift } from '../lib/keyboard';
 import { useTheme } from '../context/Theme';
 import { User } from '../context/Auth';
 import Icon from './Icon';
@@ -57,6 +58,7 @@ const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 export default function GroupChat({ me, groupId, onBack }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const lift = useKeyboardLift();
 
   const [data, setData] = useState<GroupData>({ messages: [], members: [], group: null });
   const [text, setText] = useState('');
@@ -191,7 +193,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.paper }}
+      style={{ flex: 1, backgroundColor: colors.paper, paddingBottom: lift }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={[styles.root, { paddingTop: insets.top + 14 }]}>

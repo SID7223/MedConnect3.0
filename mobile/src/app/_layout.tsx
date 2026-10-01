@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Stack, useSegments, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider } from '../context/Theme';
+import { ThemeProvider, useTheme } from '../context/Theme';
 import { AuthProvider, useAuth } from '../context/Auth';
 import { DrawerProvider } from '../context/Drawer';
 import { FocusLockProvider } from '../context/FocusLock';
@@ -30,6 +30,7 @@ function Splash() {
 // Auth gate: splash → signed-out routes → Setup (incomplete profile) → main app.
 function Gate() {
   const { user, loading } = useAuth();
+  const { colors } = useTheme();
   const segments = useSegments();
   const router = useRouter();
   const [splashDone, setSplashDone] = useState(false);
@@ -59,7 +60,8 @@ function Gate() {
   }, [loading, splashDone, user, segments, router]);
 
   if (loading || !splashDone) return <Splash />;
-  return <Stack screenOptions={{ headerShown: false }} />;
+  // scene background = paper, so no white flash shows during push/back transitions
+  return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />;
 }
 
 export default function RootLayout() {

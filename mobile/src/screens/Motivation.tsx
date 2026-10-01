@@ -174,16 +174,23 @@ export default function MotivationScreen() {
                     key={t.name}
                     onPress={() => setTheme(t)}
                     accessibilityLabel={t.name}
+                    accessibilityRole="button"
                     style={[
                       styles.themeDot,
                       {
                         backgroundColor: t.bg,
                         borderWidth: theme.name === t.name ? 2.5 : 1.5,
-                        borderColor: theme.name === t.name ? colors.forest : colors.line,
+                        borderColor: theme.name === t.name ? colors.gold : colors.line,
                         transform: [{ scale: theme.name === t.name ? 1.12 : 1 }],
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       },
                     ]}
-                  />
+                  >
+                    {theme.name === t.name && (
+                      <Text style={{ color: t.ink, fontWeight: '900', fontSize: 13 }}>✓</Text>
+                    )}
+                  </Pressable>
                 ))}
               </View>
 
@@ -225,7 +232,7 @@ export default function MotivationScreen() {
                     )}
                     <View style={styles.favRow}>
                       <View style={styles.favBody}>
-                        <Text style={styles.favQuote}>
+                        <Text style={[styles.favQuote, { color: colors.ink }]}>
                           <Text style={[styles.favMark, { color: colors.gold }]}>“</Text>
                           {q.text}
                           <Text style={[styles.favMark, { color: colors.gold }]}>”</Text>
@@ -285,7 +292,7 @@ const styles = StyleSheet.create({
   quoteMark: { fontFamily: SERIF, fontSize: 30, fontWeight: '700' },
   quoteAuthor: { fontFamily: SERIF, fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
   quoteBrand: { fontFamily: SERIF, fontSize: 13, fontWeight: '700', opacity: 0.85 },
-  themeRow: { flexDirection: 'row', gap: 10, justifyContent: 'center', marginTop: 16 },
+  themeRow: { flexDirection: 'row', gap: 10, justifyContent: 'center', marginTop: 16, marginBottom: 18 },
   themeDot: { width: 30, height: 30, borderRadius: 15 },
   saveRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 7, marginTop: 12 },
   btn: {

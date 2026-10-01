@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import Screen from '../components/Screen';
@@ -101,11 +101,28 @@ export default function PartnersScreen() {
   const stars = Array.isArray(get('starred_partners')) ? (get('starred_partners') as (string | number)[]) : [];
   const [respondingId, setRespondingId] = useState<string | number | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [toastAnim] = useState(() => new Animated.Value(0));
 
   const showToast = (msg: string) => {
     setToast(msg);
+    toastAnim.setValue(0);
+    Animated.timing(toastAnim, {
+      toValue: 1,
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
     if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(''), 2600);
+    toastTimer.current = setTimeout(() => {
+      Animated.timing(toastAnim, {
+        toValue: 0,
+        duration: 200,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }).start(({ finished }) => {
+        if (finished) setToast('');
+      });
+    }, 2600);
   };
   useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
 
@@ -124,7 +141,9 @@ export default function PartnersScreen() {
   }, []);
 
   const loadConns = useCallback(() => {
-    setCStatus('loading');
+    // keep the current list on screen during background refreshes — flipping
+    // back to 'loading' unmounts the card mid-interaction and makes the page jump
+    setCStatus((s) => (s === 'ok' ? s : 'loading'));
     api
       .connections()
       .then((d) => {
@@ -155,12 +174,22 @@ export default function PartnersScreen() {
   };
 
   const respond = async (id: string | number, action: string) => {
+    const row = conns.requests.find((r) => String(r.id) === String(id));
+    const iAmRequester = String(row?.requester) === String(user?.id);
+    const name = row ? (iAmRequester ? row.recipient_name : row.requester_name) : '';
     setRespondingId(id);
     try {
       await api.respond(id, action);
+      // drop the row optimistically — never flip the list back to a spinner
+      setConns((c) => ({ ...c, requests: c.requests.filter((r) => String(r.id) !== String(id)) }));
       await loadConns();
+      showToast(
+        action === 'accept'
+          ? `You and ${name || 'them'} are now study partners \u2713`
+          : 'Request declined',
+      );
     } catch {
-      // ignore like web
+      showToast('Could not update the request. Try again.');
     }
     setRespondingId(null);
   };
@@ -585,11 +614,22 @@ export default function PartnersScreen() {
 
         {/* toast */}
         {toast !== '' && (
-          <View style={styles.toastWrap} pointerEvents="none">
+          <Animated.View
+            style={[
+              styles.toastWrap,
+              {
+                opacity: toastAnim,
+                transform: [
+                  { translateY: toastAnim.interpolate({ inputRange: [0, 1], outputRange: [18, 0] }) },
+                ],
+              },
+            ]}
+            pointerEvents="none"
+          >
             <View style={[styles.toast, { backgroundColor: colors.forest }]}>
               <Text style={styles.toastText}>{toast}</Text>
             </View>
-          </View>
+          </Animated.View>
         )}
 
         {/* profile peek */}

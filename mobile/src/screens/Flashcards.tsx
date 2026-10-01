@@ -407,9 +407,9 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
               setMode('single');
               setBulkMsg('');
             }}
-            style={[styles.seg, mode === 'single' && { backgroundColor: colors.card }]}
+            style={[styles.seg, mode === 'single' && { backgroundColor: colors.forest }]}
           >
-            <Text style={[styles.segText, { color: mode === 'single' ? colors.forest : colors.muted }]}>
+            <Text style={[styles.segText, { color: mode === 'single' ? colors.paper : colors.muted }]}>
               One card
             </Text>
           </Pressable>
@@ -418,9 +418,9 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
               setMode('bulk');
               setBulkMsg('');
             }}
-            style={[styles.seg, mode === 'bulk' && { backgroundColor: colors.card }]}
+            style={[styles.seg, mode === 'bulk' && { backgroundColor: colors.forest }]}
           >
-            <Text style={[styles.segText, { color: mode === 'bulk' ? colors.forest : colors.muted }]}>
+            <Text style={[styles.segText, { color: mode === 'bulk' ? colors.paper : colors.muted }]}>
               Paste list
             </Text>
           </Pressable>

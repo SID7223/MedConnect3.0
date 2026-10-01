@@ -86,7 +86,7 @@ function Toggle({
       <View
         style={[
           styles.toggleTrack,
-          { width: d.w, height: d.h, backgroundColor: on ? color : colors.line },
+          { width: d.w, height: d.h, backgroundColor: on ? color : colors.subtle },
         ]}
       >
         <View

@@ -369,13 +369,13 @@ function TakeABreak() {
       <View style={[styles.pillToggle, { backgroundColor: colors.paper2 }]}>
         <Pressable
           onPress={() => setTab('breathe')}
-          style={[styles.pill, tab === 'breathe' && { backgroundColor: colors.card }]}
+          style={[styles.pill, tab === 'breathe' && { backgroundColor: colors.forest }]}
         >
           <Text
             style={{
               fontWeight: '700',
               fontSize: 13,
-              color: tab === 'breathe' ? colors.forest : colors.muted,
+              color: tab === 'breathe' ? colors.paper : colors.muted,
             }}
           >
             🫁 Breathing
@@ -383,13 +383,13 @@ function TakeABreak() {
         </Pressable>
         <Pressable
           onPress={() => setTab('game')}
-          style={[styles.pill, tab === 'game' && { backgroundColor: colors.card }]}
+          style={[styles.pill, tab === 'game' && { backgroundColor: colors.forest }]}
         >
           <Text
             style={{
               fontWeight: '700',
               fontSize: 13,
-              color: tab === 'game' ? colors.forest : colors.muted,
+              color: tab === 'game' ? colors.paper : colors.muted,
             }}
           >
             🫀 Memory

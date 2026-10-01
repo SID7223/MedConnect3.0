@@ -155,7 +155,7 @@ function Toggle({ on, onToggle, label }: { on: boolean; onToggle: () => void; la
       accessibilityRole="switch"
       accessibilityState={{ checked: on }}
       accessibilityLabel={label}
-      style={[s.track, { backgroundColor: on ? colors.forest : colors.line }]}
+      style={[s.track, { backgroundColor: on ? colors.forest : colors.subtle }]}
     >
       <View style={[s.knob, { left: on ? 20.5 : 3 }]} />
     </Pressable>

@@ -32,11 +32,11 @@ export default function DrawerHost() {
     Animated.parallel([
       Animated.timing(x, {
         toValue: open ? 0 : -310,
-        duration: 200,
+        duration: 260,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
-      Animated.timing(scrim, { toValue: open ? 1 : 0, duration: 150, useNativeDriver: true }),
+      Animated.timing(scrim, { toValue: open ? 1 : 0, duration: 200, useNativeDriver: true }),
     ]).start();
   }, [open, x, scrim]);
 
