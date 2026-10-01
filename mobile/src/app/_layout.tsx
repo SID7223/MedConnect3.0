@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
 import { Stack, useSegments, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -14,34 +13,17 @@ import DrawerHost from '../components/Drawer';
 import { FocusLockOverlay } from '../components/FocusLockOverlay';
 import NotificationsPanel from '../components/Notifications';
 
-const LOGO = require('../../assets/icon.png');
-
-function Splash() {
-  return (
-    <View style={[styles.splash, { backgroundColor: '#1f4d3f' }]}>
-      <Image source={LOGO} style={styles.splashLogo} />
-      <Text style={[styles.splashBrand, { color: '#ffffff' }]}>MedConnect</Text>
-      <Text style={[styles.splashTag, { color: 'rgba(255,255,255,.85)' }]}>Connect. Study. Succeed.</Text>
-      <ActivityIndicator style={{ marginTop: 24 }} color="#d8a84a" />
-    </View>
-  );
-}
-
-// Auth gate: splash → signed-out routes → Setup (incomplete profile) → main app.
+// Auth gate: session check → signed-out routes → Setup (incomplete profile) → main app.
+// While the session resolves we render nothing: expo-router keeps the native splash
+// up until the Stack mounts, so there is no JS splash screen — the app appears directly.
 function Gate() {
   const { user, loading } = useAuth();
   const { colors } = useTheme();
   const segments = useSegments();
   const router = useRouter();
-  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setSplashDone(true), 800);
-    return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    if (loading || !splashDone) return;
+    if (loading) return;
     const root = segments[0] as string | undefined;
 
     if (!user) {
@@ -57,9 +39,9 @@ function Gate() {
     if (root === '(auth)' || root === 'setup' || root === 'reset') {
       router.replace('/(main)');
     }
-  }, [loading, splashDone, user, segments, router]);
+  }, [loading, user, segments, router]);
 
-  if (loading || !splashDone) return <Splash />;
+  if (loading) return null;
   // scene background = paper, so no white flash shows during push/back transitions
   return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }} />;
 }
@@ -89,10 +71,3 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  splash: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
-  splashLogo: { width: 84, height: 84, borderRadius: 18, marginBottom: 8 },
-  splashBrand: { fontSize: 28, fontWeight: '900', letterSpacing: -0.5 },
-  splashTag: { fontSize: 14 },
-});
