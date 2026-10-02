@@ -78,7 +78,6 @@ const initials = (name?: string): string =>
 export default function DirectChat({ me, withId, withName, withAv, onBack }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const lift = useKeyboardLift();
 
   const [messages, setMessages] = useState<Msg[]>([]);
   const [avatars, setAvatars] = useState<Record<string, string>>({});
@@ -96,6 +95,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
   const scrollRef = useRef<ScrollView | null>(null);
   const rootRef = useRef<View | null>(null);
   const bubbleRefs = useRef<Record<string, any>>({});
+  const lift = useKeyboardLift(rootRef);
 
   const myInit = initials(me?.name || 'Me');
   const theirInit = initials(withName);

@@ -59,7 +59,6 @@ const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 export default function GroupChat({ me, groupId, onBack }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const lift = useKeyboardLift();
 
   const [data, setData] = useState<GroupData>({ messages: [], members: [], group: null });
   const [text, setText] = useState('');
@@ -74,6 +73,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
   const scrollRef = useRef<ScrollView | null>(null);
   const rootRef = useRef<View | null>(null);
   const bubbleRefs = useRef<Record<string, any>>({});
+  const lift = useKeyboardLift(rootRef);
 
   const load = useCallback(() => {
     api

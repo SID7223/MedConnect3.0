@@ -32,14 +32,21 @@ export default function DrawerHost() {
   useBackAction(open, () => setOpen(false));
 
   useEffect(() => {
+    // spring (≈critical damping) eases in from rest and settles without overshoot —
+    // smoother than the old cubic-out timing, which launched at full speed then crawled
     Animated.parallel([
-      Animated.timing(x, {
+      Animated.spring(x, {
         toValue: open ? 0 : -310,
-        duration: 260,
-        easing: Easing.out(Easing.cubic),
+        tension: 220,
+        friction: 30,
         useNativeDriver: true,
       }),
-      Animated.timing(scrim, { toValue: open ? 1 : 0, duration: 200, useNativeDriver: true }),
+      Animated.timing(scrim, {
+        toValue: open ? 1 : 0,
+        duration: open ? 300 : 260,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true,
+      }),
     ]).start();
   }, [open, x, scrim]);
 
