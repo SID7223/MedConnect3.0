@@ -3,6 +3,8 @@ import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet,
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import Screen from '../components/Screen';
+import Icon from '../components/Icon';
+import SegmentedPill from '../components/SegmentedPill';
 import { useAuth } from '../context/Auth';
 import { useTheme } from '../context/Theme';
 import { SERIF } from '../theme/fonts';
@@ -95,6 +97,7 @@ export default function PartnersScreen() {
   const [mStatus, setMStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [cStatus, setCStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [err, setErr] = useState('');
+  const [offline, setOffline] = useState(false);
   const [peek, setPeek] = useState<Peek | null>(null);
   const [toast, setToast] = useState('');
   // starred partners derive from server settings (survives data clear / phone change)
@@ -136,6 +139,7 @@ export default function PartnersScreen() {
       })
       .catch((e: any) => {
         setErr(e?.message || 'Something went wrong');
+        setOffline(!!e?.offline);
         setMStatus('error');
       });
   }, []);
@@ -150,8 +154,28 @@ export default function PartnersScreen() {
         setConns({ connected: d.connected || [], pending: d.pending || [], requests: d.requests || [] });
         setCStatus('ok');
       })
-      .catch(() => setCStatus('error'));
+      .catch((e: any) => {
+        setErr(e?.message || 'Something went wrong');
+        setOffline(!!e?.offline);
+        setCStatus('error');
+      });
   }, []);
+
+  const errorBlock = (onRetry: () => void) => (
+    <View style={styles.errWrap}>
+      {offline ? (
+        <>
+          <Icon name="cloudOff" size={76} color={colors.forest} strokeWidth={1.6} />
+          <Text style={[styles.errTitle, { color: colors.ink }]}>No internet</Text>
+        </>
+      ) : (
+        <Text style={{ color: colors.muted, fontSize: 15 }}>{err}</Text>
+      )}
+      <Pressable onPress={onRetry}>
+        <Text style={[styles.link, { color: colors.forest }]}>Try again</Text>
+      </Pressable>
+    </View>
+  );
 
   // refresh when the user returns to this screen (web refreshes on visibilitychange)
   useFocusEffect(
@@ -248,7 +272,7 @@ export default function PartnersScreen() {
   return (
     <Screen>
       <View style={styles.wrap}>
-        <ScrollView contentContainerStyle={styles.scroll}>
+        <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
           {/* hero */}
           <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
             <Text style={styles.heroEmoji} pointerEvents="none">
@@ -275,23 +299,18 @@ export default function PartnersScreen() {
           {/* body sheet */}
           <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
             {/* tabs */}
-            <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.line }]}>
-              {TABS.map(([key, label]) => {
-                const on = tab === key;
-                return (
-                  <Pressable
-                    key={key}
-                    onPress={() => setTab(key)}
-                    style={[styles.tab, on && { backgroundColor: colors.forest, shadowColor: '#1f4d3f' }]}
-                  >
-                    <Text style={[styles.tabText, { color: on ? colors.paper : colors.muted }]}>{label}</Text>
-                    {key === 'requests' && reqCount > 0 && (
-                      <View style={[styles.tabDot, { backgroundColor: on ? '#ffffff' : colors.rust }]} />
-                    )}
-                  </Pressable>
-                );
-              })}
-            </View>
+            <SegmentedPill
+              style={{ marginBottom: 18 }}
+              value={tab}
+              onChange={(key) => setTab(key as Tab)}
+              options={TABS.map(([key, label]) => ({
+                key,
+                label,
+                ...(key === 'requests' && reqCount > 0
+                  ? { dot: { color: colors.rust, activeColor: '#ffffff' } }
+                  : {}),
+              }))}
+            />
 
             {tab === 'discover' && (
               <>
@@ -316,14 +335,7 @@ export default function PartnersScreen() {
                     <ActivityIndicator color={colors.forest} />
                   </View>
                 )}
-                {mStatus === 'error' && (
-                  <View style={styles.errWrap}>
-                    <Text style={{ color: colors.muted, fontSize: 15 }}>{err}</Text>
-                    <Pressable onPress={loadMatches}>
-                      <Text style={[styles.link, { color: colors.forest }]}>Try again</Text>
-                    </Pressable>
-                  </View>
-                )}
+                {mStatus === 'error' && errorBlock(loadMatches)}
                 {mStatus === 'ok' && visibleMatches.length === 0 && (
                   <EmptyState
                     title={examLabel ? `No ${examLabel} partners yet 🌱` : 'No new partners right now'}
@@ -398,6 +410,7 @@ export default function PartnersScreen() {
                     <ActivityIndicator color={colors.forest} />
                   </View>
                 )}
+                {cStatus === 'error' && myPartners.length === 0 && errorBlock(loadConns)}
                 {cStatus === 'ok' && myPartners.length === 0 && (conns.pending?.length || 0) === 0 && (
                   <EmptyState
                     title="No partners yet 🌱"
@@ -539,6 +552,7 @@ export default function PartnersScreen() {
                     <ActivityIndicator color={colors.forest} />
                   </View>
                 )}
+                {cStatus === 'error' && conns.requests.length === 0 && errorBlock(loadConns)}
                 {cStatus === 'ok' && reqCount === 0 && (
                   <EmptyState
                     title="No requests right now"
@@ -670,7 +684,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 30 },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 36 },
   heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, color: '#fff' },
   stats: { flexDirection: 'row', gap: 22, marginTop: 16 },
   statNum: { fontFamily: SERIF, fontSize: 22, fontWeight: '900', lineHeight: 24, color: '#b98a2e' },
@@ -691,20 +705,11 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     minHeight: 400,
   },
-  tabs: { flexDirection: 'row', gap: 7, borderWidth: 1.5, borderRadius: 999, padding: 5, marginBottom: 18 },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 4,
-    borderRadius: 999,
-  },
-  tabText: { fontSize: 14, fontWeight: '600' },
-  tabDot: { position: 'absolute', top: 6, right: 10, width: 7, height: 7, borderRadius: 4 },
   subText: { fontSize: 15, lineHeight: 22, marginTop: 5 },
   matchNote: { fontSize: 11.5, lineHeight: 17, marginBottom: 14 },
   loading: { minHeight: 160, alignItems: 'center', justifyContent: 'center' },
   errWrap: { minHeight: 200, alignItems: 'center', justifyContent: 'center', gap: 10 },
+  errTitle: { fontSize: 17, fontWeight: '700' },
   link: { fontSize: 15, fontWeight: '600' },
   emptyCard: {
     alignItems: 'center',

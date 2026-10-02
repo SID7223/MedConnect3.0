@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import Screen from '../components/Screen';
+import { confirmAlert } from '../components/ConfirmDialog';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
 import { SERIF } from '../theme/fonts';
@@ -73,6 +74,12 @@ function NoteEditor({
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={s.editorInner}
         >
+          <ScrollView
+            style={s.editorScroll}
+            contentContainerStyle={s.editorScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator
+          >
           <View style={[s.editorCard, { backgroundColor: colors.paper }]}>
             <View style={s.editorHead}>
               <Text style={[s.editorTitle, { color: colors.ink }]}>
@@ -143,6 +150,7 @@ function NoteEditor({
               </Text>
             </Pressable>
           </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </View>
     </Modal>
@@ -194,11 +202,9 @@ export default function NotesVaultScreen() {
     }
   };
 
-  const confirmDelete = (id: string | number) => {
-    Alert.alert('Delete this note?', undefined, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => handleDelete(id) },
-    ]);
+  const confirmDelete = async (id: string | number) => {
+    if (!(await confirmAlert('Delete this note?', { confirmLabel: 'Delete' }))) return;
+    await handleDelete(id);
   };
 
   const fmt = (ts: string | number) => {
@@ -222,7 +228,7 @@ export default function NotesVaultScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={s.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={s.scroll}>
         {/* hero */}
         <View style={[s.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={s.heroEmoji} pointerEvents="none">
@@ -342,8 +348,8 @@ const s = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 27, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 19, color: '#fff' },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -407,7 +413,9 @@ const s = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 14,
   },
-  editorInner: { width: '100%', maxWidth: 420 },
+  editorInner: { flex: 1, width: '100%', maxWidth: 420 },
+  editorScroll: { flex: 1 },
+  editorScrollContent: { flexGrow: 1, justifyContent: 'center' },
   editorCard: { width: '100%', borderRadius: 22, padding: 18, paddingBottom: 20 },
   editorHead: {
     flexDirection: 'row',
@@ -426,7 +434,7 @@ const s = StyleSheet.create({
     paddingVertical: 11,
     marginBottom: 10,
   },
-  editorBody: { fontFamily: SERIF, fontSize: 13.5, lineHeight: 22, minHeight: 110 },
+  editorBody: { fontFamily: SERIF, fontSize: 13.5, lineHeight: 22, minHeight: 110, maxHeight: 260 },
   editorSave: {
     width: '100%',
     borderRadius: 14,

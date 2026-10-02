@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import Screen from '../components/Screen';
+import SegmentedPill from '../components/SegmentedPill';
+import { useBackAction } from '../context/Back';
 import { useSettings } from '../context/Settings';
 import DirectChat from '../components/DirectChat';
 import GroupChat from '../components/GroupChat';
@@ -53,6 +55,8 @@ export default function ChatScreen() {
   const closeConvo = useCallback(() => {
     router.setParams({ with: undefined, name: undefined, av: undefined, group: undefined });
   }, []);
+
+  useBackAction(!!active, closeConvo);
 
   if (active?.type === 'group') return <GroupChat me={user} groupId={active.id} onBack={closeConvo} />;
   if (active?.type === 'direct') {
@@ -126,7 +130,7 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
   );
 
   const delChat = async (c: Convo) => {
-    if (!(await confirmAlert(`Delete your chat with ${c.name}? This cannot be undone.`))) return;
+    if (!(await confirmAlert(`Delete your chat with ${c.name}?`, { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     api
       .deleteChat(c.other_id)
       .then(() => setConvos((v) => v.filter((x) => x.other_id !== c.other_id)))
@@ -178,7 +182,7 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
   return (
     <Screen>
       <View style={styles.wrap}>
-        <ScrollView contentContainerStyle={styles.scroll}>
+        <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
           {/* hero */}
           <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
             <Text style={styles.heroEmoji} pointerEvents="none">
@@ -192,20 +196,12 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
 
           {/* body sheet */}
           <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
-            <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.line }]}>
-              {TABS.map(([key, label]) => {
-                const on = tab === key;
-                return (
-                  <Pressable
-                    key={key}
-                    onPress={() => setTab(key)}
-                    style={[styles.tab, on && { backgroundColor: colors.forest, shadowColor: '#1f4d3f' }]}
-                  >
-                    <Text style={[styles.tabText, { color: on ? colors.paper : colors.muted }]}>{label}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+            <SegmentedPill
+              style={{ marginBottom: 14 }}
+              value={tab}
+              onChange={(key) => setTab(key as 'direct' | 'groups')}
+              options={TABS.map(([key, label]) => ({ key, label }))}
+            />
 
             {tab === 'direct' && (
               <>
@@ -403,7 +399,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 30 },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 36 },
   heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, color: '#fff' },
   sheet: {
     marginTop: -20,
@@ -414,22 +410,6 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     minHeight: 400,
   },
-  tabs: {
-    flexDirection: 'row',
-    gap: 7,
-    borderWidth: 1.5,
-    borderRadius: 999,
-    padding: 5,
-    marginBottom: 14,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 4,
-    borderRadius: 999,
-  },
-  tabText: { fontSize: 14, fontWeight: '600' },
   emptyText: { textAlign: 'center', marginTop: 30, fontSize: 15, lineHeight: 22 },
   hint: { fontSize: 11, marginBottom: 8 },
   listCard: { borderWidth: 1.5, borderRadius: 18, overflow: 'hidden' },

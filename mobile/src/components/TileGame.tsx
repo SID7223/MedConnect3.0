@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/Theme';
 import { useSettings } from '../context/Settings';
 import { SERIF } from '../theme/fonts';
@@ -39,6 +40,7 @@ export default function TileGame() {
   const { get, set } = useSettings();
 
   const [big, setBig] = useState(false);
+  const insets = useSafeAreaInsets();
 
   // best scores derive from server settings
   const bestScores = get('tiles_best') as { moves?: number; time?: number } | null;
@@ -204,7 +206,7 @@ export default function TileGame() {
 
     return (
       <Modal visible animationType="fade" onRequestClose={() => setBig(false)}>
-        <View style={[styles.fs, { backgroundColor: colors.paper, paddingTop: 12, paddingBottom: 16 }]}>
+        <View style={[styles.fs, { backgroundColor: colors.paper, paddingTop: insets.top + 12, paddingBottom: insets.bottom + 16 }]}>
           <View style={styles.fsHeader}>
             <Pressable
               onPress={reset}

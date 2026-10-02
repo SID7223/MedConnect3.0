@@ -340,7 +340,7 @@ export default function StudyPlannerScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         {/* hero */}
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -6, bottom: -14, fontSize: 84, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 26, color: '#fff' },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 33, color: '#fff' },
   examRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6, marginTop: 8 },
   examNum: { fontFamily: SERIF, fontWeight: '900', fontSize: 20 },
   examText: { fontSize: 12, opacity: 0.85, color: '#fff' },

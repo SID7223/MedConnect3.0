@@ -113,7 +113,7 @@ export default function LabValuesScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             🧪
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 19, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,

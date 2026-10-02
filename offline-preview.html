@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MedConnect — Offline State (Before / After)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --forest: #1f4d3f;
+    --gold: #b98a2e;
+    --paper: #f1f4f0;
+    --line: #dde3da;
+    --ink: #15201c;
+    --muted: #6b7670;
+    --card: #ffffff;
+    --rust: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(1200px 600px at 50% -10%, #2c6a55 0%, #173b31 55%, #10271f 100%);
+    min-height: 100vh;
+    color: #fff;
+    padding: 48px 20px 64px;
+  }
+  .page-title {
+    text-align: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -0.5px;
+  }
+  .page-sub {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,.72);
+  }
+  .frames {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+  }
+  .frame-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .frame-label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.22);
+  }
+  .frame-label.bad { background: rgba(192,57,43,.25); border-color: rgba(192,57,43,.55); }
+  .frame-label.good { background: rgba(26,168,96,.25); border-color: rgba(26,168,96,.6); }
+  .frame-note { font-size: 12.5px; color: rgba(255,255,255,.62); max-width: 340px; text-align: center; line-height: 1.6; }
+
+  /* ---- phone ---- */
+  .phone {
+    width: 375px;
+    background: var(--paper);
+    border-radius: 34px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,.45), 0 0 0 10px #0c0f0e;
+    position: relative;
+  }
+  .topbar {
+    background: var(--forest);
+    padding: 16px 18px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+  }
+  .topbar .brand { font-weight: 800; font-size: 16.5px; letter-spacing: .2px; }
+  .topbar .right { display: flex; align-items: center; gap: 12px; }
+  .avatar-chip {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #2c6a55; border: 1.5px solid rgba(255,255,255,.5);
+    display: grid; place-items: center; font-size: 15px;
+  }
+  .hero { background: var(--forest); padding: 10px 20px 40px; position: relative; overflow: hidden; color: #fff; }
+  .hero h1 { font-family: 'Fraunces', Georgia, serif; font-weight: 900; font-size: 27px; line-height: 1.15; }
+  .hero p { font-size: 12.5px; opacity: .85; margin-top: 5px; }
+  .hero .emoji { position: absolute; right: -6px; bottom: -14px; font-size: 84px; opacity: .10; }
+  .stats { display: flex; gap: 24px; margin-top: 18px; }
+  .stat b {
+    display: block;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 900; font-size: 22px; line-height: 1; color: var(--gold);
+  }
+  .stat span {
+    display: block; margin-top: 4px;
+    font-size: 9px; text-transform: uppercase; letter-spacing: .6px; opacity: .82;
+  }
+  .sheet {
+    background: var(--card);
+    border-radius: 26px 26px 0 0;
+    margin-top: -22px;
+    position: relative;
+    padding: 18px 16px 30px;
+    min-height: 340px;
+    color: var(--ink);
+  }
+  .tabs {
+    display: flex; gap: 7px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    padding: 5px;
+    margin-bottom: 22px;
+    background: var(--card);
+  }
+  .tab {
+    flex: 1; text-align: center;
+    padding: 10px 4px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 600;
+    color: var(--muted);
+  }
+  .tab.active { background: var(--forest); color: #fff; }
+
+  /* ---- before ---- */
+  .before-state {
+    min-height: 220px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px; text-align: center; padding: 0 6px;
+  }
+  .before-state .raw {
+    font-size: 13.5px; line-height: 1.55; color: var(--muted);
+    word-break: break-word;
+  }
+
+  /* ---- after ---- */
+  .after-state {
+    min-height: 220px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+  }
+  .after-state .title { font-size: 17px; font-weight: 700; color: var(--ink); }
+  .retry {
+    background: none; border: none; cursor: pointer;
+    font-family: inherit;
+    color: var(--forest); font-size: 15px; font-weight: 600;
+    padding: 6px 10px;
+  }
+  .retry:hover { opacity: .75; }
+
+  .legend {
+    margin: 46px auto 0;
+    max-width: 720px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 18px;
+    padding: 22px 26px;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: rgba(255,255,255,.85);
+  }
+  .legend b { color: #fff; }
+  .legend ul { margin: 8px 0 0 18px; }
+  @media (max-width: 460px) {
+    .phone { width: 100%; max-width: 375px; }
+  }
+</style>
+</head>
+<body>
+
+  <h1 class="page-title">Offline state — before &amp; after</h1>
+  <p class="page-sub">Study Partners screen · what the user sees when there is no connection</p>
+
+  <div class="frames">
+
+    <!-- BEFORE -->
+    <div class="frame-wrap">
+      <span class="frame-label bad">Before</span>
+      <div class="phone">
+        <div class="topbar">
+          <span style="font-size:18px;line-height:1;">&lsaquo;</span>
+          <span class="brand">MedConnect</span>
+          <span class="right">
+            <span style="font-size:16px;">&#128276;</span>
+            <span class="avatar-chip">&#129656;</span>
+          </span>
+        </div>
+        <div class="hero">
+          <span class="emoji">&#129489;&#8205;&#127891;</span>
+          <h1>Study Partners</h1>
+          <p>Find, connect, and study together.</p>
+          <div class="stats">
+            <div class="stat"><b>0</b><span>Matches</span></div>
+            <div class="stat"><b>0</b><span>Partners</span></div>
+            <div class="stat"><b>0</b><span>Requests</span></div>
+          </div>
+        </div>
+        <div class="sheet">
+          <div class="tabs">
+            <div class="tab active">Discover</div>
+            <div class="tab">My Partners</div>
+            <div class="tab">Requests</div>
+          </div>
+          <div class="before-state">
+            <p class="raw">fetch failed: java.net.UnknownHostException: Unable to resolve host &quot;med-connect3-0.vercel.app&quot;: No address associated with hostname</p>
+            <button class="retry" type="button">Try again</button>
+          </div>
+        </div>
+      </div>
+      <p class="frame-note">Raw technical error leaked to the user — looks broken and untrustworthy.</p>
+    </div>
+
+    <!-- AFTER -->
+    <div class="frame-wrap">
+      <span class="frame-label good">After</span>
+      <div class="phone">
+        <div class="topbar">
+          <span style="font-size:18px;line-height:1;">&lsaquo;</span>
+          <span class="brand">MedConnect</span>
+          <span class="right">
+            <span style="font-size:16px;">&#128276;</span>
+            <span class="avatar-chip">&#129656;</span>
+          </span>
+        </div>
+        <div class="hero">
+          <span class="emoji">&#129489;&#8205;&#127891;</span>
+          <h1>Study Partners</h1>
+          <p>Find, connect, and study together.</p>
+          <div class="stats">
+            <div class="stat"><b>0</b><span>Matches</span></div>
+            <div class="stat"><b>0</b><span>Partners</span></div>
+            <div class="stat"><b>0</b><span>Requests</span></div>
+          </div>
+        </div>
+        <div class="sheet">
+          <div class="tabs">
+            <div class="tab active">Discover</div>
+            <div class="tab">My Partners</div>
+            <div class="tab">Requests</div>
+          </div>
+          <div class="after-state">
+            <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="#1f4d3f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 19a4.25 4.25 0 0 1 0-8.5 5 5 0 0 1 10 0 4.25 4.25 0 0 1 0 8.5z" />
+              <path d="M4.5 19.5L19.5 4.5" />
+            </svg>
+            <p class="title">No internet</p>
+            <button class="retry" type="button">Try again</button>
+          </div>
+        </div>
+      </div>
+      <p class="frame-note">Clean offline state: green cloud outline with a single diagonal line, &ldquo;No internet&rdquo; below it.</p>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <b>What changed</b>
+    <ul>
+      <li>The raw network exception is no longer shown — any fetch-level failure (offline, DNS, dropped connection) renders the friendly state instead.</li>
+      <li>Cloud icon is drawn as an outline in the app&rsquo;s brand green (<b>#1f4d3f</b>) with one diagonal line crossing it.</li>
+      <li>&ldquo;No internet&rdquo; sits directly below the icon, with the existing <b>Try again</b> action under it.</li>
+      <li>Applied to <b>Discover</b>, <b>My Partners</b> and <b>Requests</b> tabs — previously the last two showed a blank sheet when offline.</li>
+      <li>Ships in both the Android/iOS app and the web app, keeping the two in sync.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

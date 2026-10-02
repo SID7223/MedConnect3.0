@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   View,
+  ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../lib/api';
@@ -68,7 +69,11 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
   const [membersOpen, setMembersOpen] = useState(false);
   const [friends, setFriends] = useState<{ id: string | number; name: string; avatar?: string }[]>([]);
   const [pickerFor, setPickerFor] = useState<string | number | null>(null);
+  const [pickerAnchor, setPickerAnchor] = useState<{ x: number; y: number; w: number; h: number; mine: boolean } | null>(null);
+  const [rootSize, setRootSize] = useState({ w: 0, h: 0 });
   const scrollRef = useRef<ScrollView | null>(null);
+  const rootRef = useRef<View | null>(null);
+  const bubbleRefs = useRef<Record<string, any>>({});
 
   const load = useCallback(() => {
     api
@@ -126,8 +131,30 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
     }
   };
 
-  const react = async (msgId: string | number, emoji: string) => {
+  const closePicker = () => {
     setPickerFor(null);
+    setPickerAnchor(null);
+  };
+
+  // anchor the picker to the long-pressed bubble (web uses position:absolute on the bubble)
+  const openPicker = (id: string | number, mine: boolean) => {
+    const el = bubbleRefs.current[String(id)];
+    const root = rootRef.current;
+    if (!el || !root || !el.measureInWindow || !root.measureInWindow) {
+      setPickerAnchor(null);
+      setPickerFor(id);
+      return;
+    }
+    root.measureInWindow((rx: number, ry: number) => {
+      el.measureInWindow((x: number, y: number, w: number, h: number) => {
+        setPickerAnchor({ x: x - rx, y: y - ry, w, h, mine });
+        setPickerFor(id);
+      });
+    });
+  };
+
+  const react = async (msgId: string | number, emoji: string) => {
+    closePicker();
     try {
       await api.toggleReaction(msgId, 'group', emoji);
       await load();
@@ -157,7 +184,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
   };
   const leave = async () => {
     setMenu(false);
-    if (!(await confirmAlert('Leave this group?'))) return;
+    if (!(await confirmAlert('Leave this group?', { confirmLabel: 'Leave' }))) return;
     try {
       await api.leaveGroup(groupId);
       onBack();
@@ -167,7 +194,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
   };
   const del = async () => {
     setMenu(false);
-    if (!(await confirmAlert('Delete this group for everyone? This cannot be undone.'))) return;
+    if (!(await confirmAlert('Delete this group for everyone?', { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     try {
       await api.deleteGroup(groupId);
       onBack();
@@ -187,16 +214,32 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
       style={({ pressed }) => [styles.menuItem, pressed && { backgroundColor: colors.paper2 }]}
     >
       {icon}
-      <Text style={[styles.menuLabel, danger && { color: colors.rust }]}>{label}</Text>
+      <Text style={[styles.menuLabel, { color: colors.ink }, danger && { color: colors.rust }]}>{label}</Text>
     </Pressable>
   );
+
+  const pickerPos: ViewStyle =
+    pickerAnchor && rootSize.h > 0
+      ? {
+          ...(pickerAnchor.y > 56
+            ? { bottom: rootSize.h - pickerAnchor.y + 6 }
+            : { top: pickerAnchor.y + pickerAnchor.h + 6 }),
+          ...(pickerAnchor.mine
+            ? { right: rootSize.w - (pickerAnchor.x + pickerAnchor.w) }
+            : { left: pickerAnchor.x }),
+        }
+      : { top: '40%', alignSelf: 'center' };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: colors.paper, paddingBottom: lift }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={[styles.root, { paddingTop: insets.top + 14 }]}>
+      <View
+        ref={rootRef}
+        onLayout={(e) => setRootSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
+        style={[styles.root, { paddingTop: insets.top + 14 }]}
+      >
         {/* header */}
         <View style={styles.header}>
           <Pressable onPress={onBack} style={styles.backBtn} accessibilityLabel="Back">
@@ -254,7 +297,8 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                     </View>
                   )}
                   <Pressable
-                    onLongPress={() => setPickerFor(m.id)}
+                    ref={(r) => { bubbleRefs.current[String(m.id)] = r; }}
+                    onLongPress={() => openPicker(m.id, mine)}
                     delayLongPress={450}
                     style={[
                       styles.bubble,
@@ -288,7 +332,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                 </View>
                 {msgReactions && Object.keys(msgReactions).length > 0 && (
                   <View
-                    style={[styles.reactionRow, { justifyContent: mine ? 'flex-end' : 'flex-start', paddingLeft: 37 }]}
+                    style={[styles.reactionRow, { justifyContent: mine ? 'flex-end' : 'flex-start', paddingLeft: mine ? 0 : 37, paddingRight: mine ? 37 : 0 }]}
                   >
                     {Object.entries(msgReactions).map(([emoji, info]) => (
                       <Pressable
@@ -364,11 +408,12 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
         {/* reaction picker — long-press a bubble to open */}
         {pickerFor !== null && (
           <>
-            <Pressable style={StyleSheet.absoluteFill} onPress={() => setPickerFor(null)} />
+            <Pressable style={StyleSheet.absoluteFill} onPress={closePicker} />
             <View
               style={[
                 styles.reactionPicker,
                 { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#000' },
+                pickerPos,
               ]}
             >
               {REACTIONS.map((e) => (
@@ -520,11 +565,9 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   menuItem: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 10 },
-  menuLabel: { fontSize: 14, fontWeight: '600', color: '#15201c' },
+  menuLabel: { fontSize: 14, fontWeight: '600' },
   reactionPicker: {
     position: 'absolute',
-    top: '40%',
-    alignSelf: 'center',
     flexDirection: 'row',
     gap: 4,
     paddingVertical: 6,

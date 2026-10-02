@@ -16,9 +16,7 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#1f4d3f",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
@@ -54,9 +52,9 @@
           "dark": {
             "backgroundColor": "#1d4034"
           },
-          "image": "./assets/splash-icon.png",
-          "imageWidth": 150,
-          "imageHeight": 150,
+          "image": "./assets/splash.png",
+          "imageWidth": 400,
+          "imageHeight": 400,
           "resizeMode": "contain"
         }
       ]

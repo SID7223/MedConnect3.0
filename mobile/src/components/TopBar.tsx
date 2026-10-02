@@ -3,10 +3,13 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation, usePathname, router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/Auth';
+import { useBack } from '../context/Back';
 import { useDrawer } from '../context/Drawer';
 import { useTheme } from '../context/Theme';
 import { useNotifications } from '../context/Notifications';
 import Icon from './Icon';
+
+const TAB_ROOTS = ['/', '/partners', '/osce', '/chat', '/focus'];
 
 // Green top app bar — burger on root tabs, back on pushed screens (matches web TopBar).
 export default function TopBar() {
@@ -14,11 +17,16 @@ export default function TopBar() {
   const { user } = useAuth();
   const { setOpen: setDrawerOpen } = useDrawer();
   const { setOpen: setBellOpen, totalCount } = useNotifications();
+  const { backHandler } = useBack();
   const navigation = useNavigation();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
 
-  const canGoBack = navigation.canGoBack();
+  const showBack = !TAB_ROOTS.includes(pathname) || !!backHandler;
+  const goBack = () => {
+    if (backHandler) backHandler();
+    else navigation.goBack();
+  };
   const onProfile = pathname === '/profile';
 
   const initials = (user?.name || 'Dr A')
@@ -32,8 +40,8 @@ export default function TopBar() {
   return (
     <View style={[styles.bar, { paddingTop: insets.top + 12, backgroundColor: colors.topbarBg }]}>
       <View style={styles.side}>
-        {canGoBack ? (
-          <Pressable style={styles.iconBtn} onPress={() => navigation.goBack()} accessibilityLabel="Back">
+        {showBack ? (
+          <Pressable style={styles.iconBtn} onPress={goBack} accessibilityLabel="Back">
             <Icon name="back" size={24} color="#fff" />
           </Pressable>
         ) : (

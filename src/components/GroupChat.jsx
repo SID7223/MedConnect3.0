@@ -82,12 +82,12 @@ export default function GroupChat({ me, groupId, onBack }) {
   };
   const leave = async () => {
     setMenu(false);
-    if (!(await confirm('Leave this group?'))) return;
+    if (!(await confirm('Leave this group?', { confirmLabel: 'Leave' }))) return;
     try { await api.leaveGroup(groupId); onBack(); } catch (e) {}
   };
   const del = async () => {
     setMenu(false);
-    if (!(await confirm('Delete this group for everyone? This cannot be undone.'))) return;
+    if (!(await confirm('Delete this group for everyone?', { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     try { await api.deleteGroup(groupId); onBack(); } catch (e) {}
   };
 

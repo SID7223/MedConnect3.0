@@ -18,6 +18,7 @@ input, textarea {
   --teal:var(--forest); --teal-dim:var(--forest-2); --amber:var(--gold);
   --rose:var(--rust); --green:#1aa860; --violet:var(--rust); --faint:var(--subtle);
   --section-hero:#1f4d3f;
+  --rust-tint:#fbeae7; --forest-tint:#eaf1ec;
 }
 [data-theme="dark"] {
   --ink:#ece7d8; --paper:#14110c; --paper-2:#1d1913; --card:#1b1710;
@@ -28,7 +29,11 @@ input, textarea {
   --rose:var(--rust); --green:#2ecc71; --violet:var(--rust); --faint:var(--subtle);
   --topbar-bg:#1d4034;
   --section-hero:#1d4034;
+  --rust-tint:#33211a; --forest-tint:#16241c;
 }
+
+@keyframes confirmFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes confirmPop { from { opacity: 0; transform: scale(.94) translateY(8px) } to { opacity: 1; transform: scale(1) translateY(0) } }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 button, a { -webkit-tap-highlight-color: transparent; }

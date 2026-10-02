@@ -91,7 +91,7 @@ export default function ResetScreen() {
         style={styles.kav}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <Pressable onPress={goSignIn}>
             <Text style={[styles.link, { color: colors.forest }]}>‹ Back to sign in</Text>
           </Pressable>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '700',
     letterSpacing: -0.5,
-    lineHeight: 32,
+    lineHeight: 41,
     marginTop: 14,
     marginBottom: 8,
   },

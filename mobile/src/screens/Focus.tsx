@@ -3,6 +3,7 @@ import { Animated, Easing, Modal, Pressable, ScrollView, StyleSheet, Text, TextI
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import Screen from '../components/Screen';
+import SegmentedPill from '../components/SegmentedPill';
 import StudyTimer from '../components/StudyTimer';
 import TileGame from '../components/TileGame';
 import { FocusLockOverlay } from '../components/FocusLockOverlay';
@@ -366,36 +367,16 @@ function TakeABreak() {
       <Text style={{ fontSize: 15, fontWeight: '700', marginBottom: 12, textAlign: 'center', color: colors.ink }}>
         Take A Break
       </Text>
-      <View style={[styles.pillToggle, { backgroundColor: colors.paper2 }]}>
-        <Pressable
-          onPress={() => setTab('breathe')}
-          style={[styles.pill, tab === 'breathe' && { backgroundColor: colors.forest }]}
-        >
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 13,
-              color: tab === 'breathe' ? colors.paper : colors.muted,
-            }}
-          >
-            🫁 Breathing
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setTab('game')}
-          style={[styles.pill, tab === 'game' && { backgroundColor: colors.forest }]}
-        >
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 13,
-              color: tab === 'game' ? colors.paper : colors.muted,
-            }}
-          >
-            🫀 Memory
-          </Text>
-        </Pressable>
-      </View>
+      <SegmentedPill
+        variant="flush"
+        style={{ marginBottom: 14 }}
+        value={tab}
+        onChange={(key) => setTab(key as 'breathe' | 'game')}
+        options={[
+          { key: 'breathe', label: '🫁 Breathing' },
+          { key: 'game', label: '🫀 Memory' },
+        ]}
+      />
       {tab === 'breathe' ? <Breathe /> : <TileGame />}
     </>
   );
@@ -405,7 +386,7 @@ export default function FocusScreen() {
   const { colors } = useTheme();
   return (
     <Screen>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+      <ScrollView bounces={false} overScrollMode="never" style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroEmoji}>🎯</Text>
           <Text style={styles.heroTitle}>Focus ☕</Text>
@@ -437,7 +418,7 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   heroTitle: { fontFamily: SERIF, fontSize: 26, fontWeight: '900', color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 18, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 21, color: '#fff' },
   body: {
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
@@ -521,11 +502,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pillToggle: {
-    flexDirection: 'row',
-    borderRadius: 999,
-    padding: 4,
-    marginBottom: 14,
-  },
-  pill: { flex: 1, borderRadius: 999, paddingVertical: 9, alignItems: 'center', justifyContent: 'center' },
 });

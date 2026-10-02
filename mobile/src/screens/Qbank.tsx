@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import Screen from '../components/Screen';
+import { confirmAlert } from '../components/ConfirmDialog';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../context/Auth';
 import { useTheme } from '../context/Theme';
@@ -239,32 +239,24 @@ export default function QbankScreen() {
     })();
   };
 
-  const deleteBank = () => {
-    Alert.alert(
-      'Delete Qbank',
-      `Delete the "${bank}" Qbank and all its topics? This can't be undone.`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            const target = bank;
-            const remaining = banks.filter((b) => b !== target);
-            // optimistic local removal
-            setRows((prev) => prev.filter((r) => r.bank !== target));
-            setBanks(remaining.length ? remaining : ['PassMedicine']);
-            setBank(remaining[0] || 'PassMedicine');
-            setSharingWith((prev) => prev.filter((g) => g.bank !== target));
-            try {
-              await api.qbankDeleteBank(target);
-            } catch {
-              // optimistic removal already happened
-            }
-          },
-        },
-      ],
-    );
+  const deleteBank = async () => {
+    const ok = await confirmAlert(`Delete the "${bank}" Qbank?`, {
+      note: "All of its topics will be removed too. This can't be undone.",
+      confirmLabel: 'Delete',
+    });
+    if (!ok) return;
+    const target = bank;
+    const remaining = banks.filter((b) => b !== target);
+    // optimistic local removal
+    setRows((prev) => prev.filter((r) => r.bank !== target));
+    setBanks(remaining.length ? remaining : ['PassMedicine']);
+    setBank(remaining[0] || 'PassMedicine');
+    setSharingWith((prev) => prev.filter((g) => g.bank !== target));
+    try {
+      await api.qbankDeleteBank(target);
+    } catch {
+      // optimistic removal already happened
+    }
   };
 
   const openShareSection = async () => {
@@ -327,7 +319,7 @@ export default function QbankScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroGlyph} pointerEvents="none">
             📊
@@ -850,8 +842,8 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 27, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 19, color: '#fff' },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 33, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,

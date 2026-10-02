@@ -34,7 +34,7 @@ export default function ProScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           {/* web gold radial glow, approximated with a soft circle */}
           <View style={styles.glow} pointerEvents="none" />
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 19, maxWidth: '84%', color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, maxWidth: '84%', color: '#fff' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Text } from 'react-native';
+import { Text } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { useTheme } from '../context/Theme';
 
@@ -119,18 +119,6 @@ export const Stamp = ({ ts, light }: { ts?: string; light?: boolean }) => {
   );
 };
 
-// Promise-based replacement for web's useConfirm() — same message + Cancel/OK
-// semantics, OK styled destructive (web shows the OK button rust-colored).
-export function confirmAlert(message: string, opts?: { danger?: boolean }): Promise<boolean> {
-  return new Promise((resolve) => {
-    Alert.alert(
-      message,
-      undefined,
-      [
-        { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
-        { text: 'OK', style: opts?.danger === false ? 'default' : 'destructive', onPress: () => resolve(true) },
-      ],
-      { cancelable: true, onDismiss: () => resolve(false) },
-    );
-  });
-}
+// Promise-based confirmation — re-exported from ConfirmDialog (the system-wide
+// "Compact Pill" dialog) so existing imports from ChatBits keep working.
+export { confirmAlert } from './ConfirmDialog';

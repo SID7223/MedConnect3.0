@@ -4,6 +4,7 @@ import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path } from 'react-native-svg';
 import Screen from '../components/Screen';
+import SegmentedPill from '../components/SegmentedPill';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
 import { quoteById, quoteOfTheDay, Quote } from '../lib/quotes';
@@ -106,7 +107,7 @@ export default function MotivationScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroGlyph} pointerEvents="none">
             ✦
@@ -120,24 +121,15 @@ export default function MotivationScreen() {
 
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
           {/* tabs */}
-          <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.line }]}>
-            <Pressable
-              style={[styles.tab, tab === 'today' && { backgroundColor: colors.forest }]}
-              onPress={() => setTab('today')}
-            >
-              <Text style={[styles.tabText, { color: tab === 'today' ? colors.paper : colors.muted }]}>
-                Today
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.tab, tab === 'favs' && { backgroundColor: colors.forest }]}
-              onPress={() => setTab('favs')}
-            >
-              <Text style={[styles.tabText, { color: tab === 'favs' ? colors.paper : colors.muted }]}>
-                {`Favourites ${favIds.length || ''}`}
-              </Text>
-            </Pressable>
-          </View>
+          <SegmentedPill
+            style={{ marginBottom: 18 }}
+            value={tab}
+            onChange={(key) => setTab(key as 'today' | 'favs')}
+            options={[
+              { key: 'today', label: 'Today' },
+              { key: 'favs', label: `Favourites ${favIds.length || ''}` },
+            ]}
+          />
 
           {tab === 'today' && (
             <View>
@@ -259,8 +251,8 @@ const styles = StyleSheet.create({
   hero: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 32, overflow: 'hidden' },
   heroGlyph: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 27, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 19, color: '#fff' },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -269,16 +261,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 24,
   },
-  tabs: {
-    flexDirection: 'row',
-    gap: 7,
-    borderWidth: 1.5,
-    borderRadius: 999,
-    padding: 5,
-    marginBottom: 18,
-  },
-  tab: { flex: 1, alignItems: 'center', paddingVertical: 10, paddingHorizontal: 4, borderRadius: 999 },
-  tabText: { fontSize: 14, fontWeight: '600' },
   card: { borderWidth: 1.5, borderRadius: 16, padding: 18, marginBottom: 16 },
   todayGlyph: { fontSize: 28, marginBottom: 14 },
   quoteText: {

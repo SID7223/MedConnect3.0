@@ -43,11 +43,19 @@ async function req<T = any>(
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   const t = await token();
   if (t) headers.Authorization = `Bearer ${t}`;
-  const res = await fetch(`${API_BASE}/api${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/api${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (e: any) {
+    // fetch never got a response (offline / DNS / connection drop) — flag it so
+    // screens can show a friendly "No internet" state instead of the raw error
+    if (e && typeof e === 'object') e.offline = true;
+    throw e;
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data && data.error) || `Request failed (${res.status})`);
   return data as T;

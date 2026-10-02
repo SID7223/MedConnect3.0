@@ -4,6 +4,7 @@ import { useBack } from '../context/Back.jsx';
 import { useAuth } from '../context/Auth.jsx';
 import { api } from '../lib/api.js';
 import { examColor } from '../lib/examColors.js';
+import { useConfirm } from '../components/ConfirmDialog.jsx';
 
 // Qbank progress tracker — solo by default, optional per-partner sharing.
 // All sharing/compare is INLINE (no modals) so nothing can clip off-screen.
@@ -36,6 +37,7 @@ export default function Qbank() {
   const [renameVal, setRenameVal] = useState('');
   const [newBankOpen, setNewBankOpen] = useState(false);
   const [newBankVal, setNewBankVal] = useState('');
+  const [confirm, ConfirmDialog] = useConfirm();
 
   const load = async () => {
     setLoading(true);
@@ -117,7 +119,7 @@ export default function Qbank() {
   };
 
   const deleteBank = async () => {
-    if (!confirm(`Delete the "${bank}" Qbank and all its topics? This can't be undone.`)) return;
+    if (!(await confirm(`Delete the "${bank}" Qbank?`, { note: 'All of its topics will be removed too. This can\'t be undone.', confirmLabel: 'Delete' }))) return;
     const target = bank;
     const remaining = banks.filter((b) => b !== target);
     // optimistic local removal
@@ -306,6 +308,7 @@ export default function Qbank() {
       {/* partners sharing WITH me — inline, with inline expand-to-compare */}
       <SharedToMe bank={bank} grants={sharedToMe} compareId={compareId} compareName={compareName} compareRows={compareRows} bankRows={bankRows} color={color} accColor={accColor} onToggle={toggleCompare} />
       </div>
+      {ConfirmDialog}
     </div>
   );
 }

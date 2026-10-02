@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../lib/api';
+import { useConfirm } from '../components/ConfirmDialog.jsx';
 
 // ── Tag pill ────────────────────────────────────────────────────────────────
 function Tag({ label }) {
@@ -53,6 +54,7 @@ export default function NotesVault() {
   const [loading, setLoading] = useState(true);
   const [editor, setEditor] = useState(null); // null | 'new' | note object
   const [toast, setToast] = useState('');
+  const [confirm, ConfirmDialog] = useConfirm();
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500); };
 
@@ -70,6 +72,7 @@ export default function NotesVault() {
   };
 
   const handleDelete = async (id) => {
+    if (!(await confirm('Delete this note?', { confirmLabel: 'Delete' }))) return;
     try {
       await api.noteDelete(id);
       setNotes(prev => prev.filter(n => n.id !== id));
@@ -119,7 +122,7 @@ export default function NotesVault() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
               {n.tags && <Tag label={n.tags} />}
               <span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 'auto' }}>{fmt(n.updated_at)}</span>
-              <button onClick={e => { e.stopPropagation(); if (confirm('Delete this note?')) handleDelete(n.id); }}
+              <button onClick={e => { e.stopPropagation(); handleDelete(n.id); }}
                 style={{ background: 'none', border: '1px solid #fde0d8', borderRadius: 8, padding: '3px 8px', fontSize: 10.5, fontWeight: 700, color: 'var(--rust)', cursor: 'pointer', fontFamily: 'inherit' }}>
                 Delete
               </button>
@@ -130,6 +133,7 @@ export default function NotesVault() {
 
       {/* modals */}
       {editor && <NoteEditor note={editor === 'new' ? null : editor} onSave={handleSave} onClose={() => setEditor(null)} />}
+      {ConfirmDialog}
 
       {/* toast */}
       {toast && (

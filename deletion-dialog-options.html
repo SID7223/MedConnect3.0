@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedConnect — Deletion Dialog Options</title>
+<style>
+  :root {
+    --forest:#1f4d3f; --forest2:#2c6a55; --rust:#c0392b; --gold:#b98a2e;
+    --ink:#15201c; --paper:#f1f4f0; --paper2:#e6ebe4; --card:#ffffff;
+    --line:#dde3da; --muted:#6b7670; --subtle:#9aa39c; --green:#1aa860;
+    --topbar:#1f4d3f; --scrim:rgba(10,18,14,.55);
+    --rust-tint:#fbeae7; --forest-tint:#eaf1ec;
+    --shadow:0 24px 60px rgba(10,25,18,.28);
+  }
+  [data-theme="dark"] {
+    --forest:#5fae93; --forest2:#7cc4aa; --rust:#d2745a; --gold:#d8a84a;
+    --ink:#ece7d8; --paper:#14110c; --paper2:#1d1913; --card:#1b1710;
+    --line:#332c20; --muted:#9a9384; --subtle:#6b6557; --green:#2ecc71;
+    --topbar:#1d4034; --scrim:rgba(0,0,0,.62);
+    --rust-tint:#33211a; --forest-tint:#16241c;
+    --shadow:0 24px 60px rgba(0,0,0,.55);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#e9ece6 0%,#dfe4dc 100%);
+    min-height:100vh; color:#15201c; padding:28px 20px 60px;
+  }
+  [data-theme="dark"] body { background:linear-gradient(160deg,#0e1512 0%,#14110c 100%); color:#ece7d8; }
+
+  .page { max-width:1180px; margin:0 auto; }
+  header.page-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .brand-mark { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#1f4d3f,#2c6a55); display:grid; place-items:center; color:#fff; font-weight:800; font-size:15px; letter-spacing:.5px; }
+  .brand h1 { font-size:19px; font-weight:800; letter-spacing:-.2px; }
+  .brand p { font-size:12.5px; color:#6b7670; margin-top:2px; }
+  [data-theme="dark"] .brand p { color:#9a9384; }
+
+  .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .seg { display:flex; background:#fff; border:1px solid #dde3da; border-radius:14px; padding:5px; gap:4px; box-shadow:0 4px 14px rgba(20,40,30,.06); }
+  [data-theme="dark"] .seg { background:#1b1710; border-color:#332c20; }
+  .seg button {
+    border:0; background:transparent; font:inherit; font-size:13px; font-weight:600; color:#6b7670;
+    padding:9px 14px; border-radius:10px; cursor:pointer; transition:.18s; white-space:nowrap;
+  }
+  [data-theme="dark"] .seg button { color:#9a9384; }
+  .seg button:hover { color:#1f4d3f; background:#eaf1ec; }
+  [data-theme="dark"] .seg button:hover { color:#7cc4aa; background:#16241c; }
+  .seg button.active { background:#1f4d3f; color:#fff; box-shadow:0 4px 10px rgba(31,77,63,.35); }
+  [data-theme="dark"] .seg button.active { background:#5fae93; color:#14110c; }
+  .theme-btn {
+    border:1px solid #dde3da; background:#fff; border-radius:14px; padding:12px 16px; font:inherit;
+    font-size:13px; font-weight:600; color:#1f4d3f; cursor:pointer; transition:.18s;
+    box-shadow:0 4px 14px rgba(20,40,30,.06);
+  }
+  [data-theme="dark"] .theme-btn { background:#1b1710; border-color:#332c20; color:#7cc4aa; }
+  .theme-btn:hover { background:#eaf1ec; }
+  [data-theme="dark"] .theme-btn:hover { background:#16241c; }
+
+  .layout { display:grid; grid-template-columns:410px 1fr; gap:28px; align-items:start; }
+  @media (max-width:940px) { .layout { grid-template-columns:1fr; } }
+
+  .phone {
+    width:100%; max-width:410px; margin:0 auto; aspect-ratio:410/800; position:relative;
+    border-radius:38px; background:#0c120f; padding:10px; box-shadow:0 30px 70px rgba(15,35,25,.35), inset 0 0 0 2px #222d27;
+  }
+  .screen { position:relative; width:100%; height:100%; border-radius:30px; overflow:hidden; background:var(--paper); display:flex; flex-direction:column; }
+
+  .statusbar { background:var(--topbar); color:#fff; display:flex; justify-content:center; align-items:center; gap:8px; font-size:12.5px; font-weight:700; padding:9px 0 6px; letter-spacing:.3px; }
+  .statusbar span { opacity:.9; font-weight:600; font-size:11px; letter-spacing:1.5px; }
+
+  .topbar { background:var(--topbar); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:12px 16px 14px; }
+  .topbar .tb-title { font-size:16.5px; font-weight:800; letter-spacing:.2px; }
+  .tb-ico { width:34px; height:34px; display:grid; place-items:center; border-radius:50%; background:rgba(255,255,255,.12); color:#fff; }
+  .tb-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#b98a2e,#d8a84a); display:grid; place-items:center; font-size:13px; font-weight:800; color:#fff; border:2px solid rgba(255,255,255,.55); }
+
+  .content { flex:1; padding:20px 18px; overflow:hidden; }
+  .hero-h { font-size:27px; font-weight:800; color:var(--ink); letter-spacing:-.5px; }
+  .hero-sub { font-size:13px; color:var(--muted); margin-top:5px; }
+  .hero-sub b { color:var(--gold); font-weight:600; }
+  .hero-sub i { color:var(--forest2); font-style:normal; font-weight:600; }
+
+  .tabs { display:flex; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px; margin-top:18px; }
+  .tabs .tab { flex:1; text-align:center; font-size:13.5px; font-weight:700; color:var(--muted); padding:10px 0; border-radius:999px; cursor:pointer; transition:.2s; }
+  .tabs .tab.on { background:var(--forest); color:#fff; box-shadow:0 4px 10px rgba(31,77,63,.3); }
+  [data-theme="dark"] .tabs .tab.on { color:#14110c; }
+
+  .hint { font-size:11.5px; color:var(--subtle); margin:14px 2px 8px; }
+  .chat-row { display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px 14px; }
+  .chat-av { width:40px; height:40px; border-radius:50%; background:var(--rust-tint); color:var(--rust); display:grid; place-items:center; font-weight:800; font-size:15px; }
+  .chat-name { font-size:15px; font-weight:700; color:var(--ink); }
+  .chat-msg { font-size:12px; color:var(--muted); margin-top:2px; }
+  .chat-time { margin-left:auto; font-size:10.5px; color:var(--subtle); align-self:flex-start; }
+
+  .bubbles { position:absolute; right:-34px; bottom:96px; width:120px; height:120px; border-radius:50%; background:var(--forest-tint); opacity:.7; }
+
+  .scrim { position:absolute; inset:0; background:var(--scrim); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:5; }
+  .scrim.show { opacity:1; pointer-events:auto; }
+
+  .dialog { position:absolute; z-index:6; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; }
+  .dialog.active { opacity:1; pointer-events:auto; }
+
+  /* ---------- Option A: Classic Alert ---------- */
+  .dlg-a {
+    left:50%; top:44%; transform:translate(-50%,-46%) scale(.94);
+    width:82%; max-width:320px; background:var(--card); border-radius:18px;
+    box-shadow:var(--shadow); overflow:hidden; border:1px solid var(--line);
+  }
+  .dlg-a.active { transform:translate(-50%,-50%) scale(1); }
+  .dlg-a .body { padding:24px 22px 20px; text-align:center; }
+  .dlg-a h3 { font-size:16.5px; font-weight:800; color:var(--ink); line-height:1.35; }
+  .dlg-a p { font-size:13.5px; color:var(--muted); margin-top:7px; line-height:1.45; }
+  .dlg-a .actions { display:flex; border-top:1px solid var(--line); }
+  .dlg-a .actions button {
+    flex:1; border:0; background:transparent; font:inherit; font-size:13px; font-weight:800;
+    letter-spacing:.8px; padding:15px 0; cursor:pointer; transition:.15s;
+  }
+  .dlg-a .actions .cancel { color:var(--forest); border-right:1px solid var(--line); }
+  .dlg-a .actions .delete { color:var(--rust); }
+  .dlg-a .actions button:active { background:var(--paper2); }
+
+  /* ---------- Option B: Icon Card ---------- */
+  .dlg-b {
+    left:50%; top:44%; transform:translate(-50%,-46%) scale(.94);
+    width:84%; max-width:330px; background:var(--card); border-radius:22px;
+    box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; border:1px solid var(--line);
+  }
+  .dlg-b.active { transform:translate(-50%,-50%) scale(1); }
+  .icon-badge {
+    width:62px; height:62px; border-radius:50%; background:var(--rust-tint);
+    display:grid; place-items:center; margin:0 auto 16px; border:1.5px solid rgba(192,57,43,.25);
+  }
+  [data-theme="dark"] .icon-badge { border-color:rgba(210,116,90,.3); }
+  .dlg-b h3 { font-size:17px; font-weight:800; color:var(--ink); line-height:1.35; }
+  .dlg-b p { font-size:13.5px; color:var(--muted); margin-top:8px; line-height:1.5; }
+  .btn-stack { display:flex; flex-direction:column; gap:10px; margin-top:22px; }
+  .btn { border:0; font:inherit; font-size:14.5px; font-weight:700; padding:14px 0; border-radius:13px; cursor:pointer; transition:.15s; letter-spacing:.2px; }
+  .btn-danger { background:var(--rust); color:#fff; box-shadow:0 8px 18px rgba(192,57,43,.32); }
+  [data-theme="dark"] .btn-danger { box-shadow:0 8px 18px rgba(210,116,90,.25); }
+  .btn-danger:active { filter:brightness(.92); transform:scale(.98); }
+  .btn-ghost { background:transparent; color:var(--forest); font-weight:700; }
+  .btn-ghost:active { background:var(--forest-tint); }
+
+  /* ---------- Option C: Bottom Sheet ---------- */
+  .dlg-c {
+    left:0; right:0; bottom:0; transform:translateY(105%);
+    background:var(--card); border-radius:24px 24px 0 0; padding:12px 20px calc(22px + env(safe-area-inset-bottom,0px));
+    box-shadow:0 -18px 50px rgba(10,25,18,.3); border-top:1px solid var(--line);
+  }
+  .dlg-c.active { transform:translateY(0); transition:transform .32s cubic-bezier(.22,1,.36,1); }
+  .handle { width:42px; height:5px; border-radius:99px; background:var(--line); margin:0 auto 18px; }
+  .sheet-head { display:flex; gap:14px; align-items:flex-start; }
+  .sheet-head .icon-badge { width:48px; height:48px; margin:0; flex-shrink:0; }
+  .dlg-c h3 { font-size:16.5px; font-weight:800; color:var(--ink); line-height:1.35; padding-top:2px; }
+  .dlg-c p { font-size:13.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .btn-outline { background:var(--card); color:var(--forest); border:1.5px solid var(--line); }
+  .btn-outline:active { background:var(--forest-tint); }
+
+  /* ---------- Option D: Compact Pill ---------- */
+  .dlg-d {
+    left:50%; top:46%; transform:translate(-50%,-46%) scale(.94);
+    width:78%; max-width:300px; background:var(--card); border-radius:20px;
+    box-shadow:var(--shadow); padding:22px 20px 20px; text-align:center;
+    border:1px solid var(--line); border-top:4px solid var(--rust);
+  }
+  .dlg-d.active { transform:translate(-50%,-50%) scale(1); }
+  .dlg-d .mini-badge {
+    width:44px; height:44px; border-radius:14px; background:var(--rust-tint); color:var(--rust);
+    display:grid; place-items:center; margin:0 auto 12px;
+  }
+  .dlg-d h3 { font-size:15.5px; font-weight:800; color:var(--ink); line-height:1.35; }
+  .dlg-d p { font-size:12.8px; color:var(--muted); margin-top:6px; line-height:1.45; }
+  .pill-row { display:flex; gap:10px; margin-top:18px; }
+  .pill { flex:1; border:0; font:inherit; font-size:13.5px; font-weight:700; padding:12px 0; border-radius:999px; cursor:pointer; transition:.15s; }
+  .pill-cancel { background:var(--paper2); color:var(--ink); }
+  [data-theme="dark"] .pill-cancel { background:#26241f; }
+  .pill-cancel:active { filter:brightness(.95); }
+  .pill-delete { background:var(--rust); color:#fff; box-shadow:0 6px 14px rgba(192,57,43,.3); }
+  .pill-delete:active { filter:brightness(.92); }
+
+  /* ---------- Info panel ---------- */
+  .panel { display:flex; flex-direction:column; gap:18px; }
+  .card-box { background:#fff; border:1px solid #dde3da; border-radius:20px; padding:24px 26px; box-shadow:0 8px 26px rgba(20,40,30,.07); }
+  [data-theme="dark"] .card-box { background:#1b1710; border-color:#332c20; box-shadow:0 8px 26px rgba(0,0,0,.35); }
+  .opt-tag { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--forest2); background:var(--forest-tint); border-radius:8px; padding:6px 11px; }
+  .card-box h2 { font-size:23px; font-weight:800; letter-spacing:-.4px; margin:14px 0 8px; color:var(--ink); }
+  .card-box .lede { font-size:14.5px; line-height:1.6; color:var(--muted); }
+  .feat { list-style:none; margin-top:18px; display:flex; flex-direction:column; gap:11px; }
+  .feat li { display:flex; gap:11px; font-size:13.8px; line-height:1.5; color:var(--ink); }
+  .feat .dot { flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--forest-tint); color:var(--forest2); display:grid; place-items:center; font-size:11px; font-weight:800; margin-top:1px; }
+  [data-theme="dark"] .feat li { color:#cfcbbe; }
+  .meta-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+  .chip { font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:999px; background:var(--paper2); color:var(--muted); border:1px solid var(--line); }
+  [data-theme="dark"] .chip { background:#26241f; }
+
+  .palette { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:16px; }
+  .sw { display:flex; align-items:center; gap:10px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+  .sw .chipc { width:30px; height:30px; border-radius:9px; border:1px solid rgba(0,0,0,.08); flex-shrink:0; }
+  .sw b { display:block; font-size:12.5px; color:var(--ink); }
+  .sw span { font-size:11px; color:var(--subtle); font-family:ui-monospace,Menlo,Consolas,monospace; }
+
+  .note { font-size:12.5px; color:var(--subtle); line-height:1.55; }
+  .section-title { font-size:12px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); }
+  .keys { margin-top:10px; font-size:12.5px; color:var(--muted); }
+  .keys kbd { background:var(--paper2); border:1px solid var(--line); border-radius:6px; padding:2px 7px; font-size:11.5px; font-family:ui-monospace,monospace; color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="page-head">
+    <div class="brand">
+      <div class="brand-mark">MC</div>
+      <div>
+        <h1>Deletion Dialog — Design Options</h1>
+        <p>MedConnect system-wide confirmation pattern · colors from app theme tokens</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="seg" id="optSeg">
+        <button data-opt="a" class="active">A · Classic</button>
+        <button data-opt="b">B · Icon Card</button>
+        <button data-opt="c">C · Bottom Sheet</button>
+        <button data-opt="d">D · Compact Pill</button>
+      </div>
+      <button class="theme-btn" id="themeBtn">Dark mode</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar">10:43 AM <span>| PDT</span></div>
+        <div class="topbar">
+          <div class="tb-ico">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="tb-title">MedConnect</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="tb-ico">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+            </div>
+            <div class="tb-avatar">U</div>
+          </div>
+        </div>
+        <div class="content">
+          <div class="bubbles"></div>
+          <div class="hero-h">Messages</div>
+          <div class="hero-sub">Your study <b>conversations</b> and <i>groups</i>.</div>
+          <div class="tabs">
+            <div class="tab on">Direct</div>
+            <div class="tab">Groups</div>
+          </div>
+          <div class="hint">Press and hold a chat to delete it.</div>
+          <div class="chat-row">
+            <div class="chat-av">A</div>
+            <div>
+              <div class="chat-name">Asharib</div>
+              <div class="chat-msg">Sure, see you at the study session.</div>
+            </div>
+            <div class="chat-time">10:42</div>
+          </div>
+        </div>
+
+        <div class="scrim show" id="scrim"></div>
+
+        <div class="dialog dlg-a active" data-dlg="a" role="alertdialog" aria-modal="true">
+          <div class="body">
+            <h3>Delete your chat with Asharib?</h3>
+            <p>This cannot be undone.</p>
+          </div>
+          <div class="actions">
+            <button class="cancel">CANCEL</button>
+            <button class="delete">DELETE</button>
+          </div>
+        </div>
+
+        <div class="dialog dlg-b" data-dlg="b" role="alertdialog" aria-modal="true">
+          <div class="icon-badge">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          </div>
+          <h3>Delete your chat with Asharib?</h3>
+          <p>This conversation will be permanently removed and cannot be undone.</p>
+          <div class="btn-stack">
+            <button class="btn btn-danger">Delete chat</button>
+            <button class="btn btn-ghost">Cancel</button>
+          </div>
+        </div>
+
+        <div class="dialog dlg-c" data-dlg="c" role="alertdialog" aria-modal="true">
+          <div class="handle"></div>
+          <div class="sheet-head">
+            <div class="icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </div>
+            <div>
+              <h3>Delete your chat with Asharib?</h3>
+              <p>This cannot be undone.</p>
+            </div>
+          </div>
+          <div class="btn-stack">
+            <button class="btn btn-danger">Delete chat</button>
+            <button class="btn btn-outline">Cancel</button>
+          </div>
+        </div>
+
+        <div class="dialog dlg-d" data-dlg="d" role="alertdialog" aria-modal="true">
+          <div class="mini-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          </div>
+          <h3>Delete chat with Asharib?</h3>
+          <p>This cannot be undone.</p>
+          <div class="pill-row">
+            <button class="pill pill-cancel">Cancel</button>
+            <button class="pill pill-delete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="card-box">
+        <span class="opt-tag" id="optTag">Option A</span>
+        <h2 id="optTitle">Classic Alert</h2>
+        <p class="lede" id="optLede"></p>
+        <ul class="feat" id="optFeat"></ul>
+        <div class="meta-row" id="optMeta"></div>
+      </div>
+
+      <div class="card-box">
+        <div class="section-title">Shared palette — from theme tokens</div>
+        <div class="palette">
+          <div class="sw"><div class="chipc" style="background:#1f4d3f"></div><div><b>Forest (brand)</b><span>#1F4D3F</span></div></div>
+          <div class="sw"><div class="chipc" style="background:#c0392b"></div><div><b>Rust (destructive)</b><span>#C0392B</span></div></div>
+          <div class="sw"><div class="chipc" style="background:#ffffff"></div><div><b>Card</b><span>#FFFFFF</span></div></div>
+          <div class="sw"><div class="chipc" style="background:#f1f4f0"></div><div><b>Paper</b><span>#F1F4F0</span></div></div>
+          <div class="sw"><div class="chipc" style="background:#b98a2e"></div><div><b>Gold (accent)</b><span>#B98A2E</span></div></div>
+          <div class="sw"><div class="chipc" style="background:#6b7670"></div><div><b>Muted text</b><span>#6B7670</span></div></div>
+        </div>
+        <p class="note" style="margin-top:14px">Destructive action always uses Rust · neutral/brand action uses Forest · every option adapts to the app's dark theme automatically.</p>
+        <div class="keys">Switch options with <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> · theme with <kbd>T</kbd></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const options = {
+    a: {
+      tag: 'Option A',
+      title: 'Classic Alert',
+      lede: 'The familiar centered system alert — quiet, trustworthy, and instantly understood by every user. Closest to what Android/iOS users already expect from a delete confirmation.',
+      feats: [
+        'Text-only actions in a split footer: Cancel in Forest, Delete in Rust.',
+        'Uppercase labels mirror the current app dialog, but with brand colors instead of teal.',
+        'Least visual noise — recommended as the system-wide default for all confirmations.',
+        'Works identically for lighter prompts (e.g. "Leave group?") by swapping Rust to Forest.'
+      ],
+      meta: ['Centered', 'Text actions', 'Lowest prominence', 'Best as system default']
+    },
+    b: {
+      tag: 'Option B',
+      title: 'Icon Card',
+      lede: 'A centered card with a warning badge and stacked, full-width buttons. The most explicit option — the red trash icon plus solid Rust button make the consequence unmistakable.',
+      feats: [
+        'Trash icon in a Rust-tinted circle signals "destructive" before the user reads a word.',
+        'Solid Rust primary button is thumb-friendly and impossible to misread as Cancel.',
+        'Cancel is a quiet ghost action in Forest — hierarchy is always clear.',
+        'Best suited for high-stakes deletions (accounts, records, completed content).'
+      ],
+      meta: ['Centered', 'Icon + stacked buttons', 'Highest prominence', 'High-stakes actions']
+    },
+    c: {
+      tag: 'Option C',
+      title: 'Bottom Sheet',
+      lede: 'A slide-up sheet anchored to the bottom of the screen — the modern mobile pattern. Action sits in the natural thumb zone, making one-handed use comfortable.',
+      feats: [
+        'Slides up with a spring curve; drag handle matches contemporary iOS/Android sheets.',
+        'Icon + title on one row keeps the message compact without losing clarity.',
+        'Full-width Rust button in the thumb zone — easiest to reach on tall screens.',
+        'Also ideal for action menus (Delete / Mute / Archive) above the confirm row.'
+      ],
+      meta: ['Bottom sheet', 'Thumb-friendly', 'Modern feel', 'Mobile-first pattern']
+    },
+    d: {
+      tag: 'Option D',
+      title: 'Compact Pill',
+      lede: 'A small, lightweight dialog with a Rust accent bar and side-by-side pill buttons. Fast to read and dismiss — best for frequent, routine deletions.',
+      feats: [
+        '4px Rust accent bar at the top flags the destructive intent at a glance.',
+        'Side-by-side pills: neutral Cancel on paper tone, solid Rust Delete.',
+        'Smallest footprint of the four — feels snappy rather than blocking.',
+        'Good fit for list-item deletions where users act quickly and often.'
+      ],
+      meta: ['Centered', 'Pill buttons', 'Lightweight', 'Frequent actions']
+    }
+  };
+
+  const seg = document.getElementById('optSeg');
+  const scrim = document.getElementById('scrim');
+  const themeBtn = document.getElementById('themeBtn');
+  let current = 'a';
+
+  function render(key) {
+    current = key;
+    const o = options[key];
+    document.getElementById('optTag').textContent = o.tag;
+    document.getElementById('optTitle').textContent = o.title;
+    document.getElementById('optLede').textContent = o.lede;
+    document.getElementById('optFeat').innerHTML = o.feats
+      .map((f, i) => `<li><span class="dot">${i + 1}</span><span>${f}</span></li>`).join('');
+    document.getElementById('optMeta').innerHTML = o.meta.map(m => `<span class="chip">${m}</span>`).join('');
+    seg.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.opt === key));
+    document.querySelectorAll('.dialog').forEach(d => d.classList.toggle('active', d.dataset.dlg === key));
+    scrim.classList.add('show');
+  }
+
+  seg.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-opt]');
+    if (btn) render(btn.dataset.opt);
+  });
+
+  themeBtn.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+    themeBtn.textContent = dark ? 'Dark mode' : 'Light mode';
+  });
+
+  document.addEventListener('keydown', e => {
+    if (['1','2','3','4'].includes(e.key)) render(['a','b','c','d'][+e.key - 1]);
+    if (e.key.toLowerCase() === 't') themeBtn.click();
+  });
+
+  render('a');
+</script>
+</body>
+</html>

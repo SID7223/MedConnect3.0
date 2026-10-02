@@ -43,7 +43,7 @@ function ConversationList({ nav, me }) {
   const [confirm, ConfirmDialog] = useConfirm();
   const delChat = async (c) => {
     setSwipeId(null);
-    if (!(await confirm(`Delete your chat with ${c.name}? This cannot be undone.`))) return;
+    if (!(await confirm(`Delete your chat with ${c.name}?`, { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     api.deleteChat(c.other_id).then(() => setConvos((v) => v.filter((x) => x.other_id !== c.other_id))).catch(() => {});
   };
   const pressStart = (c, x) => {

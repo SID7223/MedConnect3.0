@@ -14,7 +14,10 @@ import { File } from 'expo-file-system';
 import { router } from 'expo-router';
 import Screen from '../components/Screen';
 import Icon from '../components/Icon';
+import SegmentedPill from '../components/SegmentedPill';
+import { confirmAlert } from '../components/ConfirmDialog';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
 import { examColor } from '../lib/examColors';
@@ -48,6 +51,8 @@ type ViewName = 'list' | 'deck' | 'study';
 export default function FlashcardsScreen() {
   const [view, setView] = useState<ViewName>('list');
   const [activeDeck, setActiveDeck] = useState<Deck | null>(null);
+
+  useBackAction(view !== 'list', () => setView('list'));
 
   return (
     <Screen>
@@ -105,7 +110,7 @@ function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d:
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+    <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <View style={styles.headRow}>
         <Text style={[styles.h1, { color: colors.ink }]}>Flashcards</Text>
         <Pressable
@@ -235,7 +240,6 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
   const [saving, setSaving] = useState(false);
-  const [confirmDel, setConfirmDel] = useState(false);
   const [reverse, setReverse] = useState(false);
   const [mode, setMode] = useState<'single' | 'bulk'>('single');
   const [bulkText, setBulkText] = useState('');
@@ -263,6 +267,15 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
       // ignore — deck is gone locally either way
     }
     onBack();
+  };
+
+  const askDelete = async () => {
+    const ok = await confirmAlert(`Delete “${deck.name}”?`, {
+      note: "This removes the deck and all its cards. Can't be undone.",
+      confirmLabel: 'Delete',
+    });
+    if (!ok) return;
+    removeDeck();
   };
 
   const add = async () => {
@@ -350,7 +363,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+    <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <View style={styles.detailHead}>
         <Pressable onPress={onBack} accessibilityLabel="Back" style={styles.backBtn}>
           <Text style={[styles.backChevron, { color: colors.muted }]}>‹</Text>
@@ -358,7 +371,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
         <Text style={[styles.detailTitle, { color: colors.ink }]} numberOfLines={1}>
           {deck.name}
         </Text>
-        <Pressable onPress={() => setConfirmDel(true)} accessibilityLabel="Delete deck" style={styles.iconBtn}>
+        <Pressable onPress={askDelete} accessibilityLabel="Delete deck" style={styles.iconBtn}>
           <Svg
             width={19}
             height={19}
@@ -373,58 +386,23 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
         </Pressable>
       </View>
 
-      {confirmDel && (
-        <View
-          style={[
-            styles.card,
-            styles.confirmCard,
-            { backgroundColor: colors.card, borderColor: colors.rust },
-          ]}
-        >
-          <Text style={[styles.confirmTitle, { color: colors.ink }]}>{`Delete “${deck.name}”?`}</Text>
-          <Text style={[styles.confirmSub, { color: colors.muted }]}>
-            This removes the deck and all its cards. Can&apos;t be undone.
-          </Text>
-          <View style={styles.row8}>
-            <Pressable onPress={removeDeck} style={[styles.btn, { backgroundColor: colors.rust, flex: 1 }]}>
-              <Text style={[styles.btnText, { color: '#fff' }]}>Delete</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setConfirmDel(false)}
-              style={[styles.btn, styles.btnGhost, { borderColor: colors.forest, paddingHorizontal: 16 }]}
-            >
-              <Text style={[styles.btnText, { color: colors.forest }]}>Cancel</Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
-
       <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}>
         {/* single / bulk toggle */}
-        <View style={[styles.segRow, { backgroundColor: colors.paper2 }]}>
-          <Pressable
-            onPress={() => {
-              setMode('single');
-              setBulkMsg('');
-            }}
-            style={[styles.seg, mode === 'single' && { backgroundColor: colors.forest }]}
-          >
-            <Text style={[styles.segText, { color: mode === 'single' ? colors.paper : colors.muted }]}>
-              One card
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              setMode('bulk');
-              setBulkMsg('');
-            }}
-            style={[styles.seg, mode === 'bulk' && { backgroundColor: colors.forest }]}
-          >
-            <Text style={[styles.segText, { color: mode === 'bulk' ? colors.paper : colors.muted }]}>
-              Paste list
-            </Text>
-          </Pressable>
-        </View>
+        <SegmentedPill
+          variant="flush"
+          style={{ marginBottom: 12, padding: 3 }}
+          segmentStyle={{ paddingVertical: 7 }}
+          textStyle={{ fontSize: 12.5 }}
+          value={mode}
+          onChange={(key) => {
+            setMode(key as 'single' | 'bulk');
+            setBulkMsg('');
+          }}
+          options={[
+            { key: 'single', label: 'One card' },
+            { key: 'bulk', label: 'Paste list' },
+          ]}
+        />
 
         {mode === 'single' ? (
           <View>
@@ -765,12 +743,6 @@ const styles = StyleSheet.create({
   backChevron: { fontSize: 24, lineHeight: 28, fontWeight: '600' },
   detailTitle: { fontFamily: SERIF, fontSize: 19, fontWeight: '700', flex: 1 },
   iconBtn: { padding: 4 },
-  confirmCard: { marginBottom: 14, alignItems: 'stretch' },
-  confirmTitle: { fontWeight: '700', fontSize: 14, marginBottom: 4, textAlign: 'center' },
-  confirmSub: { fontSize: 12.5, marginBottom: 12, textAlign: 'center' },
-  segRow: { flexDirection: 'row', borderRadius: 999, padding: 3, marginBottom: 12 },
-  seg: { flex: 1, alignItems: 'center', paddingVertical: 7, paddingHorizontal: 4, borderRadius: 999 },
-  segText: { fontWeight: '700', fontSize: 12.5 },
   textarea: {
     borderWidth: 1.5,
     borderRadius: 18,

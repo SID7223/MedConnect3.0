@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Animated,
+  AppState,
+  Easing,
   GestureResponderEvent,
   Image,
+  Linking,
   Modal,
   Pressable,
   ScrollView,
@@ -17,13 +21,20 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Screen from '../components/Screen';
 import Icon from '../components/Icon';
+import SegmentedPill from '../components/SegmentedPill';
 import DatePickerField from '../components/DatePickerField';
 import ConfettiBurst from '../components/ConfettiBurst';
 import NotifyPrompt from '../components/NotifyPrompt';
+import { confirmAlert } from '../components/ConfirmDialog';
 import { User, useAuth } from '../context/Auth';
 import { useSettings } from '../context/Settings';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
+import {
+  getPushPermissionState,
+  onPushPermissionChange,
+  requestPushPermission,
+} from '../lib/push';
 import { quoteOfTheDay } from '../lib/quotes';
 import { SERIF } from '../theme/fonts';
 
@@ -311,24 +322,15 @@ function ExploreBrowse() {
 
   return (
     <View onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.line }]}>
-        <Pressable
-          style={[styles.tab, profession === 'medical' && { backgroundColor: colors.forest }]}
-          onPress={() => setProfession('medical')}
-        >
-          <Text style={[styles.tabText, { color: profession === 'medical' ? colors.paper : colors.muted }]}>
-            Medical
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.tab, profession === 'dental' && { backgroundColor: colors.forest }]}
-          onPress={() => setProfession('dental')}
-        >
-          <Text style={[styles.tabText, { color: profession === 'dental' ? colors.paper : colors.muted }]}>
-            Dental
-          </Text>
-        </Pressable>
-      </View>
+      <SegmentedPill
+        style={{ marginBottom: 14 }}
+        value={profession}
+        onChange={(key) => setProfession(key as Profession)}
+        options={[
+          { key: 'medical', label: 'Medical' },
+          { key: 'dental', label: 'Dental' },
+        ]}
+      />
 
       {pinC.length > 0 && (
         <Pressable
@@ -409,6 +411,140 @@ function ExploreBrowse() {
         ))}
       </View>
     </View>
+  );
+}
+
+// Live notification-enablement strip inside the Explore card. Shows the real OS
+// permission state (not a static banner) and requests it on tap — connecting
+// "find a study partner" with "get pinged the moment they reply".
+function NotifStrip() {
+  const { colors } = useTheme();
+  const { get, set, loaded } = useSettings();
+  const [state, setState] = useState<{ granted: boolean; canAskAgain: boolean } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [gone, setGone] = useState(false);
+  const [stripH, setStripH] = useState(0);
+  const [height] = useState(() => new Animated.Value(0));
+  const [marginBottom] = useState(() => new Animated.Value(16));
+  const [opacity] = useState(() => new Animated.Value(1));
+  const dismissed = !!get('notif_strip_dismissed');
+
+  useEffect(() => {
+    let alive = true;
+    const refresh = () =>
+      getPushPermissionState().then((s) => {
+        if (alive) setState(s);
+      });
+    refresh();
+    const unsub = onPushPermissionChange((granted) =>
+      setState((prev) => ({ granted, canAskAgain: prev?.canAskAgain ?? true })),
+    );
+    const appSub = AppState.addEventListener('change', (s) => {
+      if (s === 'active') refresh(); // came back from the phone's Settings app
+    });
+    return () => {
+      alive = false;
+      unsub();
+      appSub.remove();
+    };
+  }, []);
+
+  const enable = async () => {
+    if (busy) return;
+    setBusy(true);
+    const granted = await requestPushPermission();
+    setBusy(false);
+    if (granted) {
+      set('notif_prompted', '1');
+      setState({ granted: true, canAskAgain: true });
+    } else {
+      const s = await getPushPermissionState();
+      setState(s);
+    }
+  };
+
+  // save the dismissal, then collapse height+margin to 0 so the content below
+  // glides up to its real position while the strip fades out
+  const closeStrip = () => {
+    if (closing) return;
+    set('notif_strip_dismissed', '1');
+    height.setValue(stripH);
+    marginBottom.setValue(16);
+    setClosing(true);
+    Animated.parallel([
+      Animated.timing(height, { toValue: 0, duration: 260, easing: Easing.out(Easing.cubic), useNativeDriver: false }),
+      Animated.timing(marginBottom, { toValue: 0, duration: 260, easing: Easing.out(Easing.cubic), useNativeDriver: false }),
+      Animated.timing(opacity, { toValue: 0, duration: 170, useNativeDriver: false }),
+    ]).start(({ finished }) => {
+      if (finished) setGone(true);
+    });
+  };
+
+  const closeBtn = (
+    <Pressable
+      onPress={closeStrip}
+      hitSlop={8}
+      accessibilityLabel="Dismiss notification tip"
+      style={styles.notifStripClose}
+    >
+      <Svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke={colors.muted}
+        strokeWidth={2.8} strokeLinecap="round">
+        <Path d="M6 6l12 12M18 6L6 18" />
+      </Svg>
+    </Pressable>
+  );
+
+  if (gone || !loaded) return null;
+  if (!closing && (dismissed || !state)) return null;
+  if (!state) return null;
+
+  const animStyle = closing
+    ? { height, marginBottom, opacity, overflow: 'hidden' as const }
+    : { opacity };
+
+  if (state.granted) {
+    return (
+      <Animated.View
+        onLayout={(e) => { if (!closing) setStripH(e.nativeEvent.layout.height); }}
+        style={[styles.notifStripWrap, animStyle]}
+      >
+        <View style={[styles.notifStrip, { backgroundColor: 'rgba(26,168,96,0.12)', borderColor: 'rgba(26,168,96,0.3)' }]}>
+          <Text style={styles.notifStripEmoji}>🔔</Text>
+          <Text style={[styles.notifStripText, { color: colors.forest2 }]}>
+            Notifications on — you&apos;ll be pinged the moment a partner replies.
+          </Text>
+          {closeBtn}
+        </View>
+      </Animated.View>
+    );
+  }
+
+  const blocked = !state.canAskAgain;
+  return (
+    <Animated.View
+      onLayout={(e) => { if (!closing) setStripH(e.nativeEvent.layout.height); }}
+      style={[styles.notifStripWrap, animStyle]}
+    >
+      <Pressable
+        onPress={blocked ? () => Linking.openSettings() : enable}
+        disabled={busy}
+        style={[styles.notifStrip, { backgroundColor: 'rgba(224,179,65,0.16)', borderColor: 'rgba(224,179,65,0.45)' }]}
+      >
+        <Text style={styles.notifStripEmoji}>🔔</Text>
+        <Text style={[styles.notifStripText, { color: colors.gold }]}>
+          {blocked
+            ? 'Notifications are blocked — allow them in your phone settings.'
+            : 'Notifications are off — never miss a partner’s reply.'}
+        </Text>
+        <View style={[styles.notifStripBtn, { backgroundColor: colors.forest }]}>
+          <Text style={[styles.notifStripBtnText, { color: colors.paper }]}>
+            {busy ? '…' : blocked ? 'Settings' : 'Turn on'}
+          </Text>
+        </View>
+        {closeBtn}
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -639,17 +775,24 @@ function QuickRow({ user }: { user: User | null }) {
   };
   // expand-a-deck + delete (inline in the Flashcards bloom)
   const [expandedDeck, setExpandedDeck] = useState<number | string | null>(null);
-  const [confirmDelDeck, setConfirmDelDeck] = useState<number | string | null>(null);
   const [deletingDeck, setDeletingDeck] = useState(false);
   const removeDeck = async (id: number | string) => {
     if (deletingDeck) return;
     setDeletingDeck(true);
     try {
       await api.deckDelete(id);
-      setConfirmDelDeck(null);
       setExpandedDeck(null);
       loadDecks();
     } catch { /* ignore */ } finally { setDeletingDeck(false); }
+  };
+  const askDeleteDeck = async (d: { id: number | string; name: string }) => {
+    if (deletingDeck) return;
+    const ok = await confirmAlert(`Delete “${d.name}”?`, {
+      note: "This removes the deck and all its cards. Can't be undone.",
+      confirmLabel: 'Delete',
+    });
+    if (!ok) return;
+    removeDeck(d.id);
   };
   const deckStats = decks ? {
     decks: decks.length,
@@ -858,12 +1001,12 @@ function QuickRow({ user }: { user: User | null }) {
                       {new Date(examDateStr).toDateString()}
                     </Text>
                   ) : (
-                    <View style={{ marginBottom: 14 }}>
+                    <View style={styles.dateForm}>
                       <Text style={[styles.bloomDateStr, { color: colors.muted, marginBottom: 10 }]}>
                         When&apos;s your exam?
                       </Text>
                       <View style={styles.dateRow}>
-                        <View style={{ flex: 1 }}>
+                        <View style={styles.dateField}>
                           <DatePickerField
                             value={newExamDate}
                             onPick={setNewExamDate}
@@ -871,7 +1014,7 @@ function QuickRow({ user }: { user: User | null }) {
                           />
                         </View>
                         <Pressable
-                          style={[styles.btn, { backgroundColor: colors.forest, opacity: !newExamDate || savingDate ? 0.6 : 1, width: undefined, paddingHorizontal: 18, paddingVertical: 11 }]}
+                          style={[styles.dateSetBtn, { backgroundColor: colors.forest, opacity: !newExamDate || savingDate ? 0.6 : 1 }]}
                           disabled={!newExamDate || savingDate}
                           onPress={saveExamDate}
                         >
@@ -897,7 +1040,7 @@ function QuickRow({ user }: { user: User | null }) {
                         autoCapitalize="none"
                       />
                       <Pressable
-                        style={[styles.btn, { backgroundColor: colors.forest, opacity: !newExamDate || savingDate ? 0.6 : 1, width: undefined, paddingHorizontal: 18, paddingVertical: 11 }]}
+                        style={[styles.dateSetBtn, { backgroundColor: colors.forest, opacity: !newExamDate || savingDate ? 0.6 : 1 }]}
                         disabled={!newExamDate || savingDate}
                         onPress={saveExamDate}
                       >
@@ -1131,7 +1274,7 @@ function QuickRow({ user }: { user: User | null }) {
                               <View key={d.id} style={{ borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line }}>
                                 <Pressable
                                   style={styles.deckRow}
-                                  onPress={() => { setConfirmDelDeck(null); setExpandedDeck(open ? null : d.id); }}
+                                  onPress={() => { setExpandedDeck(open ? null : d.id); }}
                                 >
                                   <Text style={[styles.qTopicName, { color: colors.ink }]} numberOfLines={1}>{d.name}</Text>
                                   {Number(d.due_count) > 0 ? (
@@ -1158,45 +1301,27 @@ function QuickRow({ user }: { user: User | null }) {
                                     <Text style={[styles.deckMeta, { color: colors.muted }]}>
                                       {`${Number(d.card_count) || 0} card${d.card_count === 1 ? '' : 's'}${d.exam_tag ? ` · ${d.exam_tag}` : ''}`}
                                     </Text>
-                                    {confirmDelDeck === d.id ? (
-                                      <View style={styles.confirmRow}>
-                                        <Text style={[styles.confirmText, { color: colors.rust }]}>Delete this deck?</Text>
-                                        <Pressable
-                                          style={[styles.smallBtn, { backgroundColor: colors.card, borderColor: colors.line }]}
-                                          onPress={() => setConfirmDelDeck(null)}
-                                        >
-                                          <Text style={[styles.smallBtnText, { color: colors.muted }]}>No</Text>
-                                        </Pressable>
-                                        <Pressable
-                                          style={[styles.smallBtn, { backgroundColor: colors.rust }]}
-                                          disabled={deletingDeck}
-                                          onPress={() => removeDeck(d.id)}
-                                        >
-                                          <Text style={styles.smallBtnTextStrong}>{deletingDeck ? '…' : 'Delete'}</Text>
-                                        </Pressable>
-                                      </View>
-                                    ) : (
-                                      <View style={styles.studyRow}>
-                                        <Pressable
-                                          style={[styles.studyBtn, { backgroundColor: '#e8916b' }]}
-                                          onPress={() => goTo('/flashcards')}
-                                        >
-                                          <Text style={styles.studyBtnText}>
-                                            {Number(d.due_count) > 0 ? `Review ${d.due_count} due` : 'Study deck'}
-                                          </Text>
-                                        </Pressable>
-                                        <Pressable
-                                          style={[styles.delIconBtn, { backgroundColor: colors.card, borderColor: colors.line }]}
-                                          accessibilityLabel="Delete deck"
-                                          onPress={() => setConfirmDelDeck(d.id)}
-                                        >
-                                          <Svg width={16} height={16} viewBox="0 0 24 24" fill="none"
-                                            stroke={colors.rust} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                                            <Path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                                          </Svg>
-                                        </Pressable>
-                                      </View>
-                                    )}
+                                    <View style={styles.studyRow}>
+                                      <Pressable
+                                        style={[styles.studyBtn, { backgroundColor: '#e8916b' }]}
+                                        onPress={() => goTo('/flashcards')}
+                                      >
+                                        <Text style={styles.studyBtnText}>
+                                          {Number(d.due_count) > 0 ? `Review ${d.due_count} due` : 'Study deck'}
+                                        </Text>
+                                      </Pressable>
+                                      <Pressable
+                                        style={[styles.delIconBtn, { backgroundColor: colors.card, borderColor: colors.line, opacity: deletingDeck ? 0.6 : 1 }]}
+                                        accessibilityLabel="Delete deck"
+                                        disabled={deletingDeck}
+                                        onPress={() => askDeleteDeck(d)}
+                                      >
+                                        <Svg width={16} height={16} viewBox="0 0 24 24" fill="none"
+                                          stroke={colors.rust} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                                          <Path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                        </Svg>
+                                      </Pressable>
+                                    </View>
                                   </View>
                                 )}
                               </View>
@@ -1275,7 +1400,7 @@ export default function HomeScreen() {
   return (
     <Screen>
       <NotifyPrompt />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         {/* ===== GREEN BAND: motivation quote + nudges + plan + quick circles ===== */}
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           {/* web opens the fullscreen Motivation overlay here; native pushes the route instead */}
@@ -1431,6 +1556,11 @@ export default function HomeScreen() {
         {/* ===== CURVED LIGHT SHEET: Explore ===== */}
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
           <Text style={[styles.sheetTitle, { color: colors.forest }]}>Explore Study Partners</Text>
+          <Text style={[styles.sheetSub, { color: colors.muted }]}>
+            Find doctors &amp; dentists prepping for your same exam
+          </Text>
+
+          <NotifStrip />
 
           <ExploreBrowse />
         </View>
@@ -1584,7 +1714,16 @@ const styles = StyleSheet.create({
   bloomPad: { paddingHorizontal: 22, paddingTop: 26, alignItems: 'center' },
   bloomPadTight: { paddingHorizontal: 16, paddingTop: 20 },
   bloomDateStr: { fontSize: 13, marginBottom: 14, textAlign: 'center' },
-  dateRow: { flexDirection: 'row', gap: 8, justifyContent: 'center', alignItems: 'center', marginTop: 14 },
+  dateForm: { marginBottom: 14, alignSelf: 'stretch' },
+  dateRow: {
+    flexDirection: 'row', gap: 8, justifyContent: 'center', alignItems: 'center',
+    marginTop: 14, alignSelf: 'stretch',
+  },
+  dateField: { flex: 1, minWidth: 0 },
+  dateSetBtn: {
+    borderRadius: 999, paddingHorizontal: 18, paddingVertical: 11,
+    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+  },
   dateInput: {
     maxWidth: 170, width: 170, borderWidth: 1.5, borderRadius: 14,
     paddingVertical: 11, paddingHorizontal: 14, fontSize: 15,
@@ -1664,11 +1803,6 @@ const styles = StyleSheet.create({
   deckStatus: { fontSize: 11.5, fontWeight: '600', flexShrink: 0 },
   deckExpand: { paddingHorizontal: 15, paddingBottom: 14 },
   deckMeta: { fontSize: 11.5, marginBottom: 10 },
-  confirmRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },
-  confirmText: { flex: 1, fontSize: 12, fontWeight: '600' },
-  smallBtn: { borderWidth: 1.5, borderRadius: 999, paddingVertical: 7, paddingHorizontal: 14, alignItems: 'center' },
-  smallBtnText: { fontSize: 12, fontWeight: '700' },
-  smallBtnTextStrong: { fontSize: 12, fontWeight: '800', color: '#fff' },
   studyRow: { flexDirection: 'row', gap: 8 },
   studyBtn: { flex: 1, borderRadius: 999, paddingVertical: 10, alignItems: 'center' },
   studyBtnText: { fontSize: 13, fontWeight: '800', color: '#fff' },
@@ -1684,15 +1818,26 @@ const styles = StyleSheet.create({
   },
   sheetTitle: {
     fontFamily: SERIF, fontSize: 21, fontWeight: '900', letterSpacing: -0.3,
-    textAlign: 'center', marginBottom: 12,
+    textAlign: 'center', marginBottom: 6, lineHeight: 30,
+  },
+  sheetSub: { fontSize: 12.5, lineHeight: 19, textAlign: 'center', marginBottom: 14 },
+
+  // notification enablement strip (inside the Explore card)
+  notifStripWrap: { marginBottom: 16 },
+  notifStrip: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    borderWidth: 1, borderRadius: 14, paddingVertical: 10, paddingHorizontal: 12,
+  },
+  notifStripEmoji: { fontSize: 16, flexShrink: 0 },
+  notifStripText: { flex: 1, fontSize: 12.5, fontWeight: '700', lineHeight: 17 },
+  notifStripBtn: { borderRadius: 999, paddingVertical: 6, paddingHorizontal: 13, flexShrink: 0 },
+  notifStripBtnText: { fontSize: 12, fontWeight: '800' },
+  notifStripClose: {
+    width: 18, height: 18, borderRadius: 9, flexShrink: 0,
+    alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.05)',
   },
 
   // explore browser
-  tabs: {
-    flexDirection: 'row', gap: 7, borderWidth: 1.5, borderRadius: 999, padding: 5, marginBottom: 14,
-  },
-  tab: { flex: 1, alignItems: 'center', paddingVertical: 10, paddingHorizontal: 4, borderRadius: 999 },
-  tabText: { fontSize: 14, fontWeight: '600' },
   pinOnly: {
     flexDirection: 'row', alignItems: 'center', gap: 7, alignSelf: 'center',
     marginBottom: 16, paddingVertical: 7, paddingHorizontal: 15, borderRadius: 999, borderWidth: 1.5,

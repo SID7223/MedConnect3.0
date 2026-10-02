@@ -6,6 +6,7 @@ import { useAuth } from '../context/Auth.jsx';
 import { useTheme } from '../context/Theme.jsx';
 import { APP_VERSION } from '../lib/version.js';
 import { containsBlockedWord } from '../lib/profanity.js';
+import { useConfirm } from '../components/ConfirmDialog.jsx';
 
 const AVATARS = ['🩺','💉','🧬','🦴','🫀','🧠','👨‍⚕️','👩‍⚕️','🥼','🔬','💊','🚑',
   '🐱','🦊','🦉','🐼','🐨','🦁','🐸','🦋','🐧','🐢','🦄','🐙',
@@ -105,7 +106,7 @@ export default function Profile() {
   const [prefers, setPrefers] = useState(() => unpackBio(user?.bio).p);
   const [rightNow, setRightNow] = useState(() => unpackBio(user?.bio).r);
   const [busy, setBusy] = useState(false);
-  const [confirmDel, setConfirmDel] = useState(false);
+  const [confirm, ConfirmDialog] = useConfirm();
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   const save = async () => {
@@ -127,6 +128,12 @@ export default function Profile() {
   const doDelete = async () => {
     setBusy(true);
     try { await api.deleteAccount(); logout(); } catch (e) { setBusy(false); }
+  };
+
+  const askDeleteAccount = async () => {
+    if (busy) return;
+    if (!(await confirm('Delete your account?', { note: 'Permanently remove your account and all your data. This can\'t be undone.', confirmLabel: 'Delete everything' }))) return;
+    doDelete();
   };
 
   const Row = ({ k, v }) => (
@@ -315,16 +322,9 @@ export default function Profile() {
         <button className="link" onClick={() => { window.location.href = 'mailto:medconnectsupport.io@gmail.com?subject=MedConnect%20feature%20request'; }}>Request a feature</button>
       </div>
 
-      {!confirmDel ? (
-        <button className="link" style={{ display:'block', margin:'14px auto 0', color:'var(--subtle)', fontSize:13 }} onClick={() => setConfirmDel(true)}>Delete my account</button>
-      ) : (
-        <div className="card" style={{ marginTop:14, borderColor:'var(--rust)' }}>
-          <p style={{ fontSize:14, marginBottom:10 }}>Permanently delete your account and all your data? This can't be undone.</p>
-          <button className="btn" style={{ background:'var(--rust)' }} onClick={doDelete} disabled={busy}>{busy ? 'Deleting…' : 'Yes, delete everything'}</button>
-          <button className="btn ghost" style={{ marginTop:8 }} onClick={() => setConfirmDel(false)}>Cancel</button>
-        </div>
-      )}
+      <button className="link" style={{ display:'block', margin:'14px auto 0', color: busy ? 'var(--muted)' : 'var(--subtle)', fontSize:13 }} onClick={askDeleteAccount}>{busy ? 'Deleting…' : 'Delete my account'}</button>
       <p className="meta" style={{ textAlign:'center', marginTop:20, fontSize:11, opacity:0.7 }}>MedConnect v{APP_VERSION}</p>
+      {ConfirmDialog}
     </div>
   );
 }

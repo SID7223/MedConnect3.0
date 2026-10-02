@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   View,
+  ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../lib/api';
@@ -88,9 +89,13 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
   const [menu, setMenu] = useState(false);
   const [reactions, setReactions] = useState<Reactions>({});
   const [pickerFor, setPickerFor] = useState<string | number | null>(null);
+  const [pickerAnchor, setPickerAnchor] = useState<{ x: number; y: number; w: number; h: number; mine: boolean } | null>(null);
+  const [rootSize, setRootSize] = useState({ w: 0, h: 0 });
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState('');
   const scrollRef = useRef<ScrollView | null>(null);
+  const rootRef = useRef<View | null>(null);
+  const bubbleRefs = useRef<Record<string, any>>({});
 
   const myInit = initials(me?.name || 'Me');
   const theirInit = initials(withName);
@@ -147,8 +152,30 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
     }
   };
 
-  const react = async (msgId: string | number, emoji: string) => {
+  const closePicker = () => {
     setPickerFor(null);
+    setPickerAnchor(null);
+  };
+
+  // anchor the picker to the long-pressed bubble (web uses position:absolute on the bubble)
+  const openPicker = (id: string | number, mine: boolean) => {
+    const el = bubbleRefs.current[String(id)];
+    const root = rootRef.current;
+    if (!el || !root || !el.measureInWindow || !root.measureInWindow) {
+      setPickerAnchor(null);
+      setPickerFor(id);
+      return;
+    }
+    root.measureInWindow((rx: number, ry: number) => {
+      el.measureInWindow((x: number, y: number, w: number, h: number) => {
+        setPickerAnchor({ x: x - rx, y: y - ry, w, h, mine });
+        setPickerFor(id);
+      });
+    });
+  };
+
+  const react = async (msgId: string | number, emoji: string) => {
+    closePicker();
     try {
       await api.toggleReaction(msgId, 'direct', emoji);
       await load();
@@ -159,7 +186,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
 
   const doDelete = async () => {
     setMenu(false);
-    if (!(await confirmAlert('Delete this entire chat? This cannot be undone.'))) return;
+    if (!(await confirmAlert('Delete this entire chat?', { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     try {
       await api.deleteChat(withId);
       setMessages([]);
@@ -169,7 +196,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
   };
   const doBlock = async () => {
     setMenu(false);
-    if (!(await confirmAlert(`Block ${withName}? They will be removed from your connections and can no longer message you.`)))
+    if (!(await confirmAlert(`Block ${withName}?`, { note: 'They will be removed from your connections and can no longer message you.', confirmLabel: 'Block' })))
       return;
     try {
       await api.blockUser(withId);
@@ -180,7 +207,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
   };
   const doUnfriend = async () => {
     setMenu(false);
-    if (!(await confirmAlert(`Remove ${withName} from your connections? You can reconnect later.`))) return;
+    if (!(await confirmAlert(`Remove ${withName} from your connections?`, { note: 'You can reconnect later.', confirmLabel: 'Remove' }))) return;
     try {
       await api.unfriendUser(withId);
       onBack();
@@ -214,7 +241,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
       style={({ pressed }) => [styles.menuItem, pressed && { backgroundColor: colors.paper2 }]}
     >
       {icon}
-      <Text style={[styles.menuLabel, danger && { color: colors.rust }]}>{label}</Text>
+      <Text style={[styles.menuLabel, { color: colors.ink }, danger && { color: colors.rust }]}>{label}</Text>
     </Pressable>
   );
 
@@ -227,12 +254,28 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
     if (l) lastLabel = l;
   }
 
+  const pickerPos: ViewStyle =
+    pickerAnchor && rootSize.h > 0
+      ? {
+          ...(pickerAnchor.y > 56
+            ? { bottom: rootSize.h - pickerAnchor.y + 6 }
+            : { top: pickerAnchor.y + pickerAnchor.h + 6 }),
+          ...(pickerAnchor.mine
+            ? { right: rootSize.w - (pickerAnchor.x + pickerAnchor.w) }
+            : { left: pickerAnchor.x }),
+        }
+      : { top: '40%', alignSelf: 'center' };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: colors.paper, paddingBottom: lift }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={[styles.root, { paddingTop: insets.top + 14 }]}>
+      <View
+        ref={rootRef}
+        onLayout={(e) => setRootSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
+        style={[styles.root, { paddingTop: insets.top + 14 }]}
+      >
         {/* header: back, avatar + presence, name + meta, moderation menu */}
         <View style={styles.header}>
           <Pressable onPress={onBack} style={styles.backBtn} accessibilityLabel="Back">
@@ -296,7 +339,8 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
                 >
                   {!mine && <Avatar emoji={avatars[String(m.sender)] || withAv} init={theirInit} />}
                   <Pressable
-                    onLongPress={() => setPickerFor(m.id)}
+                    ref={(r) => { bubbleRefs.current[String(m.id)] = r; }}
+                    onLongPress={() => openPicker(m.id, mine)}
                     delayLongPress={450}
                     style={[
                       styles.bubble,
@@ -405,11 +449,12 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
         {/* reaction picker — long-press a bubble to open */}
         {pickerFor !== null && (
           <>
-            <Pressable style={StyleSheet.absoluteFill} onPress={() => setPickerFor(null)} />
+            <Pressable style={StyleSheet.absoluteFill} onPress={closePicker} />
             <View
               style={[
                 styles.reactionPicker,
                 { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#000' },
+                pickerPos,
               ]}
             >
               {REACTIONS.map((e) => (
@@ -573,11 +618,9 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   menuItem: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10, paddingHorizontal: 12, borderRadius: 10 },
-  menuLabel: { fontSize: 14, fontWeight: '600', color: '#15201c' },
+  menuLabel: { fontSize: 14, fontWeight: '600' },
   reactionPicker: {
     position: 'absolute',
-    top: '40%',
-    alignSelf: 'center',
     flexDirection: 'row',
     gap: 4,
     paddingVertical: 6,

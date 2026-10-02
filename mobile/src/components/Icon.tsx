@@ -21,7 +21,8 @@ export type IconName =
   | 'info'
   | 'dev'
   | 'file'
-  | 'logout';
+  | 'logout'
+  | 'cloudOff';
 
 interface Props {
   name: IconName;
@@ -191,6 +192,13 @@ export default function Icon({ name, size = 22, color = '#fff', strokeWidth = 1.
         <Svg {...common}>
           <Path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           <Path d="M16 17l5-5-5-5M21 12H9" />
+        </Svg>
+      );
+    case 'cloudOff':
+      return (
+        <Svg {...common}>
+          <Path d="M7 19a4.25 4.25 0 0 1 0-8.5 5 5 0 0 1 10 0 4.25 4.25 0 0 1 0 8.5z" />
+          <Path d="M4.5 19.5L19.5 4.5" />
         </Svg>
       );
     default:

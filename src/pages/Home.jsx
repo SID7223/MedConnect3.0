@@ -7,6 +7,7 @@ import { useTheme } from '../context/Theme.jsx';
 import { quoteOfTheDay } from '../lib/quotes';
 import Motivation from './Motivation.jsx';
 import NotifyPrompt from '../components/NotifyPrompt.jsx';
+import { useConfirm } from '../components/ConfirmDialog.jsx';
 import { api } from '../lib/api';
 
 // country -> exams -> parts (three levels, like the prototype)
@@ -265,6 +266,7 @@ function ExploreBrowse() {
 function QuickRow({ user, nav, onGreen }) {
   const { enterImmersive, exitImmersive, registerBack, clearBack } = useBack();
   const { setUser } = useAuth();
+  const [confirm, ConfirmDialog] = useConfirm();
   const [newExamDate, setNewExamDate] = useState('');
   const [savingDate, setSavingDate] = useState(false);
   const saveExamDate = async () => {
@@ -430,13 +432,17 @@ function QuickRow({ user, nav, onGreen }) {
   };
   // expand-a-deck + delete (inline in the Flashcards bloom)
   const [expandedDeck, setExpandedDeck] = useState(null); // deck id
-  const [confirmDelDeck, setConfirmDelDeck] = useState(null); // deck id
   const [deletingDeck, setDeletingDeck] = useState(false);
   const removeDeck = async (id) => {
     if (deletingDeck) return;
     setDeletingDeck(true);
-    try { await api.deckDelete(id); setConfirmDelDeck(null); setExpandedDeck(null); loadDecks(); }
+    try { await api.deckDelete(id); setExpandedDeck(null); loadDecks(); }
     catch (e) {} finally { setDeletingDeck(false); }
+  };
+  const askDeleteDeck = async (d) => {
+    if (deletingDeck) return;
+    if (!(await confirm(`Delete “${d.name}”?`, { note: 'This removes the deck and all its cards. Can\'t be undone.', confirmLabel: 'Delete' }))) return;
+    removeDeck(d.id);
   };
   const deckStats = decks ? {
     decks: decks.length,
@@ -832,7 +838,7 @@ function QuickRow({ user, nav, onGreen }) {
                               const open = expandedDeck === d.id;
                               return (
                               <div key={d.id} style={{ borderTop: i === 0 ? 'none' : '1px solid var(--line)' }}>
-                                <div onClick={() => { setConfirmDelDeck(null); setExpandedDeck(open ? null : d.id); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '13px 15px', cursor: 'pointer' }}>
+                                <div onClick={() => { setExpandedDeck(open ? null : d.id); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '13px 15px', cursor: 'pointer' }}>
                                   <span style={{ flex: 1, fontSize: 13.5, fontWeight: 700, color: 'var(--ink)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{d.name}</span>
                                   {d.due_count > 0
                                     ? <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--rust)', background: '#fbe4df', padding: '2px 9px', borderRadius: 99, flexShrink: 0 }}>{d.due_count} due</span>
@@ -842,20 +848,12 @@ function QuickRow({ user, nav, onGreen }) {
                                 {open && (
                                   <div style={{ padding: '0 15px 14px' }}>
                                     <div style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 10 }}>{d.card_count || 0} card{d.card_count === 1 ? '' : 's'}{d.exam_tag ? ` · ${d.exam_tag}` : ''}</div>
-                                    {confirmDelDeck === d.id ? (
-                                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                                        <span style={{ flex: 1, fontSize: 12, color: 'var(--rust)', fontWeight: 600 }}>Delete this deck?</span>
-                                        <button onClick={() => setConfirmDelDeck(null)} style={{ border: '1.5px solid var(--line)', background: 'var(--card)', color: 'var(--muted)', borderRadius: 999, padding: '7px 14px', fontSize: 12, fontWeight: 700, fontFamily: 'inherit', cursor: 'pointer' }}>No</button>
-                                        <button onClick={() => removeDeck(d.id)} disabled={deletingDeck} style={{ border: 'none', background: 'var(--rust)', color: '#fff', borderRadius: 999, padding: '7px 14px', fontSize: 12, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer' }}>{deletingDeck ? '…' : 'Delete'}</button>
-                                      </div>
-                                    ) : (
-                                      <div style={{ display: 'flex', gap: 8 }}>
-                                        <button onClick={() => { closeBloom(); setTimeout(() => nav('/flashcards'), 300); }} style={{ flex: 1, border: 'none', background: '#e8916b', color: '#fff', borderRadius: 999, padding: '10px', fontSize: 13, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer' }}>{d.due_count > 0 ? `Review ${d.due_count} due` : 'Study deck'}</button>
-                                        <button onClick={() => setConfirmDelDeck(d.id)} aria-label="Delete deck" style={{ flexShrink: 0, width: 40, border: '1.5px solid var(--line)', background: 'var(--card)', color: 'var(--rust)', borderRadius: 999, display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
-                                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /></svg>
-                                        </button>
-                                      </div>
-                                    )}
+                                    <div style={{ display: 'flex', gap: 8 }}>
+                                      <button onClick={() => { closeBloom(); setTimeout(() => nav('/flashcards'), 300); }} style={{ flex: 1, border: 'none', background: '#e8916b', color: '#fff', borderRadius: 999, padding: '10px', fontSize: 13, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer' }}>{d.due_count > 0 ? `Review ${d.due_count} due` : 'Study deck'}</button>
+                                      <button onClick={() => askDeleteDeck(d)} disabled={deletingDeck} aria-label="Delete deck" style={{ flexShrink: 0, width: 40, border: '1.5px solid var(--line)', background: 'var(--card)', color: 'var(--rust)', borderRadius: 999, display: 'grid', placeItems: 'center', cursor: 'pointer', opacity: deletingDeck ? 0.6 : 1 }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /></svg>
+                                      </button>
+                                    </div>
                                   </div>
                                 )}
                               </div>
@@ -873,6 +871,7 @@ function QuickRow({ user, nav, onGreen }) {
           </div>
         ), document.body);
       })()}
+      {ConfirmDialog}
     </>
   );
 }

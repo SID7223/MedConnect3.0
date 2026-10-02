@@ -19,6 +19,7 @@ import * as Clipboard from 'expo-clipboard';
 import Svg, { Path } from 'react-native-svg';
 import { router } from 'expo-router';
 import Screen from '../components/Screen';
+import { confirmAlert } from '../components/ConfirmDialog';
 import DatePickerField from '../components/DatePickerField';
 import { useAuth } from '../context/Auth';
 import { useTheme } from '../context/Theme';
@@ -452,28 +453,21 @@ export default function ProfileScreen() {
     ]);
   };
 
-  const confirmDelete = () => {
-    Alert.alert(
-      "Permanently delete your account and all your data? This can't be undone.",
-      undefined,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: busy ? 'Deleting…' : 'Yes, delete everything',
-          style: 'destructive',
-          onPress: async () => {
-            setBusy(true);
-            try {
-              await api.deleteAccount();
-              logout();
-              router.replace('/(auth)/sign-in');
-            } catch {
-              setBusy(false);
-            }
-          },
-        },
-      ],
-    );
+  const confirmDelete = async () => {
+    if (busy) return;
+    const ok = await confirmAlert('Delete your account?', {
+      note: "Permanently remove your account and all your data. This can't be undone.",
+      confirmLabel: 'Delete everything',
+    });
+    if (!ok) return;
+    setBusy(true);
+    try {
+      await api.deleteAccount();
+      logout();
+      router.replace('/(auth)/sign-in');
+    } catch {
+      setBusy(false);
+    }
   };
 
   const openFeatureRequest = () => {
@@ -500,7 +494,7 @@ export default function ProfileScreen() {
           style={s.flex}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <ScrollView contentContainerStyle={s.editScroll} keyboardShouldPersistTaps="handled">
+          <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={s.editScroll} keyboardShouldPersistTaps="handled">
             <Text style={[s.h1, { color: colors.ink, fontSize: 24, marginBottom: 14 }]}>
               Edit profile
             </Text>
@@ -695,7 +689,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={s.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={s.scroll}>
         <View style={s.head}>
           <View style={[s.avatar, { backgroundColor: colors.paper2, borderColor: colors.line }]}>
             <Text style={s.avatarEmoji}>{str(user?.avatar) || '🩺'}</Text>

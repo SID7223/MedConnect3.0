@@ -83,17 +83,17 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }) {
 
   const doDelete = async () => {
     setMenu(false);
-    if (!(await confirm('Delete this entire chat? This cannot be undone.'))) return;
+    if (!(await confirm('Delete this entire chat?', { note: 'This cannot be undone.', confirmLabel: 'Delete' }))) return;
     try { await api.deleteChat(withId); setMessages([]); } catch (e) {}
   };
   const doBlock = async () => {
     setMenu(false);
-    if (!(await confirm(`Block ${withName}? They will be removed from your connections and can no longer message you.`))) return;
+    if (!(await confirm(`Block ${withName}?`, { note: 'They will be removed from your connections and can no longer message you.', confirmLabel: 'Block' }))) return;
     try { await api.blockUser(withId); onBack(); } catch (e) {}
   };
   const doUnfriend = async () => {
     setMenu(false);
-    if (!(await confirm(`Remove ${withName} from your connections? You can reconnect later.`))) return;
+    if (!(await confirm(`Remove ${withName} from your connections?`, { note: 'You can reconnect later.', confirmLabel: 'Remove' }))) return;
     try { await api.unfriendUser(withId); onBack(); } catch (e) {}
   };
   const doReport = async () => {

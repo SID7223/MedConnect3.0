@@ -16,6 +16,7 @@ import { WebView } from 'react-native-webview';
 import Screen from '../components/Screen';
 import Icon from '../components/Icon';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
 import { SERIF } from '../theme/fonts';
@@ -118,6 +119,9 @@ export default function OsceScreen() {
   const [exam, setExam] = useState<string>(firstExam);
   const [active, setActive] = useState<string | null>(null); // station name being practised
   const [showPro, setShowPro] = useState(false);
+
+  useBackAction(!!active, () => setActive(null));
+
   const isPro = !!user?.pro_active;
   const stations = STATIONS[exam] || [];
 
@@ -137,7 +141,7 @@ export default function OsceScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
         <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             🩺
@@ -285,8 +289,6 @@ function Station({
 }) {
   const { user: stnMe } = useAuth();
   const { colors } = useTheme();
-  // Web registers a hardware-back handler here (useBack). On mobile the
-  // "All stations" link above (plus TopBar back) covers it.
   const total = (minutes || 8) * 60;
   const [seconds, setSeconds] = useState(total);
   const [running, setRunning] = useState(false);
@@ -551,8 +553,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 27, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 19, color: '#fff' },
+  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 21, color: '#fff' },
   statsRow: { flexDirection: 'row', gap: 22, marginTop: 16 },
   statValue: { fontFamily: SERIF, fontWeight: '900', fontSize: 22, lineHeight: 24 },
   statLabel: {

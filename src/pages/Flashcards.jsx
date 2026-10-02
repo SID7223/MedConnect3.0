@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/Auth.jsx';
 import { api } from '../lib/api.js';
 import { examColor } from '../lib/examColors.js';
+import { useConfirm } from '../components/ConfirmDialog.jsx';
 
 // Personal flashcard decks — make, study (light spaced repetition), manage.
 // Sharing & export are deferred (see ANKI-TODO-LATER).
@@ -96,7 +97,7 @@ function DeckDetail({ deck, onBack, onStudy }) {
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
   const [saving, setSaving] = useState(false);
-  const [confirmDel, setConfirmDel] = useState(false);
+  const [confirm, ConfirmDialog] = useConfirm();
   const [reverse, setReverse] = useState(false);
   const [mode, setMode] = useState('single'); // 'single' | 'bulk'
   const [bulkText, setBulkText] = useState('');
@@ -108,6 +109,11 @@ function DeckDetail({ deck, onBack, onStudy }) {
   const removeDeck = async () => {
     try { await api.deckDelete(deck.id); } catch (e) {}
     onBack();
+  };
+
+  const askDelete = async () => {
+    if (!(await confirm(`Delete “${deck.name}”?`, { note: 'This removes the deck and all its cards. Can\'t be undone.', confirmLabel: 'Delete' }))) return;
+    removeDeck();
   };
 
   const add = async () => {
@@ -172,21 +178,10 @@ function DeckDetail({ deck, onBack, onStudy }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <button onClick={onBack} style={{ background: 'none', border: 'none', fontSize: 24, color: 'var(--muted)', cursor: 'pointer', lineHeight: 1 }}>‹</button>
         <h1 className="serif" style={{ fontSize: 19, fontWeight: 700, color: 'var(--ink)', flex: 1 }}>{deck.name}</h1>
-        <button onClick={() => setConfirmDel(true)} aria-label="Delete deck" style={{ background: 'none', border: 'none', color: 'var(--subtle)', cursor: 'pointer', padding: 4 }}>
+        <button onClick={askDelete} aria-label="Delete deck" style={{ background: 'none', border: 'none', color: 'var(--subtle)', cursor: 'pointer', padding: 4 }}>
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14" /></svg>
         </button>
       </div>
-
-      {confirmDel && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--rust)', textAlign: 'center' }}>
-          <p style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>Delete “{deck.name}”?</p>
-          <p className="sub" style={{ fontSize: 12.5, marginBottom: 12 }}>This removes the deck and all its cards. Can't be undone.</p>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button onClick={removeDeck} className="btn" style={{ flex: 1, background: 'var(--rust)' }}>Delete</button>
-            <button onClick={() => setConfirmDel(false)} className="btn ghost" style={{ padding: '11px 16px' }}>Cancel</button>
-          </div>
-        </div>
-      )}
 
       <div className="card" style={{ marginBottom: 16 }}>
         {/* single / bulk toggle */}
@@ -245,6 +240,7 @@ function DeckDetail({ deck, onBack, onStudy }) {
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></svg>
         <span style={{ fontSize: 11.5, fontWeight: 600 }}>Export &amp; deck sharing · <span style={{ color: 'var(--gold)', fontWeight: 800 }}>Pro</span></span>
       </div>
+      {ConfirmDialog}
     </>
   );
 }

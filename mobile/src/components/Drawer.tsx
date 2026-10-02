@@ -3,6 +3,7 @@ import { Animated, Alert, Easing, Pressable, ScrollView, Share, StyleSheet, Text
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useDrawer } from '../context/Drawer';
 import { useTheme } from '../context/Theme';
 import { APP_VERSION } from '../lib/version';
@@ -27,6 +28,8 @@ export default function DrawerHost() {
   const insets = useSafeAreaInsets();
   const [x] = useState(() => new Animated.Value(-310));
   const [scrim] = useState(() => new Animated.Value(0));
+
+  useBackAction(open, () => setOpen(false));
 
   useEffect(() => {
     Animated.parallel([

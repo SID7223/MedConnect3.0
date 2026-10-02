@@ -3,6 +3,7 @@ import { Dimensions, Modal, Pressable, StyleSheet, Text, TextInput, View } from 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, G, Path, Rect } from 'react-native-svg';
 import { useTheme } from '../context/Theme';
+import SegmentedPill from './SegmentedPill';
 import { useTimerStatus } from '../context/TimerStatus';
 import { useSettings } from '../context/Settings';
 import { playSound } from '../lib/sounds';
@@ -151,20 +152,15 @@ export default function StudyTimer() {
   const started = running || (mode === 'timer' && secondsLeft < target) || (mode === 'stopwatch' && elapsed > 0);
 
   const renderModeTabs = () => (
-    <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.line }]}>
-      <Pressable
-        style={[styles.tab, mode === 'timer' && { backgroundColor: colors.forest }]}
-        onPress={() => switchMode('timer')}
-      >
-        <Text style={[styles.tabText, { color: mode === 'timer' ? colors.paper : colors.muted }]}>Timer</Text>
-      </Pressable>
-      <Pressable
-        style={[styles.tab, mode === 'stopwatch' && { backgroundColor: colors.forest }]}
-        onPress={() => switchMode('stopwatch')}
-      >
-        <Text style={[styles.tabText, { color: mode === 'stopwatch' ? colors.paper : colors.muted }]}>Stopwatch</Text>
-      </Pressable>
-    </View>
+    <SegmentedPill
+      style={{ width: 260, maxWidth: '100%', marginBottom: 18 }}
+      value={mode}
+      onChange={(key) => switchMode(key as Mode)}
+      options={[
+        { key: 'timer', label: 'Timer' },
+        { key: 'stopwatch', label: 'Stopwatch' },
+      ]}
+    />
   );
 
   const renderClockFace = (big: boolean) => {
@@ -405,18 +401,6 @@ const styles = StyleSheet.create({
   },
   cardInner: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   ringCenter: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
-  tabs: {
-    flexDirection: 'row',
-    gap: 7,
-    borderWidth: 1.5,
-    borderRadius: 999,
-    padding: 5,
-    marginBottom: 18,
-    width: 260,
-    maxWidth: '100%',
-  },
-  tab: { flex: 1, borderRadius: 999, paddingVertical: 10, alignItems: 'center' },
-  tabText: { fontSize: 14, fontWeight: '600' },
   controls: { flexDirection: 'row', gap: 16, alignItems: 'center', justifyContent: 'center' },
   iconBtn: {
     borderRadius: 999,

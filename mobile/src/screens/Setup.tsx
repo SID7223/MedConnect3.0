@@ -108,8 +108,9 @@ export default function SetupScreen() {
         examDate,
       });
       setUser(user);
-      // web falls through its catch-all to /home once profile_complete flips
-      router.replace('/home');
+      // web falls through its catch-all to /home once profile_complete flips;
+      // mobile's home route is the tabs index at '/'
+      router.replace('/');
     } catch (e: any) {
       setErr(e?.message || 'Something went wrong');
     } finally {
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 23,
     letterSpacing: -0.5,
-    lineHeight: 25,
+    lineHeight: 32,
     textAlign: 'center',
   },
   sub: { fontSize: 15, marginTop: 5, textAlign: 'center', marginBottom: 8 },

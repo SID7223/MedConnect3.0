@@ -38,38 +38,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const t = await AsyncStorage.getItem('token');
-      if (!t) {
-        setLoading(false);
-        return;
-      }
-
-      // Show cached user instantly — works offline and removes loading flash
-      const cached = await AsyncStorage.getItem('mc_user');
-      if (cached) {
-        try {
-          setUser(JSON.parse(cached));
-        } catch {
-          // corrupt cache — ignore
-        }
-      }
-
       try {
-        const d = await withTimeout(api.me(), 8000);
-        setUser(d.user);
-        AsyncStorage.setItem('mc_user', JSON.stringify(d.user));
-      } catch (err: any) {
-        // Only log out if the SERVER explicitly rejected the token (401/403).
-        // Network errors, timeouts, and 5xx errors should NOT log the user out.
-        const msg = err?.message || '';
-        const isAuthFailure =
-          /\b(401|403)\b/.test(msg) ||
-          msg.toLowerCase().includes('unauthorized') ||
-          msg.toLowerCase().includes('forbidden');
-        if (isAuthFailure) {
-          AsyncStorage.removeItem('token');
-          AsyncStorage.removeItem('mc_user');
-          setUser(null);
+        const t = await AsyncStorage.getItem('token');
+        if (!t) return;
+
+        // Show cached user instantly — works offline and removes loading flash
+        const cached = await AsyncStorage.getItem('mc_user');
+        let hasCached = false;
+        if (cached) {
+          try {
+            setUser(JSON.parse(cached));
+            hasCached = true;
+          } catch {
+            // corrupt cache — ignore
+          }
+        }
+        // Ready to render from cache right away; refresh from the server below.
+        if (hasCached) setLoading(false);
+
+        try {
+          const d = await withTimeout(api.me(), 8000);
+          setUser(d.user);
+          AsyncStorage.setItem('mc_user', JSON.stringify(d.user));
+        } catch (err: any) {
+          // Only log out if the SERVER explicitly rejected the token (401/403).
+          // Network errors, timeouts, and 5xx errors should NOT log the user out.
+          const msg = err?.message || '';
+          const isAuthFailure =
+            /\b(401|403)\b/.test(msg) ||
+            msg.toLowerCase().includes('unauthorized') ||
+            msg.toLowerCase().includes('forbidden');
+          if (isAuthFailure) {
+            AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('mc_user');
+            setUser(null);
+          }
         }
       } finally {
         setLoading(false);

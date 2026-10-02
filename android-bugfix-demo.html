@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MedConnect — Android Bug Fixes (Before / After)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --forest:#1f4d3f; --forest2:#1d4034; --paper:#f1f4f0; --paper2:#e7ece7;
+    --card:#ffffff; --line:#dfe6df; --ink:#182420; --muted:#6b7f74;
+    --gold:#b88a2e; --rust:#c0392b; --green-ok:#2e7d32;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  [hidden]{ display:none !important; }
+  html{ background:#eef1ee; }
+  body{
+    font-family:'Inter',system-ui,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 0%, rgba(31,77,63,.07), transparent 42%),
+      radial-gradient(circle at 85% 100%, rgba(184,138,46,.07), transparent 42%),
+      #eef1ee;
+    min-height:100vh; padding-bottom:60px;
+  }
+
+  /* ---------- page header ---------- */
+  .site-head{ max-width:980px; margin:0 auto; padding:44px 20px 8px; text-align:center; }
+  .site-head .brand{
+    display:inline-block; background:var(--forest); color:#fff; font-family:'Fraunces',Georgia,serif;
+    font-weight:900; font-size:13px; letter-spacing:2.5px; text-transform:uppercase;
+    padding:7px 16px; border-radius:999px; margin-bottom:16px;
+  }
+  .site-head h1{ font-family:'Fraunces',Georgia,serif; font-size:31px; font-weight:900; color:var(--forest); letter-spacing:-.5px; }
+  .site-head .sub{ margin-top:9px; font-size:14.5px; color:var(--muted); font-weight:500; }
+
+  main{ max-width:980px; margin:0 auto; padding:10px 20px 0; }
+
+  /* ---------- demo section ---------- */
+  .demo{
+    background:var(--card); border:1px solid var(--line); border-radius:24px;
+    padding:26px 22px 30px; margin-top:30px;
+    box-shadow:0 10px 34px rgba(20,30,24,.07);
+  }
+  .demo-title{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .demo-title .badge{
+    background:var(--rust); color:#fff; font-size:11px; font-weight:800; letter-spacing:1.2px;
+    padding:5px 11px; border-radius:999px; text-transform:uppercase;
+  }
+  .demo-title h2{ font-family:'Fraunces',Georgia,serif; font-size:22px; font-weight:900; color:var(--forest); }
+  .demo-desc{ margin-top:9px; font-size:14px; line-height:1.55; color:#41544b; max-width:760px; }
+  .demo-desc b{ color:var(--rust); }
+
+  /* segmented before/after toggle */
+  .seg{
+    display:inline-flex; background:var(--paper2); border:1px solid var(--line);
+    border-radius:999px; padding:4px; margin-top:16px; gap:4px;
+  }
+  .seg-btn{
+    border:none; background:transparent; font-family:inherit; font-size:13px; font-weight:700;
+    color:var(--muted); padding:8px 20px; border-radius:999px; cursor:pointer;
+    transition:background .18s, color .18s, box-shadow .18s;
+  }
+  .seg-btn.active[data-mode="before"]{ background:#fff; color:var(--rust); box-shadow:0 2px 8px rgba(0,0,0,.10); }
+  .seg-btn.active[data-mode="after"]{ background:#fff; color:var(--green-ok); box-shadow:0 2px 8px rgba(0,0,0,.10); }
+
+  /* notes swap */
+  .note{ display:none; margin-top:14px; font-size:13.5px; line-height:1.55; font-weight:600; border-radius:14px; padding:12px 16px; max-width:760px; }
+  .note-before{ background:#fdecea; color:#8e2b20; border:1px solid #f5c6c0; }
+  .note-after{ background:#e9f5ea; color:#1f5e24; border:1px solid #bfe3c2; }
+  .demo[data-mode="before"] .note-before{ display:block; }
+  .demo[data-mode="after"] .note-after{ display:block; }
+
+  /* ---------- phone frame ---------- */
+  .phone-wrap{ display:flex; justify-content:center; margin-top:22px; }
+  .phone-body{
+    position:relative; padding:11px;
+    background:linear-gradient(160deg,#3a3f3c 0%,#17191a 45%,#232624 100%);
+    border-radius:56px;
+    box-shadow:0 26px 60px rgba(15,22,18,.35), inset 0 0 0 1.5px rgba(255,255,255,.07);
+    transform-origin:top center;
+  }
+  /* side buttons */
+  .phone-body .b-side{ position:absolute; right:-3px; width:3.5px; border-radius:3px; background:#2c302e; }
+  .phone-body .b-power{ top:200px; height:78px; }
+  .phone-body .b-vol{ top:296px; height:120px; }
+
+  .screen{
+    position:relative; width:412px; height:915px; border-radius:46px; overflow:hidden;
+    background:var(--paper); color:var(--ink); font-size:14px;
+  }
+  .screen *::-webkit-scrollbar{ display:none; }
+  .screen *{ scrollbar-width:none; }
+
+  /* punch-hole camera */
+  .punch{
+    position:absolute; top:8px; left:50%; transform:translateX(-50%);
+    width:11.5px; height:11.5px; border-radius:50%;
+    background:#050607; z-index:120;
+    box-shadow:inset 0 0 0 1.6px #17191b, 0 0 0 .8px rgba(255,255,255,.10);
+  }
+  /* latest Android status bar: clock left, status icons right */
+  .statusbar{
+    position:absolute; top:0; left:0; right:0; height:28px; z-index:110;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 17px; font-size:12.5px; font-weight:600; color:#1b211e;
+    pointer-events:none;
+  }
+  .statusbar .sb-time{ letter-spacing:.2px; padding-left:4px; }
+  .statusbar .sb-ic{ display:flex; align-items:center; gap:6px; }
+  .statusbar .sb-ic svg{ display:block; fill:currentColor; }
+  .statusbar .sb-batt{ display:flex; align-items:center; gap:3.5px; font-size:11.5px; font-weight:700; }
+  .gesture{ position:absolute; left:0; right:0; bottom:0; height:24px; z-index:110; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .gesture i{ width:108px; height:4px; border-radius:99px; }
+  .gesture.g-dark i{ background:rgba(20,26,23,.60); }
+  .gesture.g-light i{ background:rgba(255,255,255,.80); }
+  /* screens with a green top bar show light status-bar icons (like the real app) */
+  #scr2 .statusbar, #scr3 .statusbar{ color:#fff; }
+
+  /* under-phone controls + stack strip */
+  .controls{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:18px; }
+  .stack-strip{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center; min-height:34px; }
+  .stack-strip .lbl{ font-size:11.5px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:var(--muted); margin-right:2px; }
+  .chip{
+    background:var(--paper2); border:1.5px solid var(--line); color:var(--ink);
+    font-size:12.5px; font-weight:700; padding:6px 13px; border-radius:999px;
+    animation:chipIn .28s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .chip.tabchip{ background:#e4efe9; border-color:#c4dbd0; color:var(--forest); }
+  .chip.subchip{ background:#fdf3e0; border-color:#f0dcb4; color:#8a6516; }
+  .chip .arr{ color:var(--muted); font-weight:400; }
+  .stack-strip .sep{ color:#9db0a6; font-size:13px; }
+  @keyframes chipIn{ from{ opacity:0; transform:scale(.75); } to{ opacity:1; transform:scale(1); } }
+  .ctl-row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .ctl-btn{
+    font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;
+    background:var(--forest); color:#fff; border:none; padding:11px 20px; border-radius:999px;
+    transition:transform .15s, opacity .15s;
+  }
+  .ctl-btn:active{ transform:scale(.95); }
+  .ctl-btn.ghost{ background:#fff; color:var(--forest); border:1.5px solid var(--line); }
+
+  footer{ max-width:980px; margin:38px auto 0; padding:0 20px; text-align:center; font-size:12.5px; color:var(--muted); line-height:1.7; }
+  footer b{ color:var(--forest); }
+
+  /* =================== BUG 1 — fullscreen memory match =================== */
+  .s1-card{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:40px 24px; gap:6px; cursor:pointer; text-align:center; z-index:5;
+    background:var(--paper);
+  }
+  .s1-card .box{
+    background:linear-gradient(180deg,rgba(31,77,63,.09),rgba(31,77,63,.045));
+    border:1.5px solid #cfe0d6; border-radius:22px; padding:26px 22px; width:100%; max-width:340px;
+  }
+  .s1-card h3{ font-family:'Fraunces',Georgia,serif; font-size:21px; font-weight:900; color:var(--forest); }
+  .s1-card p{ font-size:13.5px; color:#41544b; margin-top:7px; line-height:1.5; }
+  .s1-card .tiny{ font-size:11.5px; color:var(--muted); margin-top:5px; }
+  .s1-card .open-btn{
+    margin-top:16px; background:var(--forest); color:#fff; border:none; font-family:inherit;
+    font-size:13.5px; font-weight:700; padding:12px 22px; border-radius:999px; cursor:pointer;
+  }
+  .s1-card .mini{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-top:18px; }
+  .s1-card .mini i{ aspect-ratio:1; border-radius:9px; background:var(--forest); opacity:.9; display:grid; place-items:center; font-style:normal; font-size:15px; }
+  .s1-card .mini i::after{ content:'🩺'; opacity:.20; font-size:.7em; }
+
+  .s1-fs{ position:absolute; inset:0; z-index:10; background:var(--paper); display:flex; }
+  .s1-fs-inner{ flex:1; display:flex; flex-direction:column; padding:12px 16px 16px; min-width:0; min-height:0; }
+  /* THE FIX: clear the status bar (28px) + gesture bar (24px) */
+  .demo[data-mode="after"] .s1-fs-inner{ padding-top:40px; padding-bottom:40px; }
+  .s1-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .s1-restart{
+    background:transparent; border:1.5px solid var(--line); color:var(--ink); border-radius:999px;
+    padding:7px 14px; font-weight:700; font-size:12.5px; font-family:inherit; cursor:pointer;
+  }
+  .s1-restart:active{ transform:scale(.94); }
+  .s1-title{ font-family:'Fraunces',Georgia,serif; font-size:18px; font-weight:800; color:var(--forest); }
+  .s1-close{ background:transparent; border:none; color:var(--muted); font-size:22px; width:34px; height:34px; border-radius:999px; opacity:.5; cursor:pointer; }
+  .s1-stats{ display:flex; justify-content:center; gap:16px; font-size:13px; color:var(--muted); font-weight:600; margin-bottom:12px; }
+  .s1-board-wrap{ flex:1; display:grid; place-items:center; min-height:0; }
+  .s1-board{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:100%; max-width:380px; }
+  .tile{
+    aspect-ratio:1; border-radius:12px; background:var(--card); border:1.5px solid var(--line);
+    display:grid; place-items:center; cursor:pointer; user-select:none; line-height:1;
+    font-size:40px; position:relative; transition:transform .18s, opacity .25s, background .2s;
+  }
+  .tile:active{ transform:scale(.94); }
+  .tile.down{ background:var(--forest); border-color:var(--forest); }
+  .tile .mark{ display:none; }
+  .tile.down .mark{ display:block; opacity:.18; font-size:.55em; color:#8fd4c0; }
+  .tile.matched{ opacity:.5; background:#d9e6dd; border-color:var(--forest); }
+  .tile .em{ display:none; }
+  .tile:not(.down) .em{ display:block; }
+  .s1-win{
+    position:absolute; inset:0; background:rgba(31,77,63,.78); z-index:5;
+    display:grid; place-items:center; padding:24px;
+  }
+  .s1-win .wbox{ background:var(--card); border-radius:18px; padding:26px 22px; text-align:center; width:100%; max-width:300px; }
+  .s1-win .wbox .big{ font-size:42px; }
+  .s1-win .wbox h4{ font-family:'Fraunces',Georgia,serif; font-size:21px; font-weight:900; color:var(--forest); margin-top:4px; }
+  .s1-win .wbox p{ font-size:13.5px; color:var(--muted); margin-top:5px; }
+  .s1-win .wbtns{ display:flex; gap:8px; margin-top:16px; }
+  .s1-win .wbtns button{ flex:1; font-family:inherit; font-size:13.5px; font-weight:700; padding:11px; border-radius:999px; cursor:pointer; border:none; }
+  .s1-win .wbtns .primary{ background:var(--forest); color:#fff; }
+  .s1-win .wbtns .ghost{ background:#fff; color:var(--forest); border:1.5px solid var(--line); }
+
+  /* =================== BUG 2 — back navigation =================== */
+  .s2-top{
+    position:absolute; top:0; left:0; right:0; z-index:40;
+    background:var(--forest); color:#fff; display:flex; align-items:center;
+    padding:40px 10px 12px; gap:6px;
+  }
+  .s2-top .t-side{ width:44px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .s2-top .t-btn{ background:transparent; border:none; cursor:pointer; color:#fff; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; }
+  .s2-top .t-btn svg{ display:block; }
+  .s2-top .t-burger span{ display:block; width:17px; height:2.2px; background:#fff; border-radius:2px; margin:3.3px 0; }
+  .s2-top .t-title{ flex:1; text-align:center; font-size:15.5px; font-weight:800; letter-spacing:.2px; }
+  .s2-top .t-right{ width:74px; flex-shrink:0; display:flex; align-items:center; justify-content:flex-end; gap:8px; padding-right:4px; }
+  .s2-top .t-bell{ position:relative; width:30px; height:30px; display:grid; place-items:center; }
+  .s2-top .t-bell .dot{ position:absolute; top:3px; right:3px; width:9px; height:9px; border-radius:50%; background:var(--rust); border:1.5px solid var(--forest); }
+  .s2-top .t-ava{
+    width:29px; height:29px; border-radius:50%; background:#e8f0ec; color:var(--forest);
+    font-size:11px; font-weight:800; display:grid; place-items:center;
+  }
+  /* topbar height = 40 status-bar pad + 40 row + 12 pad */
+  .s2-content{ position:absolute; top:92px; left:0; right:0; bottom:0; overflow-y:auto; background:var(--paper); z-index:10; }
+  .s2-content.with-tabs{ bottom:86px; }
+  .s2-tabs{
+    position:absolute; left:0; right:0; bottom:0; z-index:40; height:86px;
+    background:var(--forest); display:flex; padding:9px 4px 26px;
+  }
+  .s2-tab{ flex:1; background:transparent; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; color:#bcd4c8; font-family:inherit; font-size:9.5px; font-weight:700; padding:2px 0; }
+  .s2-tab .ti{ font-size:19px; line-height:1; filter:saturate(.15) brightness(1.6); opacity:.75; }
+  .s2-tab.on{ color:var(--gold); }
+  .s2-tab.on .ti{ filter:none; opacity:1; }
+  .s2-toast{
+    position:absolute; left:50%; bottom:110px; transform:translateX(-50%); z-index:70;
+    background:rgba(24,36,32,.93); color:#fff; font-size:12.5px; font-weight:600;
+    padding:10px 18px; border-radius:999px; white-space:nowrap; max-width:88%;
+    animation:toastIn .22s ease both;
+  }
+  @keyframes toastIn{ from{ opacity:0; transform:translate(-50%,8px); } to{ opacity:1; transform:translate(-50%,0); } }
+
+  .pg{ padding:16px 16px 24px; animation:pgIn .26s ease both; }
+  @keyframes pgIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  .pg .greet{ font-family:'Fraunces',Georgia,serif; font-size:21px; font-weight:900; color:var(--forest); }
+  .pg .greet span{ display:block; font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--muted); margin-top:4px; }
+  .pg .sec-h{ font-size:11px; font-weight:800; letter-spacing:.7px; text-transform:uppercase; color:var(--muted); margin:18px 0 9px; }
+  .pg .card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:16px;
+    padding:15px 16px; margin-bottom:10px; display:flex; align-items:center; gap:13px; cursor:pointer;
+    transition:transform .15s;
+  }
+  .pg .card:active{ transform:scale(.975); }
+  .pg .card .ic{ width:42px; height:42px; border-radius:12px; background:var(--paper2); display:grid; place-items:center; font-size:20px; flex-shrink:0; }
+  .pg .card .tx b{ display:block; font-size:14.5px; font-weight:800; }
+  .pg .card .tx span{ display:block; font-size:12.5px; color:var(--muted); margin-top:3px; }
+  .pg .card .chev{ margin-left:auto; color:#9db0a6; font-size:19px; font-weight:400; }
+  .pg .card.hero{ background:linear-gradient(135deg,#1f4d3f,#2b6653); border-color:#1f4d3f; }
+  .pg .card.hero .ic{ background:rgba(255,255,255,.14); }
+  .pg .card.hero .tx b{ color:#fff; }
+  .pg .card.hero .tx span{ color:#c5ddd2; }
+  .pg .row{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+    padding:13px 15px; margin-bottom:9px; display:flex; align-items:center; gap:12px; cursor:pointer;
+  }
+  .pg .row:active{ transform:scale(.98); }
+  .pg .row .av{ width:38px; height:38px; border-radius:50%; background:var(--paper2); display:grid; place-items:center; font-size:17px; flex-shrink:0; }
+  .pg .row .tx b{ display:block; font-size:14px; font-weight:700; }
+  .pg .row .tx span{ display:block; font-size:12px; color:var(--muted); margin-top:2px; }
+  .pg .row .pill{ margin-left:auto; font-size:10.5px; font-weight:800; padding:4px 9px; border-radius:999px; background:#fdecea; color:var(--rust); }
+  .pg .row .pill.g{ background:#e9f5ea; color:var(--green-ok); }
+  .pg .deck-em{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center; font-size:21px; background:#e4efe9; flex-shrink:0; }
+  .pg .study-hero{
+    background:linear-gradient(135deg,#1f4d3f,#2b6653); border-radius:18px; color:#fff;
+    padding:18px 17px; margin-bottom:14px;
+  }
+  .pg .study-hero b{ font-family:'Fraunces',Georgia,serif; font-size:18px; font-weight:900; }
+  .pg .study-hero p{ font-size:12.5px; color:#c5ddd2; margin-top:5px; }
+  .pg .study-hero .bar{ height:7px; background:rgba(255,255,255,.22); border-radius:99px; margin-top:12px; overflow:hidden; }
+  .pg .study-hero .bar i{ display:block; width:46%; height:100%; background:var(--gold); border-radius:99px; }
+
+  /* =================== BUG 3 — white line during back =================== */
+  .s3-stage{ position:absolute; inset:0; overflow:hidden; background:var(--paper); }
+  .s3-under{ position:absolute; inset:0; z-index:0; background:#ffffff; }
+  .demo[data-mode="after"] .s3-under{ background:var(--paper); }
+  .s3-page{ position:absolute; inset:0; display:flex; flex-direction:column; }
+  .s3-in{ z-index:2; }
+  .s3-out{ z-index:3; }
+  .s3-stage.done .s3-out{ visibility:hidden; }
+  .s3-top{
+    background:var(--forest); color:#fff; display:flex; align-items:center; gap:8px;
+    padding:40px 12px 13px; flex-shrink:0;
+  }
+  .s3-top .b{ background:transparent; border:none; color:#fff; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; cursor:pointer; flex-shrink:0; }
+  .s3-top .ttl{ font-size:15.5px; font-weight:800; }
+  .s3-top .ttl small{ display:block; font-size:10.5px; font-weight:500; color:#b9d2c6; margin-top:2px; }
+  .s3-burger span{ display:block; width:17px; height:2.2px; background:#fff; border-radius:2px; margin:3.3px 0; }
+  .s3-ava{ width:29px; height:29px; border-radius:50%; background:#e8f0ec; color:var(--forest); font-size:11px; font-weight:800; display:grid; place-items:center; }
+  .s3-body{ flex:1; overflow-y:auto; background:var(--paper); padding:16px 16px 22px; }
+  .s3-tabs{
+    background:var(--forest); display:flex; padding:9px 4px 26px; flex-shrink:0;
+  }
+  .s3-tab{ flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; color:#bcd4c8; font-size:9.5px; font-weight:700; }
+  .s3-tab .ti{ font-size:19px; filter:saturate(.15) brightness(1.6); opacity:.75; }
+  .s3-tab.on{ color:var(--gold); }
+  .s3-tab.on .ti{ filter:none; opacity:1; }
+  .s3-item{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+    padding:13px 15px; margin-bottom:9px; display:flex; align-items:center; gap:12px; font-size:13.5px; font-weight:600;
+  }
+  .s3-item .day{ font-size:11px; font-weight:800; color:var(--forest); background:#e4efe9; padding:4px 9px; border-radius:8px; flex-shrink:0; }
+  .s3-item .ck{ margin-left:auto; width:20px; height:20px; border-radius:6px; border:2px solid var(--line); flex-shrink:0; }
+  .s3-item .ck.on{ background:var(--forest); border-color:var(--forest); position:relative; }
+  .s3-item .ck.on::after{ content:'✓'; color:#fff; font-size:12px; position:absolute; inset:0; display:grid; place-items:center; }
+  .s3-hint{
+    background:#fdf3e0; border:1.5px solid #f0dcb4; color:#7a5a12; border-radius:14px;
+    padding:12px 15px; font-size:12.5px; font-weight:600; line-height:1.5; margin-bottom:14px;
+  }
+  .s3-replay{
+    position:absolute; left:50%; bottom:118px; transform:translateX(-50%); z-index:8;
+    background:var(--forest); color:#fff; border:none; font-family:inherit; font-size:13px; font-weight:700;
+    padding:11px 22px; border-radius:999px; cursor:pointer; box-shadow:0 8px 22px rgba(31,77,63,.35);
+    animation:chipIn .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  /* Android 13+ back transition (react-native-screens v33 geometry) */
+  @keyframes s3out{
+    0%{ transform:translateX(0); opacity:1; }
+    7.8%{ transform:translateX(.9%); opacity:1; }
+    26.2%{ transform:translateX(4%); opacity:0; }
+    100%{ transform:translateX(10%); opacity:0; }
+  }
+  @keyframes s3in{
+    from{ transform:translateX(-10%); }
+    to{ transform:translateX(0); }
+  }
+  .s3-stage.playing .s3-out{ animation:s3out 450ms cubic-bezier(.4,0,.2,1) both; }
+  .s3-stage.playing .s3-in{ animation:s3in 450ms cubic-bezier(.2,0,0,1) both; }
+  /* fixed mode: incoming screen stays put — no gap can open */
+  .demo[data-mode="after"] .s3-stage.playing .s3-in{ animation:none; }
+
+  @media (max-width:520px){
+    .site-head h1{ font-size:24px; }
+    .demo{ padding:20px 14px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="brand">MedConnect</div>
+  <h1>Android bug fixes — before &amp; after</h1>
+  <p class="sub">Interactive demo. Use the toggle on each section to compare the current behaviour with the fix.</p>
+</header>
+
+<main>
+
+  <!-- ============ BUG 1 ============ -->
+  <section class="demo" id="sec1" data-mode="before">
+    <div class="demo-title"><span class="badge">Bug 1</span><h2>Fullscreen game sits under the status bar</h2></div>
+    <p class="demo-desc">Opening <b>Memory Match</b> fullscreen draws the header beneath the Android status bar — the <b>Restart button overlaps the clock</b> and the <b>✕ button overlaps the wifi / battery icons</b>.</p>
+    <div class="seg" data-demo="1">
+      <button class="seg-btn active" data-mode="before">Before (bug)</button>
+      <button class="seg-btn" data-mode="after">After (fix)</button>
+    </div>
+
+    <div class="phone-wrap"><div class="phone-body" data-phone>
+      <span class="b-side b-power"></span><span class="b-side b-vol"></span>
+      <div class="screen" id="scr1">
+        <div class="punch"></div>
+        <div class="statusbar">
+          <span class="sb-time">12:23</span>
+          <span class="sb-ic">
+            <svg width="15" height="15" viewBox="0 0 24 24"><path d="M1 8.5C4.5 5 8.1 3.5 12 3.5S19.5 5 23 8.5l-2.2 2.2C18 8 15.2 6.8 12 6.8S6 8 3.2 10.7L1 8.5zM5.2 12.7C6.9 11.2 8.9 10.4 12 10.4s5.1.8 6.8 2.3l-2.2 2.2c-1-1-2.4-1.5-4.6-1.5s-3.6.5-4.6 1.5l-2.2-2.2zM8.9 16.4c.9-.8 1.9-1.2 3.1-1.2s2.2.4 3.1 1.2L12 20l-3.1-3.6z"/></svg>
+            <svg width="15" height="13" viewBox="0 0 24 22"><rect x="1" y="15" width="4.4" height="6" rx="1.2"/><rect x="7.2" y="11" width="4.4" height="10" rx="1.2"/><rect x="13.4" y="7" width="4.4" height="14" rx="1.2"/><rect x="19.6" y="3" width="4.4" height="18" rx="1.2"/></svg>
+            <span class="sb-batt"><span>76</span>
+              <svg width="25" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22.5" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/><rect x="3.2" y="3.2" width="16.5" height="7.6" rx="1.8" fill="#3ddc84"/><rect x="25" y="4.5" width="2.6" height="5" rx="1.2"/></svg>
+            </span>
+          </span>
+        </div>
+        <div class="gesture g-dark"><i></i></div>
+
+        <!-- launcher card -->
+        <div class="s1-card" id="s1card">
+          <div class="box">
+            <h3>🩺 Memory Match</h3>
+            <p>A 60-second brain reset. Find the pairs.</p>
+            <p class="tiny">Tap to open fullscreen</p>
+            <div class="mini">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <button class="open-btn">Open fullscreen</button>
+          </div>
+        </div>
+
+        <!-- fullscreen game -->
+        <div class="s1-fs" id="s1fs" hidden>
+          <div class="s1-fs-inner">
+            <div class="s1-head">
+              <button class="s1-restart" id="s1restart">↻ Restart</button>
+              <div class="s1-title">Memory Match</div>
+              <button class="s1-close" id="s1close" aria-label="Close">✕</button>
+            </div>
+            <div class="s1-stats"><span>⏱ <b id="s1sec">0</b>s</span><span>🎯 <b id="s1moves">0</b></span></div>
+            <div class="s1-board-wrap"><div class="s1-board" id="s1board"></div></div>
+          </div>
+          <div class="s1-win" id="s1win" hidden>
+            <div class="wbox">
+              <div class="big">🎉</div>
+              <h4>Matched!</h4>
+              <p><b id="s1wmoves">0</b> moves · <b id="s1wsec">0</b>s</p>
+              <div class="wbtns">
+                <button class="primary" id="s1again">Play again</button>
+                <button class="ghost" id="s1done">Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+    <p class="note note-before">⚠ Before: the header starts only 12&nbsp;px from the top — right underneath the status bar, so the clock and wifi icons collide with the buttons.</p>
+    <p class="note note-after">✅ After: the content is padded below the status bar (and above the gesture bar), so Restart, the title and ✕ are always clear — on any Android device, notch or punch-hole.</p>
+  </section>
+
+  <!-- ============ BUG 2 ============ -->
+  <section class="demo" id="sec2" data-mode="before">
+    <div class="demo-title"><span class="badge">Bug 2</span><h2>Back button jumps straight to Home</h2></div>
+    <p class="demo-desc">From almost anywhere, pressing <b>back</b> (top-bar arrow or the Android back gesture) skips the previous screen and <b>lands on Home</b>. Try it: open <b>Flashcards → a deck → back</b>, or switch tabs and press back.</p>
+    <div class="seg" data-demo="2">
+      <button class="seg-btn active" data-mode="before">Before (bug)</button>
+      <button class="seg-btn" data-mode="after">After (fix)</button>
+    </div>
+
+    <div class="phone-wrap"><div class="phone-body" data-phone>
+      <span class="b-side b-power"></span><span class="b-side b-vol"></span>
+      <div class="screen" id="scr2">
+        <div class="punch"></div>
+        <div class="statusbar">
+          <span class="sb-time">12:23</span>
+          <span class="sb-ic">
+            <svg width="15" height="15" viewBox="0 0 24 24"><path d="M1 8.5C4.5 5 8.1 3.5 12 3.5S19.5 5 23 8.5l-2.2 2.2C18 8 15.2 6.8 12 6.8S6 8 3.2 10.7L1 8.5zM5.2 12.7C6.9 11.2 8.9 10.4 12 10.4s5.1.8 6.8 2.3l-2.2 2.2c-1-1-2.4-1.5-4.6-1.5s-3.6.5-4.6 1.5l-2.2-2.2zM8.9 16.4c.9-.8 1.9-1.2 3.1-1.2s2.2.4 3.1 1.2L12 20l-3.1-3.6z"/></svg>
+            <svg width="15" height="13" viewBox="0 0 24 22"><rect x="1" y="15" width="4.4" height="6" rx="1.2"/><rect x="7.2" y="11" width="4.4" height="10" rx="1.2"/><rect x="13.4" y="7" width="4.4" height="14" rx="1.2"/><rect x="19.6" y="3" width="4.4" height="18" rx="1.2"/></svg>
+            <span class="sb-batt"><span>76</span>
+              <svg width="25" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22.5" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/><rect x="3.2" y="3.2" width="16.5" height="7.6" rx="1.8" fill="#3ddc84"/><rect x="25" y="4.5" width="2.6" height="5" rx="1.2"/></svg>
+            </span>
+          </span>
+        </div>
+        <div class="gesture g-light"><i></i></div>
+
+        <div class="s2-top">
+          <div class="t-side"><button class="t-btn" id="s2nav" aria-label="Navigation"></button></div>
+          <div class="t-title">MedConnect</div>
+          <div class="t-right">
+            <span class="t-bell"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-9-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span></span>
+            <span class="t-ava">SA</span>
+          </div>
+        </div>
+
+        <div class="s2-content with-tabs" id="s2content"></div>
+
+        <div class="s2-tabs" id="s2tabs">
+          <button class="s2-tab on" data-tab="home"><span class="ti">🏠</span>Home</button>
+          <button class="s2-tab" data-tab="partners"><span class="ti">👥</span>Partners</button>
+          <button class="s2-tab" data-tab="osce"><span class="ti">🩺</span>OSCE</button>
+          <button class="s2-tab" data-tab="chat"><span class="ti">💬</span>Chat</button>
+          <button class="s2-tab" data-tab="focus"><span class="ti">🎯</span>Focus</button>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="controls">
+      <div class="stack-strip" id="s2strip"></div>
+      <div class="ctl-row">
+        <button class="ctl-btn" id="s2back">◀ Android back (gesture / hardware)</button>
+        <button class="ctl-btn ghost" id="s2reset">Reset demo</button>
+      </div>
+    </div>
+
+    <p class="note note-before">⚠ Before: the back arrow appears on tab screens (hiding the menu), and from an open deck one back press <b>skips Flashcards entirely and drops you on Home</b> — the history strip shows the skipped steps.</p>
+    <p class="note note-after">✅ After: back steps through history one screen at a time — <b>Deck → Flashcards → previous tab → Home</b> — and tab screens correctly show the menu button instead of a back arrow.</p>
+  </section>
+
+  <!-- ============ BUG 3 ============ -->
+  <section class="demo" id="sec3" data-mode="before">
+    <div class="demo-title"><span class="badge">Bug 3</span><h2>White line flashes on the right when going back</h2></div>
+    <p class="demo-desc">During the Android back animation a <b>white line/strip appears on the right edge</b> and follows the transition until it completes. It shows because a gap opens between the two sliding screens and something white sits behind them.</p>
+    <div class="seg" data-demo="3">
+      <button class="seg-btn active" data-mode="before">Before (bug)</button>
+      <button class="seg-btn" data-mode="after">After (fix)</button>
+    </div>
+
+    <div class="phone-wrap"><div class="phone-body" data-phone>
+      <span class="b-side b-power"></span><span class="b-side b-vol"></span>
+      <div class="screen" id="scr3">
+        <div class="punch"></div>
+        <div class="statusbar">
+          <span class="sb-time">12:23</span>
+          <span class="sb-ic">
+            <svg width="15" height="15" viewBox="0 0 24 24"><path d="M1 8.5C4.5 5 8.1 3.5 12 3.5S19.5 5 23 8.5l-2.2 2.2C18 8 15.2 6.8 12 6.8S6 8 3.2 10.7L1 8.5zM5.2 12.7C6.9 11.2 8.9 10.4 12 10.4s5.1.8 6.8 2.3l-2.2 2.2c-1-1-2.4-1.5-4.6-1.5s-3.6.5-4.6 1.5l-2.2-2.2zM8.9 16.4c.9-.8 1.9-1.2 3.1-1.2s2.2.4 3.1 1.2L12 20l-3.1-3.6z"/></svg>
+            <svg width="15" height="13" viewBox="0 0 24 22"><rect x="1" y="15" width="4.4" height="6" rx="1.2"/><rect x="7.2" y="11" width="4.4" height="10" rx="1.2"/><rect x="13.4" y="7" width="4.4" height="14" rx="1.2"/><rect x="19.6" y="3" width="4.4" height="18" rx="1.2"/></svg>
+            <span class="sb-batt"><span>76</span>
+              <svg width="25" height="13" viewBox="0 0 28 14"><rect x="1" y="1" width="22.5" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/><rect x="3.2" y="3.2" width="16.5" height="7.6" rx="1.8" fill="#3ddc84"/><rect x="25" y="4.5" width="2.6" height="5" rx="1.2"/></svg>
+            </span>
+          </span>
+        </div>
+        <div class="gesture g-light"><i></i></div>
+
+        <div class="s3-stage" id="s3stage">
+          <div class="s3-under"></div>
+
+          <!-- incoming (previous screen: Home) -->
+          <div class="s3-page s3-in">
+            <div class="s3-top">
+              <span class="b"><span class="s3-burger"><span></span><span></span><span></span></span></span>
+              <div class="ttl" style="flex:1;text-align:center;">MedConnect</div>
+              <span class="b"><span class="s3-ava">SA</span></span>
+            </div>
+            <div class="s3-body">
+              <div class="pg" style="padding:0;">
+                <div class="greet">Welcome back 👋<span>Ready for today's revision?</span></div>
+                <div class="sec-h">Continue</div>
+                <div class="card"><span class="ic">📇</span><span class="tx"><b>Flashcards</b><span>12 decks · 3 due today</span></span><span class="chev">›</span></div>
+                <div class="card"><span class="ic">📊</span><span class="tx"><b>Qbank progress</b><span>68% complete this week</span></span><span class="chev">›</span></div>
+                <div class="card"><span class="ic">🩺</span><span class="tx"><b>Memory Match</b><span>A 60-second brain reset</span></span><span class="chev">›</span></div>
+                <div class="card"><span class="ic">📅</span><span class="tx"><b>Study planner</b><span>3 tasks left today</span></span><span class="chev">›</span></div>
+              </div>
+            </div>
+            <div class="s3-tabs">
+              <span class="s3-tab on"><span class="ti">🏠</span>Home</span>
+              <span class="s3-tab"><span class="ti">👥</span>Partners</span>
+              <span class="s3-tab"><span class="ti">🩺</span>OSCE</span>
+              <span class="s3-tab"><span class="ti">💬</span>Chat</span>
+              <span class="s3-tab"><span class="ti">🎯</span>Focus</span>
+            </div>
+          </div>
+
+          <!-- outgoing (current screen: Study Planner) -->
+          <div class="s3-page s3-out" id="s3out">
+            <div class="s3-top">
+              <button class="b" id="s3backTop" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <div class="ttl">Study Planner<small>Week 3 · Surgery rotation</small></div>
+            </div>
+            <div class="s3-body">
+              <div class="s3-hint">Tap the <b>back arrow</b> above (or the button below the phone) to run the Android back animation.</div>
+              <div class="s3-item"><span class="day">MON</span>Cardiology — 40 MCQs<span class="ck on"></span></div>
+              <div class="s3-item"><span class="day">TUE</span>OSCE: history taking<span class="ck on"></span></div>
+              <div class="s3-item"><span class="day">WED</span>Pharmacology revision<span class="ck"></span></div>
+              <div class="s3-item"><span class="day">THU</span>Flashcards — decks 4–6<span class="ck"></span></div>
+              <div class="s3-item"><span class="day">FRI</span>Mock exam (timed)<span class="ck"></span></div>
+              <div class="s3-item"><span class="day">SAT</span>Anatomy flashcards<span class="ck"></span></div>
+              <div class="s3-item"><span class="day">SUN</span>Weekly review<span class="ck"></span></div>
+            </div>
+          </div>
+
+          <button class="s3-replay" id="s3replay" hidden>▶ Play it again</button>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="controls">
+      <div class="ctl-row">
+        <button class="ctl-btn" id="s3play">◀ Simulate back (Android animation)</button>
+      </div>
+    </div>
+
+    <p class="note note-before">⚠ Before: the two screens slide out of sync — a gap opens on the right and the <b>white layer behind the app shows through as a line</b> for the length of the transition.</p>
+    <p class="note note-after">✅ After: the incoming screen no longer slides out of place (and the layer behind is painted in the app's own colour) — <b>no gap can open, so no white line appears</b>.</p>
+  </section>
+
+</main>
+
+<footer>
+  <b>MedConnect</b> — Android bug-fix demo · 1) fullscreen status-bar overlap · 2) back always lands on Home · 3) white line during back animation<br />
+  Each phone shows a live, tappable simulation at real device size (412 × 915 dp · punch-hole camera · Android 14/15 status bar).
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- fit phones to the window ---------- */
+  function fitPhones(){
+    document.querySelectorAll('[data-phone]').forEach(function(body){
+      body.style.transform = '';
+      body.style.marginBottom = '';
+      var w = body.offsetWidth, h = body.offsetHeight;
+      var wrap = body.parentElement;
+      var scale = Math.min(1, wrap.clientWidth / w, (window.innerHeight * 0.86) / h);
+      scale = Math.max(scale, 0.34);
+      body.style.transform = 'scale(' + scale + ')';
+      /* pull up the unscaled layout space so the page doesn't scroll past the phone */
+      body.style.marginBottom = ((h * scale) - h) + 'px';
+    });
+  }
+  window.addEventListener('resize', fitPhones);
+
+  /* ---------- shared: before/after toggles ---------- */
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.addEventListener('click', function(e){
+      var btn = e.target.closest('.seg-btn');
+      if(!btn) return;
+      seg.querySelectorAll('.seg-btn').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      var mode = btn.dataset.mode;
+      var sec = seg.closest('.demo');
+      sec.dataset.mode = mode;
+      var scr = sec.querySelector('.screen');
+      if(scr) scr.dataset.mode = mode;
+      if(seg.dataset.demo === '2') S2.setMode(mode);
+      if(seg.dataset.demo === '3') S3.setMode(mode);
+    });
+  });
+
+  /* ============================================================
+     BUG 1 — Memory Match fullscreen
+     ============================================================ */
+  var S1 = (function(){
+    var EMOJIS = ['🫀','🩺','🧠','💊','🩸','🧬','🩹','🔬'];
+    var fs = document.getElementById('s1fs');
+    var card = document.getElementById('s1card');
+    var board = document.getElementById('s1board');
+    var win = document.getElementById('s1win');
+    var elSec = document.getElementById('s1sec');
+    var elMoves = document.getElementById('s1moves');
+    var tiles = [], picked = [], moves = 0, seconds = 0, running = false, lock = false, timer = null;
+
+    function makeBoard(){
+      var picked8 = EMOJIS.slice().sort(function(){ return Math.random() - .5; });
+      tiles = [];
+      picked8.forEach(function(e, i){
+        tiles.push({ e: e, matched: false, flipped: false });
+        tiles.push({ e: e, matched: false, flipped: false });
+      });
+      tiles.sort(function(){ return Math.random() - .5; });
+    }
+    function stopTimer(){ if(timer){ clearInterval(timer); timer = null; } }
+    function startTimer(){
+      stopTimer();
+      timer = setInterval(function(){ seconds++; elSec.textContent = seconds; }, 1000);
+    }
+    function render(){
+      board.innerHTML = '';
+      tiles.forEach(function(t, i){
+        var d = document.createElement('div');
+        d.className = 'tile' + (t.matched ? ' matched' : (t.flipped ? '' : ' down'));
+        d.innerHTML = '<span class="mark">🩺</span><span class="em">' + t.e + '</span>';
+        d.addEventListener('click', function(){ flip(i); });
+        board.appendChild(d);
+      });
+      elMoves.textContent = moves;
+      elSec.textContent = seconds;
+    }
+    function reset(){
+      stopTimer(); makeBoard(); picked = []; moves = 0; seconds = 0; lock = false; running = false;
+      win.hidden = true; render();
+    }
+    function flip(i){
+      if(lock || tiles[i].matched || tiles[i].flipped) return;
+      if(!running){ running = true; startTimer(); }
+      tiles[i].flipped = true;
+      picked.push(i);
+      render();
+      if(picked.length === 2){
+        moves++; render();
+        var a = picked[0], b = picked[1];
+        if(tiles[a].e === tiles[b].e){
+          setTimeout(function(){
+            tiles[a].matched = tiles[b].matched = true;
+            picked = []; render();
+            if(tiles.every(function(t){ return t.matched; })){
+              stopTimer(); running = false;
+              document.getElementById('s1wmoves').textContent = moves;
+              document.getElementById('s1wsec').textContent = seconds;
+              win.hidden = false;
+            }
+          }, 320);
+        } else {
+          lock = true;
+          setTimeout(function(){
+            tiles[a].flipped = tiles[b].flipped = false;
+            picked = []; lock = false; render();
+          }, 720);
+        }
+      }
+    }
+
+    function open(){ fs.hidden = false; card.style.display = 'none'; reset(); }
+    function close(){ fs.hidden = true; card.style.display = 'flex'; stopTimer(); }
+
+    card.addEventListener('click', open);
+    document.getElementById('s1close').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    document.getElementById('s1restart').addEventListener('click', function(e){ e.stopPropagation(); reset(); });
+    document.getElementById('s1again').addEventListener('click', reset);
+    document.getElementById('s1done').addEventListener('click', close);
+
+    reset();
+    return { open: open };
+  })();
+
+  /* ============================================================
+     BUG 2 — back navigation
+     ============================================================ */
+  var S2 = (function(){
+    var ICON_BACK = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+    var ICON_BURGER = '<span class="t-burger"><span></span><span></span><span></span></span>';
+
+    var TAB_LABEL = { home:'Home', partners:'Partners', osce:'OSCE', chat:'Chat', focus:'Focus' };
+
+    var st = { mode:'before', tab:'home', pushed:null, sub:null };
+
+    var elContent = document.getElementById('s2content');
+    var elNav = document.getElementById('s2nav');
+    var elTabs = document.getElementById('s2tabs');
+    var elStrip = document.getElementById('s2strip');
+    var toastEl = null, toastT = null;
+
+    /* ----- screen templates ----- */
+    var views = {
+      home: function(){
+        return '<div class="pg">'
+          + '<div class="greet">Welcome back 👋<span>Ready for today\'s revision?</span></div>'
+          + '<div class="sec-h">Jump back in</div>'
+          + '<div class="card hero" data-push="flashcards"><span class="ic">📇</span><span class="tx"><b>Flashcards</b><span>12 decks · 3 due today</span></span><span class="chev">›</span></div>'
+          + '<div class="card" data-toast="The tile game lives on the Focus tab"><span class="ic">🩺</span><span class="tx"><b>Memory Match</b><span>A 60-second brain reset</span></span><span class="chev">›</span></div>'
+          + '<div class="card" data-toast="Qbank progress: 68% this week"><span class="ic">📊</span><span class="tx"><b>Qbank progress</b><span>68% complete this week</span></span><span class="chev">›</span></div>'
+          + '<div class="sec-h">Today</div>'
+          + '<div class="row" data-toast="Planner opens as a pushed screen"><span class="av">📅</span><span class="tx"><b>Study planner</b><span>3 tasks left today</span></span><span class="pill g">On track</span></div>'
+          + '<div class="row" data-toast="2 new connection requests"><span class="av">🤝</span><span class="tx"><b>Connection requests</b><span>Amara, Youssef</span></span><span class="pill">2 new</span></div>'
+          + '</div>';
+      },
+      partners: function(){
+        return '<div class="pg">'
+          + '<div class="greet">Your partners<span>3 study buddies online</span></div>'
+          + '<div class="sec-h">Connections</div>'
+          + '<div class="row" data-toast="Chat opens on the Chat tab"><span class="av">👩‍⚕️</span><span class="tx"><b>Dr Amara O.</b><span>Online · Cardiology deck</span></span><span class="pill g">Online</span></div>'
+          + '<div class="row" data-toast="Chat opens on the Chat tab"><span class="av">👨‍⚕️</span><span class="tx"><b>Dr Youssef K.</b><span>Studying · OSCE prep</span></span><span class="pill g">Online</span></div>'
+          + '<div class="row" data-toast="Partner profile"><span class="av">🧑‍⚕️</span><span class="tx"><b>Dr Linh T.</b><span>Last seen 2h ago</span></span></div>'
+          + '</div>';
+      },
+      osce: function(){
+        return '<div class="pg">'
+          + '<div class="greet">OSCE practice<span>8 stations this week</span></div>'
+          + '<div class="sec-h">Stations</div>'
+          + '<div class="row" data-toast="Station detail opens as a pushed screen"><span class="av">🗣️</span><span class="tx"><b>History taking</b><span>12 min · scripted</span></span><span class="pill g">Ready</span></div>'
+          + '<div class="row" data-toast="Station detail opens as a pushed screen"><span class="av">🩻</span><span class="tx"><b>Clinical examination</b><span>15 min · checklist</span></span></div>'
+          + '<div class="row" data-toast="Station detail opens as a pushed screen"><span class="av">⚡</span><span class="tx"><b>Emergency station</b><span>10 min · timed</span></span><span class="pill">Due</span></div>'
+          + '</div>';
+      },
+      chat: function(){
+        return '<div class="pg">'
+          + '<div class="greet">Chat<span>2 unread conversations</span></div>'
+          + '<div class="sec-h">Messages</div>'
+          + '<div class="row" data-toast="Conversation opens over the whole screen"><span class="av">👩‍⚕️</span><span class="tx"><b>Dr Amara O.</b><span>Did you finish the cardio deck?</span></span><span class="pill">2</span></div>'
+          + '<div class="row" data-toast="Group chat opens over the whole screen"><span class="av">👥</span><span class="tx"><b>Study group — Surgery</b><span>Youssef: mock exam Sunday?</span></span></div>'
+          + '<div class="row" data-toast="Conversation opens over the whole screen"><span class="av">🧑‍⚕️</span><span class="tx"><b>Dr Linh T.</b><span>Thanks for the notes!</span></span></div>'
+          + '</div>';
+      },
+      focus: function(){
+        return '<div class="pg">'
+          + '<div class="greet">Focus<span>Protect your study time</span></div>'
+          + '<div class="sec-h">Tools</div>'
+          + '<div class="row" data-toast="Pomodoro timer — can go fullscreen"><span class="av">⏱️</span><span class="tx"><b>Study timer</b><span>25 / 5 pomodoro</span></span></div>'
+          + '<div class="row" data-toast="Box breathing guide — can go fullscreen"><span class="av">🫁</span><span class="tx"><b>Breathe</b><span>Box breathing · 1 min</span></span></div>'
+          + '<div class="row" data-toast="Open the Flashcards card on Home to try it"><span class="ic" style="width:38px;height:38px;border-radius:50%;background:var(--paper2);display:grid;place-items:center;font-size:17px;flex-shrink:0;">🩺</span><span class="tx"><b>Memory Match</b><span>Tap a card to match pairs</span></span></div>'
+          + '</div>';
+      },
+      flashcards: function(){
+        return '<div class="pg">'
+          + '<div class="greet">Flashcards<span>12 decks · 3 due today</span></div>'
+          + '<div class="sec-h">Your decks — tap one, then press back</div>'
+          + '<div class="row" data-sub="1"><span class="deck-em">🫀</span><span class="tx"><b>Anatomy</b><span>42 cards · 12 due</span></span><span class="pill">12</span></div>'
+          + '<div class="row" data-sub="1"><span class="deck-em">❤️</span><span class="tx"><b>Cardiology</b><span>60 cards · 8 due</span></span><span class="pill">8</span></div>'
+          + '<div class="row" data-sub="1"><span class="deck-em">🧠</span><span class="tx"><b>Neurology</b><span>35 cards</span></span></div>'
+          + '<div class="row" data-sub="1"><span class="deck-em">💊</span><span class="tx"><b>Pharmacology</b><span>80 cards · 5 due</span></span><span class="pill">5</span></div>'
+          + '</div>';
+      },
+      deck: function(){
+        return '<div class="pg">'
+          + '<div class="study-hero"><b>🫀 Anatomy</b><p>Card 19 of 42 · due today</p><div class="bar"><i></i></div></div>'
+          + '<div class="sec-h">Study options</div>'
+          + '<div class="row" data-toast="Flashcard review starts here"><span class="av">🔁</span><span class="tx"><b>Smart review</b><span>Spaced repetition · 12 due</span></span></div>'
+          + '<div class="row" data-toast="Multiple-choice mode"><span class="av">✅</span><span class="tx"><b>Quiz mode</b><span>10 questions</span></span></div>'
+          + '<div class="row" data-toast="Deck settings"><span class="av">⚙️</span><span class="tx"><b>Deck settings</b><span>Rename · share · export</span></span></div>'
+          + '<p style="font-size:12.5px;color:var(--muted);text-align:center;margin-top:16px;font-weight:600;">Now press <b>back</b> ↑ and watch the history strip</p>'
+          + '</div>';
+      }
+    };
+
+    function current(){ return st.sub ? 'deck' : (st.pushed || st.tab); }
+
+    function toast(msg){
+      if(toastEl) toastEl.remove();
+      if(toastT) clearTimeout(toastT);
+      toastEl = document.createElement('div');
+      toastEl.className = 's2-toast';
+      toastEl.textContent = msg;
+      document.getElementById('scr2').appendChild(toastEl);
+      toastT = setTimeout(function(){ if(toastEl){ toastEl.remove(); toastEl = null; } }, 1600);
+    }
+
+    function render(){
+      var cur = current();
+      elContent.innerHTML = (views[cur] || views.home)();
+      elContent.classList.toggle('with-tabs', !st.pushed && !st.sub);
+
+      /* top bar: back vs burger */
+      var showBack = !!st.sub || !!st.pushed || (st.mode === 'before' && st.tab !== 'home');
+      elNav.innerHTML = showBack ? ICON_BACK : ICON_BURGER;
+
+      /* tab bar */
+      elTabs.style.display = (st.pushed || st.sub) ? 'none' : 'flex';
+      elTabs.querySelectorAll('.s2-tab').forEach(function(b){
+        b.classList.toggle('on', b.dataset.tab === st.tab);
+      });
+
+      /* history strip */
+      var stack = ['Home'];
+      if(st.tab !== 'home') stack.push(TAB_LABEL[st.tab]);
+      if(st.pushed) stack.push('Flashcards');
+      if(st.sub) stack.push('Deck');
+      var html = '<span class="lbl">History</span>';
+      stack.forEach(function(name, i){
+        if(i > 0) html += '<span class="sep">›</span>';
+        var cls = 'chip' + (i === 1 && st.tab !== 'home' && !st.pushed ? ' tabchip' : '') + (name === 'Deck' ? ' subchip' : '');
+        html += '<span class="' + cls + '">' + name + '</span>';
+      });
+      elStrip.innerHTML = html;
+    }
+
+    /* ----- navigation ----- */
+    function back(){
+      if(st.sub){
+        if(st.mode === 'before'){
+          /* BUG: sub-views have no history entry → hardware/arrow back falls
+             through to the tab router's first route = Home, skipping Flashcards */
+          st.sub = null; st.pushed = null; st.tab = 'home';
+        } else {
+          st.sub = null;              /* fixed: close the deck → back to the list */
+        }
+      } else if(st.pushed){
+        st.pushed = null;             /* pop the pushed screen → previous tab */
+      } else if(st.tab !== 'home'){
+        st.tab = 'home';              /* tab history back → previous (Home) */
+      } else {
+        toast('Already on Home ✓');
+        return;
+      }
+      render();
+    }
+
+    document.getElementById('scr2').addEventListener('click', function(e){
+      var nav = e.target.closest('#s2nav');
+      if(nav){
+        var showBack = !!st.sub || !!st.pushed || (st.mode === 'before' && st.tab !== 'home');
+        if(showBack) back();
+        else toast('☰ Drawer: Labs · Formulas · Notes · Settings…');
+        return;
+      }
+      var tabBtn = e.target.closest('.s2-tab');
+      if(tabBtn){
+        st.tab = tabBtn.dataset.tab; st.pushed = null; st.sub = null;
+        render(); return;
+      }
+      var push = e.target.closest('[data-push]');
+      if(push){ st.pushed = push.dataset.push; st.sub = null; render(); return; }
+      var sub = e.target.closest('[data-sub]');
+      if(sub){ st.sub = '1'; render(); return; }
+      var t = e.target.closest('[data-toast]');
+      if(t){ toast(t.dataset.toast); }
+    });
+    document.getElementById('s2back').addEventListener('click', back);
+    document.getElementById('s2reset').addEventListener('click', function(){
+      st.tab = 'home'; st.pushed = null; st.sub = null; render();
+    });
+
+    function setMode(mode){
+      st.mode = mode;
+      /* reset position so the comparison starts fair */
+      st.tab = 'home'; st.pushed = null; st.sub = null;
+      render();
+    }
+
+    render();
+    return { setMode: setMode };
+  })();
+
+  /* ============================================================
+     BUG 3 — white line during back animation
+     ============================================================ */
+  var S3 = (function(){
+    var stage = document.getElementById('s3stage');
+    var replay = document.getElementById('s3replay');
+    var playing = false;
+    var token = 0;
+
+    function play(){
+      if(playing) return;
+      playing = true;
+      replay.hidden = true;
+      stage.classList.remove('done');
+      /* restart the CSS animations */
+      stage.classList.remove('playing');
+      void stage.offsetWidth;
+      stage.classList.add('playing');
+      setTimeout(function(){
+        stage.classList.add('done');
+        stage.classList.remove('playing');
+        replay.hidden = false;
+        playing = false;
+      }, 480);
+    }
+    function reset(){
+      playing = false;
+      token++;
+      stage.classList.remove('playing', 'done');
+      replay.hidden = true;
+    }
+
+    document.getElementById('s3play').addEventListener('click', play);
+    document.getElementById('s3backTop').addEventListener('click', play);
+    replay.addEventListener('click', reset);
+
+    function setMode(mode){
+      reset();
+      /* in "after" mode auto-run once so the client sees the clean transition */
+      if(mode === 'after'){
+        var t = token;
+        setTimeout(function(){ if(t === token) play(); }, 350);
+      }
+    }
+
+    return { setMode: setMode };
+  })();
+
+  fitPhones();
+  window.addEventListener('load', fitPhones);
+})();
+</script>
+</body>
+</html>

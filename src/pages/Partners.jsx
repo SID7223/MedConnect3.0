@@ -56,6 +56,7 @@ export default function Partners() {
   const [mStatus, setMStatus] = useState('loading');
   const [cStatus, setCStatus] = useState('loading');
   const [err, setErr] = useState('');
+  const [offline, setOffline] = useState(false);
   const [peek, setPeek] = useState(null);
   const [toast, setToast] = useState('');
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2600); };
@@ -64,13 +65,30 @@ export default function Partners() {
   const loadMatches = () => {
     setMStatus('loading');
     api.matches().then((d) => { setMatches(d.matches || []); setMStatus('ok'); })
-      .catch((e) => { setErr(e.message); setMStatus('error'); });
+      .catch((e) => { setErr(e.message); setOffline(!!e.offline); setMStatus('error'); });
   };
   const loadConns = () => {
     setCStatus('loading');
     api.connections().then((d) => { setConns({ connected: d.connected || [], pending: d.pending || [], requests: d.requests || [] }); setCStatus('ok'); })
-      .catch(() => setCStatus('error'));
+      .catch((e) => { setErr(e.message || 'Something went wrong'); setOffline(!!e.offline); setCStatus('error'); });
   };
+
+  const ErrorBlock = ({ onRetry }) => (
+    <div className="center" style={{ flexDirection: 'column', minHeight: 200, gap: 10 }}>
+      {offline ? (
+        <>
+          <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 19a4.25 4.25 0 0 1 0-8.5 5 5 0 0 1 10 0 4.25 4.25 0 0 1 0 8.5z" />
+            <path d="M4.5 19.5L19.5 4.5" />
+          </svg>
+          <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: 'var(--ink)' }}>No internet</p>
+        </>
+      ) : (
+        <p style={{ margin: 0 }}>{err}</p>
+      )}
+      <button className="link" onClick={onRetry}>Try again</button>
+    </div>
+  );
   useEffect(() => { loadMatches(); loadConns(); }, []);
 
   // refresh automatically when someone returns to the app/tab, instead of relying on pull-to-refresh
@@ -178,7 +196,7 @@ export default function Partners() {
             </p>
           )}
           {mStatus === 'loading' && <div className="center" style={{ minHeight: 160 }}><div className="spinner" /></div>}
-          {mStatus === 'error' && <div className="center" style={{ flexDirection: 'column' }}><p>{err}</p><button className="link" onClick={loadMatches}>Try again</button></div>}
+          {mStatus === 'error' && <ErrorBlock onRetry={loadMatches} />}
           {mStatus === 'ok' && visibleMatches.length === 0 && (
             <EmptyState
               title={examLabel ? `No ${examLabel} partners yet 🌱` : 'No new partners right now'}
@@ -213,6 +231,7 @@ export default function Partners() {
       {tab === 'mine' && (
         <>
           {cStatus === 'loading' && <div className="center" style={{ minHeight: 160 }}><div className="spinner" /></div>}
+          {cStatus === 'error' && myPartners.length === 0 && <ErrorBlock onRetry={loadConns} />}
           {cStatus === 'ok' && myPartners.length === 0 && (conns.pending?.length || 0) === 0 && (
             <EmptyState title="No partners yet 🌱" sub="Head to Discover to connect with someone preparing for your exam." />
           )}
@@ -267,6 +286,7 @@ export default function Partners() {
       {tab === 'requests' && (
         <>
           {cStatus === 'loading' && <div className="center" style={{ minHeight: 160 }}><div className="spinner" /></div>}
+          {cStatus === 'error' && conns.requests.length === 0 && <ErrorBlock onRetry={loadConns} />}
           {cStatus === 'ok' && reqCount === 0 && (
             <EmptyState title="No requests right now" sub="When someone asks to study with you, they'll appear here." />
           )}

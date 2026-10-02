@@ -33,13 +33,45 @@ export async function getPushPermission(): Promise<boolean> {
   }
 }
 
+// granted + whether the OS will still show the system prompt (after a hard
+// denial the only way out is the phone's Settings app)
+export async function getPushPermissionState(): Promise<{ granted: boolean; canAskAgain: boolean }> {
+  try {
+    const res = await Notifications.getPermissionsAsync();
+    return { granted: res.status === 'granted', canAskAgain: res.canAskAgain !== false };
+  } catch {
+    return { granted: false, canAskAgain: true };
+  }
+}
+
+type PermissionListener = (granted: boolean) => void;
+const permissionListeners = new Set<PermissionListener>();
+
+// broadcast permission changes so every surface showing notification state
+// (Explore strip, NotifyPrompt, Profile toggle) stays in sync
+export function onPushPermissionChange(listener: PermissionListener): () => void {
+  permissionListeners.add(listener);
+  return () => {
+    permissionListeners.delete(listener);
+  };
+}
+
 export async function requestPushPermission(): Promise<boolean> {
+  let granted = false;
   try {
     const { status } = await Notifications.requestPermissionsAsync();
-    return status === 'granted';
+    granted = status === 'granted';
   } catch {
-    return false;
+    granted = false;
   }
+  permissionListeners.forEach((fn) => {
+    try {
+      fn(granted);
+    } catch {
+      // listener threw — keep notifying the rest
+    }
+  });
+  return granted;
 }
 
 export async function sendLocalNotification(title: string, body: string): Promise<void> {
