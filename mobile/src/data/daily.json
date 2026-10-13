@@ -1,0 +1,63 @@
+{
+  "note": "SAMPLE content only — full libraries (365 terms / 365 drills / 90 cases, clinician-approved) are out of scope for the app ticket. Use scripts/daily-upload.mjs to bulk-load scheduled CSVs into daily_items.",
+  "items": [
+    {
+      "type": "term",
+      "scheduled_date": "2026-01-01",
+      "specialty": "Cardiology",
+      "content": {
+        "term": "Pulsus paradoxus",
+        "specialty": "Cardiology",
+        "meaning": "An abnormally large fall in systolic blood pressure (more than 10 mmHg) during inspiration.",
+        "seen_in": "Cardiac tamponade, severe asthma, COPD exacerbation.",
+        "how_to_check": "With a BP cuff, note when sounds first appear in expiration only, then when they are heard in every beat. A gap of more than 10 mmHg is abnormal.",
+        "related": ["Beck's triad", "Kussmaul's sign"]
+      },
+      "source": "Sample — Geeky Medics",
+      "reviewer": "Pending clinician review",
+      "reviewed_on": null,
+      "status": "approved"
+    },
+    {
+      "type": "drill",
+      "scheduled_date": "2026-01-01",
+      "specialty": "ECG",
+      "content": {
+        "topic": "ECG",
+        "stem": "Lead II · 25 mm/s",
+        "question": "What is the rhythm?",
+        "options": ["Sinus tachycardia", "Atrial flutter", "Atrial fibrillation", "SVT"],
+        "answer": 2,
+        "explanation": "Irregularly irregular rhythm with no clear P waves. Flutter is usually regular with a sawtooth baseline."
+      },
+      "source": "Sample — in-house",
+      "reviewer": "Pending clinician review",
+      "reviewed_on": null,
+      "status": "approved"
+    },
+    {
+      "type": "one-liner",
+      "scheduled_date": "2026-01-01",
+      "specialty": "Respiratory",
+      "content": {
+        "presentation": "58-year-old smoker with 3 weeks of cough, weight loss and a sodium of 124.",
+        "differentials": [
+          { "name": "Small cell lung cancer", "confidence": 5, "topics": ["respiratory", "oncology"], "aliases": ["sclc", "oat cell carcinoma"], "note": "SIADH (low sodium) is a classic paraneoplastic presentation." },
+          { "name": "Tuberculosis", "confidence": 3, "topics": ["respiratory", "infection"], "aliases": ["tb", "pulmonary tb"] },
+          { "name": "Non-small cell lung cancer", "confidence": 3, "topics": ["respiratory", "oncology"], "aliases": ["nsclc"] },
+          { "name": "Pneumonia", "confidence": 2, "topics": ["respiratory", "infection"] }
+        ],
+        "reason": "A smoker with weight loss and low sodium points to a lung tumour making ADH (SIADH).",
+        "diagnoses": ["Small cell lung cancer", "Tuberculosis", "Pneumonia", "Non-small cell lung cancer"],
+        "references": [
+          { "title": "Lung cancer: diagnosis and management (NG122)", "org": "NICE", "year": 2019, "url": "https://www.nice.org.uk/guidance/ng122" },
+          { "title": "Diagnosis and treatment of hyponatremia (SIADH)", "org": "ERESA", "year": 2014, "url": "https://www.erc.es/wp-content/uploads/2019/08/clinical_practice_guideline_hyponatremia_siadh_2014.pdf" }
+        ]
+      },
+      "source": "Sample — in-house",
+      "reviewer": "Pending clinician review",
+      "reviewed_on": null,
+      "status": "in review"
+    }
+  ]
+}
