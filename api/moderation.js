@@ -1,4 +1,4 @@
-import { sql, getUserId, readBody, applyCors } from './_shared/util.js';
+import { sql, getUserId, readBody, applyCors } from '../api-shared/util.js';
 
 // GET  /api/moderation                     -> { blocked: [...] } people I have blocked
 // POST /api/moderation { action: 'block'|'unblock'|'unfriend'|'report'|'delete_chat', targetId, reason? }

@@ -1,4 +1,4 @@
-import { sql, getUserId, applyCors } from './_shared/util.js';
+import { sql, getUserId, applyCors } from '../api-shared/util.js';
 
 // GET /api/stats -> { counts: { "MRCP": 5, "USMLE": 10, ... }, total: N }
 // Counts are grouped by exam FAMILY (text before "—"), since the home browse

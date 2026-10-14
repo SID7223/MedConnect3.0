@@ -1,4 +1,4 @@
-import { sql, getUserId, readBody, applyCors } from './_shared/util.js';
+import { sql, getUserId, readBody, applyCors } from '../api-shared/util.js';
 
 // Logbook — procedures and research entries (MEGA-PROMPT §6E).
 // GET  /api/logbook?kind=procedure|research

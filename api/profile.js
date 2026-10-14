@@ -1,5 +1,5 @@
-import { sql, getUserId, safeUser, readBody, applyCors } from './_shared/util.js';
-import { containsBlockedWord } from './_shared/profanity.js';
+import { sql, getUserId, safeUser, readBody, applyCors } from '../api-shared/util.js';
+import { containsBlockedWord } from '../api-shared/profanity.js';
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return res.status(204).end();

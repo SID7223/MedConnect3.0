@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { sql, signToken, safeUser, readBody, applyCors } from './_shared/util.js';
+import { sql, signToken, safeUser, readBody, applyCors } from '../api-shared/util.js';
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return res.status(204).end();

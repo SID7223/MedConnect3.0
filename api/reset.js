@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import { sql, readBody, applyCors } from './_shared/util.js';
+import { sql, readBody, applyCors } from '../api-shared/util.js';
 
 // POST /api/reset
 //   { action: 'request', email }            -> creates a reset token

@@ -1,4 +1,4 @@
-import { sql, getUserId, readBody, applyCors } from './_shared/util.js';
+import { sql, getUserId, readBody, applyCors } from '../api-shared/util.js';
 
 // GET  /api/favourites            -> { ids: [quoteId, ...] }
 // POST /api/favourites { quoteId, action: 'add'|'remove' }

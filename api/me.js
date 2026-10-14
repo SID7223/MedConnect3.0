@@ -1,5 +1,5 @@
-import { sql, getUserId, safeUser, readBody, applyCors } from './_shared/util.js';
-import { ensurePushTable } from './_shared/push.js';
+import { sql, getUserId, safeUser, readBody, applyCors } from '../api-shared/util.js';
+import { ensurePushTable } from '../api-shared/push.js';
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return res.status(204).end();
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
       let sendResult = 'skipped';
       if (mySubs.length && diag.vapid_public_set && diag.vapid_private_set) {
         try {
-          const { sendPushToUser } = await import('./_shared/push.js');
+          const { sendPushToUser } = await import('../api-shared/push.js');
           await sendPushToUser(uid, { title: 'MedConnect test 🔔', body: 'If you see this, push works!', url: '/home', tag: 'test' });
           sendResult = 'attempted — check your device for a notification';
         } catch (e) {

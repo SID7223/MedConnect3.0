@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { sql, signToken, safeUser, readBody, checkRateLimit, recordAttempt, applyCors } from './_shared/util.js';
+import { sql, signToken, safeUser, readBody, checkRateLimit, recordAttempt, applyCors } from '../api-shared/util.js';
 
 const GOOGLE_CLIENT_ID = '402347146267-47oui3qdf8sir6do5115ejdi5gdgok6r.apps.googleusercontent.com';
 

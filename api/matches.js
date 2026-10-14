@@ -1,4 +1,4 @@
-import { sql, getUserId, safeUser, applyCors } from './_shared/util.js';
+import { sql, getUserId, safeUser, applyCors } from '../api-shared/util.js';
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return res.status(204).end();
