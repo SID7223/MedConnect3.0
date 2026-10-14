@@ -1,4 +1,7 @@
 /* ===== MedConnect — v1.0 editorial design language ===== */
+/* NOTE: @import must stay the very first statement — anything above it
+   makes bundlers/browsers ignore the font import (spec rule). */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 * {
   -webkit-user-select: none;
   user-select: none;
@@ -8,7 +11,6 @@ input, textarea {
   -webkit-user-select: text;
   user-select: text;
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root, [data-theme="light"] {
   --ink:#15201c; --paper:#f1f4f0; --paper-2:#e6ebe4; --card:#ffffff;

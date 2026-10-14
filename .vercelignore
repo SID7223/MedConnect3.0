@@ -8,9 +8,6 @@ mobile
 # Kotlin backend (deployed separately, e.g. Fly.io / Cloud Run / Railway)
 server
 
-# retired Vercel serverless functions — the Ktor server serves /api now
-api
-
 # build artifacts
 medconnect.apk
 dist

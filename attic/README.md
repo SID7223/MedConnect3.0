@@ -1,21 +1,20 @@
 # Attic - retired, do not import or deploy from here
 
-## api-legacy/ (archived from `api/`)
-The old Vercel serverless functions (13 endpoints) plus the two duplicate
-schema files (`schema.sql`, `schema-full.sql`).
+## api-legacy/ → moved back to `api/` (14 Oct 2026)
+The Vercel serverless functions now serve `/api` again (Phase 1), because
+there is no backend host and no `api.medconnect.app` DNS record — the Ktor
+server in `server/` has nowhere to run yet. The old claim below that Ktor is
+"live at api.medconnect.app" was never true; do not trust it.
 
-**Canonical backend is `server/` (Kotlin/Ktor), live at api.medconnect.app**
-(`vercel.json` rewrites `/api/*` there). Edit backend code only in
-`server/src/main/kotlin/app/medconnect/routes/`. Schema truth is Flyway
-`server/src/main/resources/db/migration/V1__baseline.sql`.
+**Current split (until Ktor gets a host):**
+- Production API = `api/*.js` on Vercel (legacy contract: auth, qbank tracker,
+  decks, notes, blocks, logbook, partners, messages, reset-links, stats).
+- `server/` (Kotlin/Ktor, migrations V1–V9) is the future canonical backend:
+  adds mcq answers/shares, goals/minutes, daily content, presence, resources,
+  OTP reset. Deploy it to a JVM host, create the DNS, then point clients at it.
 
-## BLOCKERS - read before touching anything here
-1. **Ktor has no `/logbook` route and V1 has no `logbook_entries` /
-   `logbook_targets` tables** (the only tables in `schema-full.sql` missing
-   from V1). If production traffic reaches Ktor, Logbook persistence is
-   broken; if it still reaches these functions, deleting this directory
-   breaks it. Verify Vercel routing precedence + function logs, then port
-   `logbook.js` to Ktor (route + V2 migration) before removing this attic.
-2. Do not re-add these files to any build or import them - they exist only
-   as a readable record of the old contract (wire format reference for
-   keeping Ktor responses identical).
+## Known gaps of the Phase-1 API (fixed properly by the Ktor deploy)
+1. Password reset is token-link based; the mobile app speaks OTP codes, so
+   in-app reset stays broken until Ktor ships.
+2. No `/mcq`, `/goals`, `/daily`, `/presence`, `/resources` endpoints — the
+   app covers these with real local fallbacks until then.
