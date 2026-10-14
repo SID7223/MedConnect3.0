@@ -5,11 +5,13 @@ export type IconName =
   | 'home'
   | 'partners'
   | 'osce'
+  | 'study'
   | 'chat'
   | 'focus'
   | 'profile'
   | 'bell'
   | 'back'
+  | 'menu'
   | 'labs'
   | 'formulas'
   | 'resources'
@@ -22,7 +24,12 @@ export type IconName =
   | 'dev'
   | 'file'
   | 'logout'
-  | 'cloudOff';
+  | 'cloudOff'
+  | 'cards'
+  | 'qbank'
+  | 'essentials'
+  | 'logbook'
+  | 'tracker';
 
 interface Props {
   name: IconName;
@@ -31,7 +38,7 @@ interface Props {
   strokeWidth?: number;
 }
 
-// Ported from src/App.jsx inline SVGs — stroke uses the given color instead of currentColor.
+// Ported from src/App.jsx inline SVGs - stroke uses the given color instead of currentColor.
 export default function Icon({ name, size = 22, color = '#fff', strokeWidth = 1.8 }: Props) {
   const common = {
     width: size,
@@ -72,6 +79,13 @@ export default function Icon({ name, size = 22, color = '#fff', strokeWidth = 1.
           <Circle cx="18" cy="16.5" r="1" />
         </Svg>
       );
+    case 'study':
+      return (
+        <Svg {...common}>
+          <Path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+          <Path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </Svg>
+      );
     case 'chat':
       return (
         <Svg {...common}>
@@ -107,6 +121,14 @@ export default function Icon({ name, size = 22, color = '#fff', strokeWidth = 1.
       return (
         <Svg {...common} strokeWidth={2.2}>
           <Path d="M15 18l-6-6 6-6" />
+        </Svg>
+      );
+    case 'menu':
+      return (
+        <Svg {...common} strokeWidth={2.2}>
+          <Path d="M4 7h16" />
+          <Path d="M4 12h16" />
+          <Path d="M4 17h16" />
         </Svg>
       );
     case 'labs':
@@ -199,6 +221,52 @@ export default function Icon({ name, size = 22, color = '#fff', strokeWidth = 1.
         <Svg {...common}>
           <Path d="M7 19a4.25 4.25 0 0 1 0-8.5 5 5 0 0 1 10 0 4.25 4.25 0 0 1 0 8.5z" />
           <Path d="M4.5 19.5L19.5 4.5" />
+        </Svg>
+      );
+    case 'cards':
+      return (
+        <Svg {...common}>
+          <Rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+          <Path d="M6 10h12" />
+        </Svg>
+      );
+    case 'qbank':
+      return (
+        <Svg {...common}>
+          <Path d="M3 21h18" />
+          <Path d="M4 21V4" />
+          <Path d="M8.5 21v-5" />
+          <Path d="M12.5 21v-11" />
+          <Path d="M16.5 21v-8" />
+        </Svg>
+      );
+    case 'essentials':
+      // open reference book (board toolkit tile)
+      return (
+        <Svg {...common}>
+          <Path d="M12 7.5C10.5 6 8 5.5 4 5.5v12c4 0 6.5.5 8 2" />
+          <Path d="M12 7.5c1.5-1.5 4-2 8-2v12c-4 0-6.5.5-8 2" />
+          <Path d="M12 7.5v12" />
+        </Svg>
+      );
+    case 'logbook':
+      // spiral notebook (board toolkit tile)
+      return (
+        <Svg {...common}>
+          <Rect x="6" y="3.5" width="13" height="17" rx="2.5" />
+          <Path d="M9.5 3.5v17" />
+          <Path d="M4.5 8h4" />
+          <Path d="M4.5 12h4" />
+          <Path d="M4.5 16h4" />
+        </Svg>
+      );
+    case 'tracker':
+      // rising trend on axes (board toolkit tile)
+      return (
+        <Svg {...common}>
+          <Path d="M4 4v16h16" />
+          <Path d="M7.5 15.5 11 12l2.5 2.5L19 9" />
+          <Path d="M15.5 9H19v3.5" />
         </Svg>
       );
     default:

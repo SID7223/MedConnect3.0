@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,14 +11,25 @@ import {
 } from 'react-native';
 import Screen from '../components/Screen';
 import { confirmAlert } from '../components/ConfirmDialog';
-import { LinearGradient } from 'expo-linear-gradient';
+import ContextualPrompt from '../components/ContextualPrompt';
+import { router, useFocusEffect } from 'expo-router';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
+import { ThemeColors } from '../theme/tokens';
 import { useTheme } from '../context/Theme';
+import { tick } from '../lib/haptics';
 import { api } from '../lib/api';
+import { analytics } from '../lib/analytics';
 import { examColor } from '../lib/examColors';
+import { QUESTIONS, SYSTEMS } from '../lib/qbank';
+import { mergeAnswerMaps, readMcqLog } from '../lib/mcqLog';
+import { usePrompts } from '../lib/prompts';
+import { QBANKS } from '../lib/profile-data';
+import Celebration from '../components/Celebration';
 import { SERIF } from '../theme/fonts';
-
-// Qbank progress tracker — solo by default, optional per-partner sharing.
+import Svg, { Circle as SvgCircle } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// Qbank progress tracker - solo by default, optional per-partner sharing.
 // Port of src/pages/Qbank.jsx. All sharing/compare is INLINE (no modals).
 
 interface QRow {
@@ -58,7 +70,7 @@ interface ConnectionsRes {
 const sameId = (a: number | string | undefined | null, b: number | string | undefined | null) =>
   String(a) === String(b);
 
-const accColorOf = (p: number) => (p >= 70 ? '#2c6a55' : p >= 50 ? '#b98a2e' : '#a8442a');
+const accColorOf = (p: number, c: ThemeColors) => (p >= 70 ? c.green : p >= 50 ? c.gold : c.rust);
 
 function Toggle({
   on,
@@ -78,7 +90,10 @@ function Toggle({
       : { w: 38, h: 22, k: 17, on: 18, off: 3, top: 2.5 };
   return (
     <Pressable
-      onPress={() => onChange(!on)}
+      onPress={() => {
+        tick();
+        onChange(!on);
+      }}
       accessibilityRole="switch"
       accessibilityState={{ checked: on }}
       style={{ flexShrink: 0 }}
@@ -92,7 +107,7 @@ function Toggle({
         <View
           style={[
             styles.toggleKnob,
-            { width: d.k, height: d.k, borderRadius: d.k / 2, top: d.top, left: on ? d.on : d.off },
+            { width: d.k, height: d.k, borderRadius: d.k / 2, top: d.top, left: on ? d.on : d.off, backgroundColor: colors.onForest },
           ]}
         />
       </View>
@@ -103,6 +118,7 @@ function Toggle({
 export default function QbankScreen() {
   const { colors } = useTheme();
   const { user } = useAuth();
+  const { dismiss, open, answer } = usePrompts();
   const color = examColor(user?.exam);
   const defaultBank = (user?.question_bank as string | undefined) || 'PassMedicine';
 
@@ -112,7 +128,6 @@ export default function QbankScreen() {
   const [sharingWith, setSharingWith] = useState<Grant[]>([]);
   const [sharedToMe, setSharedToMe] = useState<Grant[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tick, setTick] = useState(0);
 
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState({ topic: '', done: '', total: '', correct: '' });
@@ -129,13 +144,26 @@ export default function QbankScreen() {
   const [renameVal, setRenameVal] = useState('');
   const [newBankOpen, setNewBankOpen] = useState(false);
   const [newBankVal, setNewBankVal] = useState('');
+  const [showCelebration, setShowCelebration] = useState(false);
+  const prevPctDoneRef = useRef(0);
+  // mockup MCQs tile mini-chart (real per-subject done counts) + saved session
+  const [mcqBars, setMcqBars] = useState<number[]>([]);
+  const [savedInfo, setSavedInfo] = useState<{ label: string; left: number } | null>(null);
+  // back collapses inline layers, topmost first (later hooks win the stack)
+  useBackAction(adding, () => setAdding(false));
+  useBackAction(shareSection, () => setShareSection(false));
+  useBackAction(renaming, () => setRenaming(false));
+  useBackAction(newBankOpen, () => setNewBankOpen(false));
 
-  useEffect(() => {
+  // refetch on every focus (not just mount): tabs stay mounted, so answers
+  // synced by a practice run would otherwise show stale numbers here
+  const load = useCallback(() => {
+    analytics.track('qbank_viewed');
     let active = true;
     (async () => {
       try {
         const d: { progress?: QRow[]; sharingWith?: Grant[]; sharedToMe?: Grant[] } =
-          await api.qbankGet();
+          await api.qbankGetFresh();
         if (!active) return;
         const pr = d.progress || [];
         setRows(pr);
@@ -146,16 +174,55 @@ export default function QbankScreen() {
           const merged = [...new Set([...prev, ...found])];
           return merged.length ? merged : [defaultBank];
         });
-        setBank((b) => b || found[0] || defaultBank);
+        // prefer the auto-synced Practice bank when it has progress, so App
+        // practice answers are visible instead of hiding behind manual banks
+        const hasPractice = pr.some((r) => r.bank === 'Practice' && (r.done || 0) > 0);
+        setBank((b) => b || (hasPractice ? 'Practice' : found[0]) || defaultBank);
       } catch {
         // keep whatever we already have
+      }
+      if (active) {
+        // real per-subject done counts for the MCQs tile mini-chart (merged log)
+        try {
+          const [mcq, loc] = await Promise.all([
+            api.mcqGet().then((x: any) => x).catch(() => null),
+            readMcqLog(),
+          ]);
+          const serverAnswers = Array.isArray(mcq?.answers)
+            ? mcq.answers.map((a: any) => ({
+              questionId: String(a.questionId || ''),
+              subject: String(a.subject || 'General'),
+              correct: !!a.correct && a.correct !== 'false' && a.correct !== 'f',
+              answeredAt: String(a.answeredAt || ''),
+            }))
+            : [];
+          const merged = mergeAnswerMaps(serverAnswers, loc || {});
+          const perSys = SYSTEMS.map((s) => Object.values(merged).filter((e) => e.subject === s).length);
+          if (active) setMcqBars(perSys);
+        } catch { /* mini-chart stays empty */ }
+        // saved in-app session for the Resume row
+        try {
+          const raw = await AsyncStorage.getItem('mc_qbank_practice_v2');
+          if (raw && active) {
+            const s = JSON.parse(raw);
+            if (Array.isArray(s.ids) && s.ids.length && !s.finished) {
+              const answered = Object.keys(s.log || {}).length;
+              const left = s.ids.length - answered;
+              if (left > 0) {
+                const label = s.filters?.system || s.filters?.exam || 'Mixed set';
+                setSavedInfo({ label: String(label), left });
+              } else if (active) setSavedInfo(null);
+            } else if (active) setSavedInfo(null);
+          }
+        } catch { /* no resume row */ }
       }
       if (active) setLoading(false);
     })();
     return () => {
       active = false;
     };
-  }, [tick, defaultBank]);
+  }, [defaultBank]);
+  useFocusEffect(load);
 
   const bankRows = rows.filter((r) => r.bank === bank);
   const totals = bankRows.reduce(
@@ -169,28 +236,54 @@ export default function QbankScreen() {
   const pctDone = totals.total ? Math.round((totals.done / totals.total) * 100) : 0;
   const pctAcc = totals.done ? Math.round((totals.correct / totals.done) * 100) : 0;
 
+  // mockup YOUR PROGRESS card: real in-app Practice counts (never manual sums).
+  // total is ALWAYS the bundled bank size — a stale server row inflated by the
+  // old per-session accumulator (e.g. 198) can never reach the screen.
+  const practiceRow = rows.find((r) => r.bank === 'Practice' && r.topic === 'App practice');
+  const pTotal = QUESTIONS.length;
+  const pDone = Math.min(Number(practiceRow?.done) || 0, pTotal);
+  const pCorrect = Math.min(Number(practiceRow?.correct) || 0, pDone);
+  const pAcc = pDone ? Math.round((pCorrect / pDone) * 100) : 0;
+  const pPct = pTotal ? Math.round((pDone / pTotal) * 100) : 0;
+
+  // Celebrate only on the in-session transition to 100% (prev < 100 && next === 100)
+  useEffect(() => {
+    if (prevPctDoneRef.current < 100 && pctDone === 100 && totals.total > 0) {
+      setShowCelebration(true);
+    }
+    prevPctDoneRef.current = pctDone;
+  }, [pctDone, totals.total]);
+
   const saveTopic = async () => {
     if (!draft.topic.trim()) return;
-    const done = parseInt(draft.done, 10) || 0;
     const total = parseInt(draft.total, 10) || 0;
+    if (total <= 0) {
+      Alert.alert('Enter a total', 'Total questions must be at least 1.');
+      return;
+    }
+    const done = Math.min(parseInt(draft.done, 10) || 0, total);
     const correct = Math.min(parseInt(draft.correct, 10) || 0, done);
     try {
       await api.qbankSave(bank, draft.topic.trim(), done, total, correct);
     } catch {
+      Alert.alert('Could not save', 'Check your connection and try again.');
       return;
     }
     setDraft({ topic: '', done: '', total: '', correct: '' });
     setAdding(false);
-    setTick((t) => t + 1);
+    load();
   };
 
   const delTopic = async (topic: string) => {
     // optimistic: remove from screen instantly, then sync to server in background
+    const doomed = rows.find((r) => r.bank === bank && r.topic === topic);
     setRows((prev) => prev.filter((r) => !(r.bank === bank && r.topic === topic)));
     try {
       await api.qbankDeleteTopic(bank, topic);
     } catch {
-      // optimistic removal already happened
+      // rollback: put the row back and say so
+      if (doomed) setRows((prev) => [...prev, doomed]);
+      Alert.alert('Could not delete', 'Check your connection and try again.');
     }
   };
 
@@ -320,20 +413,95 @@ export default function QbankScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
-          <Text style={styles.heroGlyph} pointerEvents="none">
-            📊
-          </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Progress</Text>
-          <Text style={styles.h1}>Qbank Tracker</Text>
-          <Text style={styles.heroSub}>
-            Track your question-bank progress, solo or shared with a partner.
-          </Text>
+        <Text style={[styles.screenTitle, { color: colors.ink }]}>Qbank</Text>
+
+        {/* mockup YOUR PROGRESS card — real Practice counts only */}
+        <View style={[styles.progressCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.progressEyebrow, { color: colors.muted }]}>YOUR PROGRESS</Text>
+            <Text style={[styles.progressBig, { color: colors.ink }]}>
+              {pDone} of {pTotal}
+            </Text>
+            <Text style={[styles.progressSub, { color: colors.muted }]}>{`answered · ${pAcc}% accuracy`}</Text>
+          </View>
+          <MiniRing pct={pPct} />
         </View>
 
         {/* content sheet (web minHeight: 60vh + 90px bottom pad omitted: viewport units /
             fixed bottom nav don't exist on native) */}
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
+          {/* §6D - question-bank prompt: first Qbank open, if never answered */}
+          {!user?.question_bank && open('question_bank') && (
+            <ContextualPrompt
+              eyebrow="ONE MORE THING"
+              title="Which question bank do you use?"
+              sub="We surface questions and partners that match yours."
+              options={QBANKS}
+              value={(user?.question_bank as string) || undefined}
+              onSelect={(v) => answer('question_bank', { questionBank: v })}
+              onDismiss={() => dismiss('question_bank')}
+              style={{ marginBottom: 14 }}
+            />
+          )}
+
+          {/* mockup NEW — MCQs tile with real mini bar chart */}
+          <Text style={[styles.mockSection, { color: colors.rust }]}>NEW</Text>
+          <Pressable
+            onPress={() => router.push('/mcqs')}
+            style={[styles.mcqsTile, { backgroundColor: colors.card, borderColor: colors.line }]}
+            accessibilityRole="button"
+            accessibilityLabel="Open MCQs by subject"
+          >
+            <View style={styles.mcqsHead}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.mcqsTitle, { color: colors.ink }]}>MCQs</Text>
+                <Text style={[styles.mcqsSub, { color: colors.muted }]}>
+                  Progress by subject and your wrong questions to review or share with a partner.
+                </Text>
+              </View>
+              <Text style={[styles.mcqsChev, { color: colors.ink }]}>›</Text>
+            </View>
+            <View style={styles.miniBars}>
+              {mcqBars.map((n, i) => {
+                const max = Math.max(1, ...mcqBars);
+                return (
+                  <View key={i} style={[styles.miniTrack, { backgroundColor: colors.paper2 }]}>
+                    <View style={[styles.miniFill, { height: `${Math.max(6, Math.round((n / max) * 100))}%`, backgroundColor: colors.green }]} />
+                  </View>
+                );
+              })}
+            </View>
+          </Pressable>
+
+          {/* mockup PRACTICE — resume + new set */}
+          <Text style={[styles.mockSection, { color: colors.rust }]}>PRACTICE</Text>
+          {savedInfo && (
+            <View style={[styles.setRow, { backgroundColor: colors.card, borderColor: colors.line }]}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.setTitle, { color: colors.ink }]}>{`Resume: ${savedInfo.label}`}</Text>
+                <Text style={[styles.setSub, { color: colors.muted }]}>{`${savedInfo.left} questions left`}</Text>
+              </View>
+              <Pressable
+                onPress={() => router.push({ pathname: '/qbank-practice', params: { resume: '1' } } as never)}
+                style={[styles.setBtn, { backgroundColor: colors.rust }]}
+              >
+                <Text style={styles.setBtnText}>Resume</Text>
+              </Pressable>
+            </View>
+          )}
+          <View style={[styles.setRow, { backgroundColor: colors.card, borderColor: colors.line }]}>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.setTitle, { color: colors.ink }]}>New set</Text>
+              <Text style={[styles.setSub, { color: colors.muted }]}>Choose subjects, number of questions, timer</Text>
+            </View>
+            <Pressable
+              onPress={() => router.push('/qbank-practice')}
+              style={[styles.setBtn, { backgroundColor: colors.paper2 }]}
+            >
+              <Text style={[styles.setBtnTextDark, { color: colors.ink }]}>Start</Text>
+            </Pressable>
+          </View>
+
           {/* bank selector */}
           <ScrollView
             horizontal
@@ -352,7 +520,7 @@ export default function QbankScreen() {
                     : { backgroundColor: colors.card, borderColor: colors.line },
                 ]}
               >
-                <Text style={[styles.bankChipText, { color: bank === b ? '#fff' : colors.muted }]}>
+                <Text style={[styles.bankChipText, { color: bank === b ? colors.onForest : colors.muted }]}>
                   {b}
                 </Text>
               </Pressable>
@@ -393,12 +561,7 @@ export default function QbankScreen() {
           )}
 
           {/* overall summary */}
-          <LinearGradient
-            colors={[color, `${color}cc`]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.summary}
-          >
+          <View style={[styles.summary, { backgroundColor: color }]}>
             <View style={styles.summaryHead}>
               {renaming ? (
                 <View style={styles.renameRow}>
@@ -422,12 +585,12 @@ export default function QbankScreen() {
                     onSubmitEditing={doRename}
                   />
                   <Pressable onPress={doRename} style={styles.renameSave}>
-                    <Text style={styles.renameSaveText}>Save</Text>
+                    <Text style={[styles.renameSaveText, { color: colors.onForest }]}>Save</Text>
                   </Pressable>
                 </View>
               ) : (
                 <View style={styles.summaryHeadRow}>
-                  <Text style={styles.summaryLabel}>{`${bank} · Overall`}</Text>
+                  <Text style={[styles.summaryLabel, { color: colors.onForest }]}>{`${bank} · Overall`}</Text>
                   <View style={styles.summaryActions}>
                     <Pressable
                       onPress={() => {
@@ -435,10 +598,10 @@ export default function QbankScreen() {
                         setRenaming(true);
                       }}
                     >
-                      <Text style={styles.summaryAction}>Rename</Text>
+                      <Text style={[styles.summaryAction, { color: colors.onForest }]}>Rename</Text>
                     </Pressable>
                     <Pressable onPress={deleteBank}>
-                      <Text style={styles.summaryAction}>Delete</Text>
+                      <Text style={[styles.summaryAction, { color: colors.onForest }]}>Delete</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -447,24 +610,24 @@ export default function QbankScreen() {
 
             <View style={styles.statsRow}>
               <View>
-                <Text style={styles.statBig}>
+                <Text style={[styles.statBig, { color: colors.onForest }]}>
                   {totals.done}
                   <Text style={styles.statBigSub}>{`/${totals.total || '?'}`}</Text>
                 </Text>
-                <Text style={styles.statLabel}>questions done</Text>
+                <Text style={[styles.statLabel, { color: colors.onForest }]}>questions done</Text>
               </View>
               <View>
-                <Text style={styles.statBig}>{`${pctAcc}%`}</Text>
-                <Text style={styles.statLabel}>accuracy</Text>
+                <Text style={[styles.statBig, { color: colors.onForest }]}>{`${pctAcc}%`}</Text>
+                <Text style={[styles.statLabel, { color: colors.onForest }]}>accuracy</Text>
               </View>
             </View>
 
             {totals.total > 0 && (
               <View style={styles.summaryBarTrack}>
-                <View style={[styles.summaryBarFill, { width: `${pctDone}%` }]} />
+                <View style={[styles.summaryBarFill, { width: `${pctDone}%`, backgroundColor: colors.onForest }]} />
               </View>
             )}
-          </LinearGradient>
+          </View>
 
           {/* INLINE sharing toggle */}
           <Pressable
@@ -479,7 +642,7 @@ export default function QbankScreen() {
             </Text>
             {shareCount > 0 && (
               <View style={[styles.shareBadge, { backgroundColor: color }]}>
-                <Text style={styles.shareBadgeText}>{`Sharing with ${shareCount}`}</Text>
+                <Text style={[styles.shareBadgeText, { color: colors.onForest }]}>{`Sharing with ${shareCount}`}</Text>
               </View>
             )}
             <Text
@@ -493,7 +656,7 @@ export default function QbankScreen() {
             </Text>
           </Pressable>
 
-          {/* INLINE sharing panel — part of the page, scrolls naturally, no modal */}
+          {/* INLINE sharing panel - part of the page, scrolls naturally, no modal */}
           {shareSection && (
             <View
               style={[
@@ -523,7 +686,7 @@ export default function QbankScreen() {
                     <View style={styles.partnerBody}>
                       <Text style={[styles.partnerName, { color: colors.ink }]}>{p.name}</Text>
                       <Text
-                        style={[styles.partnerStatus, { color: on ? '#2c6a55' : colors.subtle }]}
+                        style={[styles.partnerStatus, { color: on ? colors.green : colors.subtle }]}
                       >
                         {on ? 'You share with them' : 'Not sharing'}
                       </Text>
@@ -574,7 +737,7 @@ export default function QbankScreen() {
                   <Text style={[styles.topicStat, { color: colors.muted }]}>
                     {`${r.done}/${r.total || '?'} done`}
                   </Text>
-                  <Text style={[styles.topicStat, { color: accColorOf(acc), fontWeight: '700' }]}>
+                  <Text style={[styles.topicStat, { color: accColorOf(acc, colors), fontWeight: '700' }]}>
                     {`${acc}% accuracy`}
                   </Text>
                 </View>
@@ -636,7 +799,7 @@ export default function QbankScreen() {
                   onPress={saveTopic}
                   style={[styles.btn, styles.flex1, { backgroundColor: color }]}
                 >
-                  <Text style={[styles.btnText, { color: '#fff' }]}>Save</Text>
+                  <Text style={[styles.btnText, { color: colors.onForest }]}>Save</Text>
                 </Pressable>
                 <Pressable
                   onPress={() => {
@@ -651,7 +814,7 @@ export default function QbankScreen() {
             </View>
           )}
 
-          {/* partners sharing WITH me — inline, with inline expand-to-compare */}
+          {/* partners sharing WITH me - inline, with inline expand-to-compare */}
           <SharedToMe
             bank={bank}
             grants={sharedToMe}
@@ -664,7 +827,44 @@ export default function QbankScreen() {
           />
         </View>
       </ScrollView>
+      <Celebration
+        variant="compact"
+        stats={[
+          { label: 'Complete', value: '100%' },
+          { label: 'Accuracy', value: `${pctAcc}%` },
+        ]}
+        onPrimary={() => setShowCelebration(false)}
+        primaryLabel="Awesome"
+        visible={showCelebration}
+      />
     </Screen>
+  );
+}
+
+function MiniRing({ pct }: { pct: number }) {
+  const { colors } = useTheme();
+  const r = 22;
+  const c = 2 * Math.PI * r;
+  const clamped = Math.max(0, Math.min(100, pct));
+  return (
+    <View style={styles.ringWrap}>
+      <Svg width={60} height={60}>
+        <SvgCircle cx={30} cy={30} r={r} stroke={colors.paper2} strokeWidth={6} fill="none" />
+        <SvgCircle
+          cx={30}
+          cy={30}
+          r={r}
+          stroke={colors.forest}
+          strokeWidth={6}
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={`${c} ${c}`}
+          strokeDashoffset={c - (c * clamped) / 100}
+          transform="rotate(-90 30 30)"
+        />
+      </Svg>
+      <Text style={[styles.ringText, { color: colors.ink }]}>{`${Math.round(clamped)}%`}</Text>
+    </View>
   );
 }
 
@@ -826,7 +1026,45 @@ function SharedToMe({
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: 32 },
+  scroll: { paddingBottom: 32, paddingHorizontal: 16, paddingTop: 8 },
+  screenTitle: { fontFamily: SERIF, fontSize: 22, lineHeight: 26, marginBottom: 10 },
+  progressCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1.5,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 6,
+  },
+  progressEyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, marginBottom: 4 },
+  progressBig: { fontFamily: SERIF, fontSize: 30, lineHeight: 34 },
+  progressSub: { fontSize: 12.5, marginTop: 2 },
+  ringWrap: { width: 60, height: 60, alignItems: 'center', justifyContent: 'center' },
+  ringText: { position: 'absolute', fontSize: 13, fontWeight: '800' },
+  mockSection: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, marginTop: 18, marginBottom: 8 },
+  mcqsTile: { borderWidth: 1.5, borderRadius: 16, padding: 15 },
+  mcqsHead: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  mcqsTitle: { fontFamily: SERIF, fontSize: 20, lineHeight: 24 },
+  mcqsSub: { fontSize: 12.5, lineHeight: 18, marginTop: 2 },
+  mcqsChev: { fontSize: 26, fontWeight: '700' },
+  miniBars: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, height: 44, marginTop: 12 },
+  miniTrack: { flex: 1, height: 44, borderRadius: 5, overflow: 'hidden', justifyContent: 'flex-end' },
+  miniFill: { width: '100%', borderRadius: 5 },
+  setRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1.5,
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 8,
+  },
+  setTitle: { fontSize: 14.5, fontWeight: '700' },
+  setSub: { fontSize: 12, marginTop: 2 },
+  setBtn: { borderRadius: 999, paddingVertical: 9, paddingHorizontal: 18 },
+  setBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  setBtnTextDark: { fontSize: 13, fontWeight: '700' },
   hero: {
     paddingHorizontal: 20,
     paddingTop: 18,
@@ -842,8 +1080,8 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 33, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 24, lineHeight: 25 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -853,6 +1091,18 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   bankScroll: { marginBottom: 14 },
+  practiceCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 15,
+    marginBottom: 16,
+  },
+  practiceTitle: { fontFamily: SERIF, fontSize: 17 },
+  practiceSub: { fontSize: 11.5, opacity: 0.85, marginTop: 2 },
+  practiceArrow: { fontSize: 26, fontWeight: '700', marginTop: -3 },
   bankRow: { gap: 8, paddingBottom: 4, alignItems: 'center' },
   bankChip: {
     flexShrink: 0,
@@ -904,12 +1154,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     opacity: 0.85,
-    color: '#fff',
     flex: 1,
   },
   summaryActions: { flexDirection: 'row', gap: 12 },
   summaryAction: {
-    color: '#fff',
     opacity: 0.8,
     fontSize: 11,
     fontWeight: '700',
@@ -923,11 +1171,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: 'center',
   },
-  renameSaveText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+  renameSaveText: { fontWeight: '700', fontSize: 12 },
   statsRow: { flexDirection: 'row', gap: 24 },
-  statBig: { fontFamily: SERIF, fontSize: 30, fontWeight: '900', lineHeight: 34, color: '#fff' },
+  statBig: { fontFamily: SERIF, fontSize: 30, lineHeight: 34 },
   statBigSub: { fontSize: 16, opacity: 0.7 },
-  statLabel: { fontSize: 11, opacity: 0.85, marginTop: 2, color: '#fff' },
+  statLabel: { fontSize: 11, opacity: 0.85, marginTop: 2 },
   summaryBarTrack: {
     marginTop: 14,
     height: 7,
@@ -935,7 +1183,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,.25)',
     overflow: 'hidden',
   },
-  summaryBarFill: { height: '100%', borderRadius: 999, backgroundColor: '#fff' },
+  summaryBarFill: { height: '100%', borderRadius: 999 },
   shareBtn: {
     width: '100%',
     flexDirection: 'row',
@@ -953,7 +1201,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
   },
-  shareBadgeText: { color: '#fff', fontSize: 11, fontWeight: '700' },
+  shareBadgeText: { fontSize: 11, fontWeight: '700' },
   shareChevron: { fontSize: 14, marginLeft: 4, fontWeight: '700' },
   shareChevronOpen: { transform: [{ rotate: '180deg' }] },
   sharePanel: {
@@ -987,7 +1235,7 @@ const styles = StyleSheet.create({
   partnerName: { fontWeight: '700', fontSize: 14 },
   partnerStatus: { fontSize: 11.5, marginTop: 1 },
   toggleTrack: { borderRadius: 999 },
-  toggleKnob: { position: 'absolute', backgroundColor: '#fff' },
+  toggleKnob: { position: 'absolute' },
   topicsHead: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 import { useAuth } from '../../context/Auth';
 import { useTheme } from '../../context/Theme';
 
-// Signed-in area — renders nothing while the root gate redirects unauthorized users.
+// Signed-in area - renders nothing while the root gate redirects unauthorized users.
 export default function MainLayout() {
   const { user, loading } = useAuth();
   const { colors } = useTheme();

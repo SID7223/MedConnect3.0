@@ -5,6 +5,7 @@ import * as Sharing from 'expo-sharing';
 import Svg, { Path } from 'react-native-svg';
 import Screen from '../components/Screen';
 import SegmentedPill from '../components/SegmentedPill';
+import Wordmark from '../components/Wordmark';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
 import { quoteById, quoteOfTheDay, Quote } from '../lib/quotes';
@@ -89,7 +90,7 @@ export default function MotivationScreen() {
       });
   };
 
-  // wallpaper export — capture the quote card view and share/save the PNG
+  // wallpaper export - capture the quote card view and share/save the PNG
   // (port of web downloadQuote: same layout, rendered natively then snapshotted)
   const cardRef = useRef<View>(null);
   const [savingWallpaper, setSavingWallpaper] = useState(false);
@@ -100,7 +101,7 @@ export default function MotivationScreen() {
       const uri = await captureRef(cardRef, { format: 'png', quality: 1 });
       await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Save wallpaper' });
     } catch {
-      // capture or share unavailable — ignore
+      // capture or share unavailable - ignore
     }
     setSavingWallpaper(false);
   };
@@ -108,13 +109,13 @@ export default function MotivationScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.tintGold }]}>
           <Text style={styles.heroGlyph} pointerEvents="none">
             ✦
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Daily Motivation</Text>
-          <Text style={styles.h1}>Motivation</Text>
-          <Text style={styles.heroSub}>
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Daily Motivation</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>Motivation</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>
             Your daily thought. Save the ones that move you.
           </Text>
         </View>
@@ -156,7 +157,7 @@ export default function MotivationScreen() {
                     {today.author}
                   </Text>
                 )}
-                <Text style={[styles.quoteBrand, { color: theme.accent }]}>MedConnect</Text>
+                <Wordmark size={13} peersSize={14} color={theme.accent} style={styles.quoteBrand} />
               </View>
 
               {/* background theme picker */}
@@ -251,8 +252,8 @@ const styles = StyleSheet.create({
   hero: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 32, overflow: 'hidden' },
   heroGlyph: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -266,14 +267,15 @@ const styles = StyleSheet.create({
   quoteText: {
     fontFamily: SERIF,
     fontSize: 21,
-    fontWeight: '500',
     lineHeight: 30,
     textAlign: 'center',
-    alignSelf: 'stretch',
-  },
-  quoteMark: { fontFamily: SERIF, fontSize: 30, fontWeight: '700' },
-  quoteAuthor: { fontFamily: SERIF, fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
-  quoteBrand: { fontFamily: SERIF, fontSize: 13, fontWeight: '700', opacity: 0.85 },
+    alignSelf: 'stretch' },
+  // SERIF === Fraunces_700Bold, which is ALREADY a bold cut. Setting fontWeight
+  // or fontStyle here makes Android hunt for `Fraunces_700Bold_bold.ttf` /
+  // `_italic.ttf`, miss, and silently fall back to the system sans.
+  quoteMark: { fontFamily: SERIF, fontSize: 30 },
+  quoteAuthor: { fontFamily: SERIF, fontSize: 14, textAlign: 'center' },
+  quoteBrand: { opacity: 0.85 },
   themeRow: { flexDirection: 'row', gap: 10, justifyContent: 'center', marginTop: 16, marginBottom: 18 },
   themeDot: { width: 30, height: 30, borderRadius: 15 },
   saveRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 7, marginTop: 12 },
@@ -294,6 +296,6 @@ const styles = StyleSheet.create({
   favRow: { flexDirection: 'row', gap: 12, alignItems: 'flex-start', paddingVertical: 14, paddingHorizontal: 4 },
   favBody: { flex: 1 },
   favQuote: { fontFamily: SERIF, fontSize: 16, lineHeight: 24 },
-  favMark: { fontFamily: SERIF, fontSize: 20, fontWeight: '700' },
-  favAuthor: { fontFamily: SERIF, fontSize: 12.5, fontStyle: 'italic', marginTop: 5 },
+  favMark: { fontFamily: SERIF, fontSize: 20 },
+  favAuthor: { fontFamily: SERIF, fontSize: 12.5, marginTop: 5 },
 });

@@ -1,19 +1,32 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import Screen from '../components/Screen';
+import Card from '../components/Card';
+import Eyebrow from '../components/Eyebrow';
 import Icon from '../components/Icon';
+import ListItem from '../components/ListItem';
+import Pill from '../components/Pill';
 import SegmentedPill from '../components/SegmentedPill';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
 import { SERIF } from '../theme/fonts';
 import { api } from '../lib/api';
+import { bioDisplay } from '../lib/bio';
 import { examColor } from '../lib/examColors';
 import { isOnline } from '../lib/presence';
 import { useSettings } from '../context/Settings';
+import { border, radius } from '../theme/tokens';
 
 type Tab = 'discover' | 'mine' | 'requests';
+
+const TABS: [Tab, string][] = [
+  ['discover', 'Discover'],
+  ['mine', 'My Partners'],
+  ['requests', 'Requests'],
+];
 
 interface MatchUser {
   id: string | number;
@@ -33,7 +46,7 @@ interface Peek {
   name?: string;
   exam?: string;
   avatar?: string;
-  bio?: string;
+  bioText?: string;
 }
 
 const one = (v?: string | string[]): string | undefined => (Array.isArray(v) ? v[0] : v);
@@ -80,13 +93,17 @@ function EmptyState({ title, sub }: { title: string; sub: string }) {
 
 export default function PartnersScreen() {
   const { user } = useAuth();
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const { get, set } = useSettings();
   const params = useLocalSearchParams<Record<string, string | string[]>>();
   const filterExam = one(params.exam);
   const filterPart = one(params.part);
   const initialTab = one(params.tab) === 'mine' ? 'mine' : one(params.tab) === 'requests' ? 'requests' : 'discover';
   const [tab, setTab] = useState<Tab>(initialTab);
+  // `undefined` = fall back to the ?exam= route param; `null` = All
+  const [examFilter, setExamFilter] = useState<string | null | undefined>(undefined);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [conns, setConns] = useState<{ connected: any[]; pending: any[]; requests: any[] }>({
@@ -99,6 +116,12 @@ export default function PartnersScreen() {
   const [err, setErr] = useState('');
   const [offline, setOffline] = useState(false);
   const [peek, setPeek] = useState<Peek | null>(null);
+  // back closes the topmost layer first: search bar, then profile peek sheet
+  useBackAction(searchOpen && !peek, () => {
+    setSearchOpen(false);
+    setSearch('');
+  });
+  useBackAction(!!peek, () => setPeek(null));
   const [toast, setToast] = useState('');
   // starred partners derive from server settings (survives data clear / phone change)
   const stars = Array.isArray(get('starred_partners')) ? (get('starred_partners') as (string | number)[]) : [];
@@ -193,6 +216,12 @@ export default function PartnersScreen() {
       loadConns();
       showToast(`Request sent to ${person?.user?.name || 'them'} ✓`);
     } catch {
+      // restore the card so a failed request can be retried — never vanish it
+      if (person) {
+        setMatches((m) =>
+          m.some((x) => String(x.user.id) === String(id)) ? m : [...m, person],
+        );
+      }
       showToast('Could not send request. Try again.');
     }
   };
@@ -223,14 +252,49 @@ export default function PartnersScreen() {
     set('starred_partners', next);
   };
 
-  const examLabel = filterExam ? (filterPart ? `${filterExam} ${filterPart}` : filterExam) : null;
-  const visibleMatches = filterExam
-    ? matches.filter((m) => {
-        const theirFamily = (m.user.exam || '').split('—')[0].trim().toLowerCase();
-        const want = filterExam.trim().toLowerCase();
-        return theirFamily === want || (m.user.exam || '').toLowerCase().includes(want);
-      })
-    : matches;
+  const activeExam = examFilter !== undefined ? examFilter : filterExam;
+  const examLabel = activeExam
+    ? activeExam === filterExam && filterPart
+      ? `${filterExam} ${filterPart}`
+      : activeExam
+    : null;
+  const query = search.trim().toLowerCase();
+  const hit = (name?: string) => !query || `${name || ''}`.toLowerCase().includes(query);
+  // the exam SegmentedPill sits above every section, so it filters all three lists
+  const famOk = (exam?: string | null) => {
+    if (!activeExam) return true;
+    const want = activeExam.trim().toLowerCase();
+    const raw = (exam || '').toLowerCase();
+    return (exam || '').split('—')[0].trim().toLowerCase() === want || raw.includes(want);
+  };
+
+  // memoised: SegmentedPill's glide effect re-runs on every `options`
+  // identity change, so a fresh array per render strands the thumb mid-flight
+  const examFamilies = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          matches
+            .map((m) => (m.user.exam || '').split('—')[0].trim())
+            .filter((x): x is string => !!x),
+        ),
+      ),
+    [matches],
+  );
+  const filterOptions = useMemo(
+    () => [
+      'All',
+      ...(filterExam && !examFamilies.includes(filterExam) ? [filterExam] : []),
+      ...examFamilies,
+    ],
+    [filterExam, examFamilies],
+  );
+  const examSegOptions = useMemo(
+    () => filterOptions.map((k) => ({ key: k, label: k })),
+    [filterOptions],
+  );
+
+  const visibleMatches = matches.filter((m) => famOk(m.user.exam) && hit(`${m.user.name} ${m.user.country || ''}`));
 
   const reqCount = conns.requests?.length || 0;
 
@@ -246,85 +310,105 @@ export default function PartnersScreen() {
     };
   };
 
-  const myPartners = [...(conns.connected || [])].sort((a, b) => {
-    const sa = stars.includes(other(a).id) ? 1 : 0;
-    const sb = stars.includes(other(b).id) ? 1 : 0;
-    return sb - sa;
-  });
+  const myPartners = [...(conns.connected || [])]
+    .filter((c) => famOk(other(c).exam) && hit(other(c).name))
+    .sort((a, b) => {
+      const sa = stars.includes(other(a).id) ? 1 : 0;
+      const sb = stars.includes(other(b).id) ? 1 : 0;
+      return sb - sa;
+    });
 
-  const pillStyle = (pct: number) => {
-    if (mode === 'dark') {
-      if (pct >= 80) return { bg: '#16352a', fg: '#7fd4b0' };
-      if (pct >= 55) return { bg: '#332a14', fg: '#d9b15e' };
-      return { bg: '#26241f', fg: '#9aa39c' };
-    }
-    if (pct >= 80) return { bg: '#dcefe6', fg: '#1f4d3f' };
-    if (pct >= 55) return { bg: '#fbf0d8', fg: '#8a6620' };
-    return { bg: '#f0ece2', fg: '#6b7670' };
-  };
+  const visibleRequests = (conns.requests || []).filter(
+    (c) => famOk(other(c).exam) && hit(other(c).name),
+  );
 
-  const TABS: [Tab, string][] = [
-    ['discover', 'Discover'],
-    ['mine', 'My Partners'],
-    ['requests', 'Requests'],
-  ];
+  // memoised for the same reason as examSegOptions above
+  const tabSegOptions = useMemo(
+    () =>
+      TABS.map(([key, label]) => ({
+        key,
+        label,
+        ...(key === 'requests' && reqCount > 0
+          ? { dot: { color: colors.rust, activeColor: colors.onForest } }
+          : {}),
+      })),
+    [reqCount, colors.rust, colors.onForest],
+  );
 
   return (
     <Screen>
       <View style={styles.wrap}>
         <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-          {/* hero */}
-          <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
-            <Text style={styles.heroEmoji} pointerEvents="none">
-              🤝
-            </Text>
-            <Text style={styles.h1}>Study Partners</Text>
-            <Text style={styles.heroSub}>Find, connect, and study together.</Text>
-            <View style={styles.stats}>
-              <View>
-                <Text style={styles.statNum}>{matches.length}</Text>
-                <Text style={styles.statLabel}>matches</Text>
-              </View>
-              <View>
-                <Text style={styles.statNum}>{conns.connected?.length || 0}</Text>
-                <Text style={styles.statLabel}>partners</Text>
-              </View>
-              <View>
-                <Text style={styles.statNum}>{reqCount}</Text>
-                <Text style={styles.statLabel}>requests</Text>
-              </View>
-            </View>
+          {/* header */}
+          <View style={styles.headRow}>
+            <Text style={[styles.h1, { color: colors.ink }]}>Partners</Text>
+            <Pressable
+              onPress={() => setSearchOpen((v) => !v)}
+              accessibilityRole="button"
+              accessibilityLabel="Search partners"
+              style={({ pressed }) => [
+                styles.iconBtn,
+                { backgroundColor: searchOpen ? colors.ink : colors.paper2 },
+                pressed && styles.pressed,
+              ]}
+            >
+              <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
+                <Circle
+                  cx={11}
+                  cy={11}
+                  r={7}
+                  stroke={searchOpen ? colors.paper : colors.ink}
+                  strokeWidth={2.4}
+                />
+                <Path
+                  d="M16.5 16.5L21 21"
+                  stroke={searchOpen ? colors.paper : colors.ink}
+                  strokeWidth={2.4}
+                  strokeLinecap="round"
+                />
+              </Svg>
+            </Pressable>
           </View>
 
-          {/* body sheet */}
-          <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
-            {/* tabs */}
-            <SegmentedPill
-              style={{ marginBottom: 18 }}
-              value={tab}
-              onChange={(key) => setTab(key as Tab)}
-              options={TABS.map(([key, label]) => ({
-                key,
-                label,
-                ...(key === 'requests' && reqCount > 0
-                  ? { dot: { color: colors.rust, activeColor: '#ffffff' } }
-                  : {}),
-              }))}
+          {searchOpen && (
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search by name or country"
+              placeholderTextColor={colors.subtle}
+              autoFocus
+              style={[
+                styles.search,
+                { backgroundColor: colors.card, borderColor: colors.line, color: colors.ink },
+              ]}
             />
+          )}
+
+          {/* the exam filter is this screen's primary control (§04: SegmentedPill
+              "All | USMLE | PLAB | AMC | …"). Natural-width segments in a horizontal
+              scroll so a long exam list reads as a cut-off row, not a squashed one. */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.examSegRow}
+          >
+            <SegmentedPill
+              value={activeExam ?? 'All'}
+              onChange={(key) => setExamFilter(key === 'All' ? null : key)}
+              options={examSegOptions}
+              segmentStyle={styles.examSeg}
+            />
+          </ScrollView>
+
+          {/* tabs */}
+          <SegmentedPill
+            value={tab}
+            onChange={(key) => setTab(key as Tab)}
+            options={tabSegOptions}
+          />
 
             {tab === 'discover' && (
               <>
-                {!!examLabel && (
-                  <Text style={[styles.subText, { color: colors.muted, marginBottom: 14 }]}>
-                    Showing {examLabel} partners ·{' '}
-                    <Text
-                      style={{ color: colors.forest, fontWeight: '600' }}
-                      onPress={() => router.push('/partners')}
-                    >
-                      Show all
-                    </Text>
-                  </Text>
-                )}
                 {mStatus === 'ok' && visibleMatches.length > 0 && (
                   <Text style={[styles.matchNote, { color: colors.muted }]}>
                     Match % reflects how closely your exam, country, and timezone line up with theirs.
@@ -347,58 +431,57 @@ export default function PartnersScreen() {
                   />
                 )}
                 {mStatus === 'ok' && visibleMatches.length > 0 && (
-                  <View style={[styles.listCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
-                    {visibleMatches.map((m, i) => (
-                      <View
-                        key={String(m.user.id)}
-                        style={[
-                          styles.row,
-                          { borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line },
-                        ]}
-                      >
-                        <View
-                          style={[
-                            styles.avatarRing,
-                            { borderColor: examColor(m.user.exam), backgroundColor: colors.paper2 },
-                          ]}
-                        >
-                          <Text style={{ fontSize: 22 }}>{m.user.avatar || '🩺'}</Text>
-                        </View>
-                        <View style={styles.grow}>
-                          <View style={styles.nameRow}>
-                            <View
-                              style={[
-                                styles.dot,
-                                {
-                                  backgroundColor: isOnline(m.user.last_seen) ? '#2ecc71' : colors.subtle,
-                                  opacity: isOnline(m.user.last_seen) ? 1 : 0.5,
-                                },
-                              ]}
-                            />
-                            <Text style={[styles.name, { color: colors.ink }]} numberOfLines={1}>
-                              {m.user.name}
-                            </Text>
-                          </View>
-                          <View style={styles.metaWrap}>
-                            <Text style={[styles.meta, { color: colors.muted }]}>
-                              <Text style={{ color: examColor(m.user.exam), fontWeight: '700' }}>{m.user.exam}</Text>
-                              {' · '}
-                              {m.user.country}
-                            </Text>
-                            <View style={[styles.matchPill, { backgroundColor: pillStyle(m.matchPercent).bg }]}>
-                              <Text style={[styles.matchPillText, { color: pillStyle(m.matchPercent).fg }]}>
-                                {m.matchPercent}% ·{' '}
-                                {m.matchPercent >= 80 ? 'Excellent' : m.matchPercent >= 55 ? 'Good' : 'Fair'}
+                  <Card>
+                    {visibleMatches.map((m, i) => {
+                      const av = examColor(m.user.exam);
+                      const online = isOnline(m.user.last_seen);
+                      return (
+                        <ListItem
+                          key={String(m.user.id)}
+                          title={m.user.name}
+                          sub={[m.user.exam, m.user.country].filter(Boolean).join(' · ')}
+                          avatarBg={av}
+                          avatar={
+                            <View style={styles.avatarBox}>
+                              <Text style={{ fontSize: 17 }}>
+                                {m.user.avatar || initials(m.user.name)}
                               </Text>
+                              <View
+                                style={[
+                                  styles.presence,
+                                  {
+                                    borderColor: av,
+                                    backgroundColor: online ? colors.green : colors.subtle,
+                                    opacity: online ? 1 : 0.55,
+                                  },
+                                ]}
+                              />
                             </View>
-                          </View>
-                        </View>
-                        <Pressable onPress={() => connect(m.user.id)} style={[styles.ctaBtn, { backgroundColor: colors.rust }]}>
-                          <Text style={styles.ctaBtnText}>Add</Text>
-                        </Pressable>
-                      </View>
-                    ))}
-                  </View>
+                          }
+                          trailing={
+                            <View style={styles.trailingStack}>
+                              <Pill tone="rust">{m.matchPercent}%</Pill>
+                              <Pressable
+                                onPress={() => connect(m.user.id)}
+                                accessibilityRole="button"
+                                accessibilityLabel={`Add ${m.user.name}`}
+                                style={({ pressed }) => [
+                                  styles.addBtn,
+                                  { backgroundColor: colors.ink },
+                                  pressed && styles.pressed,
+                                ]}
+                              >
+                                <Text style={[styles.addBtnText, { color: colors.paper }]}>
+                                  Add
+                                </Text>
+                              </Pressable>
+                            </View>
+                          }
+                          divider={i > 0}
+                        />
+                      );
+                    })}
+                  </Card>
                 )}
               </>
             )}
@@ -418,128 +501,109 @@ export default function PartnersScreen() {
                   />
                 )}
                 {myPartners.length > 0 && (
-                  <View style={[styles.listCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
+                  <Card>
                     {myPartners.map((c, i) => {
                       const o = other(c);
                       const starred = stars.includes(o.id);
+                      const av = examColor(o.exam);
+                      const online = isOnline(o.seen);
                       return (
-                        <View
+                        <ListItem
                           key={String(c.id)}
-                          style={[
-                            styles.row,
-                            { borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line },
-                          ]}
-                        >
-                          <Pressable
-                            onPress={() => setPeek({ name: o.name, exam: o.exam, avatar: o.avatar, bio: o.bio })}
-                          >
-                            <View
-                              style={[
-                                styles.avatarRing,
-                                { borderColor: examColor(o.exam), backgroundColor: colors.paper2 },
-                              ]}
-                            >
-                              {o.avatar ? (
-                                <Text style={{ fontSize: 22 }}>{o.avatar}</Text>
-                              ) : (
-                                <Text style={{ fontSize: 15, color: colors.forest, fontWeight: '600' }}>
-                                  {initials(o.name)}
-                                </Text>
-                              )}
-                            </View>
-                          </Pressable>
-                          <View style={styles.grow}>
-                            <View style={styles.nameRow}>
-                              <View
-                                style={[
-                                  styles.dot,
-                                  {
-                                    backgroundColor: isOnline(o.seen) ? '#2ecc71' : colors.subtle,
-                                    opacity: isOnline(o.seen) ? 1 : 0.5,
-                                  },
-                                ]}
-                              />
-                              <Text style={[styles.name, { color: colors.ink }]} numberOfLines={1}>
-                                {o.name}
-                              </Text>
-                            </View>
-                            <Text style={[styles.meta, { color: examColor(o.exam), fontWeight: '700' }]}>
-                              {o.exam}
-                            </Text>
-                          </View>
-                          <View style={styles.rowActions}>
-                            <Pressable onPress={() => toggleStar(o.id)} accessibilityLabel={starred ? 'Unstar' : 'Star'}>
-                              <Svg width={20} height={20} viewBox="0 0 24 24">
-                                <Path
-                                  d="M12 3.2c.4 0 .77.23.95.6l2.18 4.46 4.92.72c.83.12 1.16 1.14.56 1.72l-3.56 3.47.84 4.9c.14.82-.72 1.45-1.46 1.06L12 17.8l-4.4 2.32c-.74.39-1.6-.24-1.46-1.06l.84-4.9-3.56-3.47c-.6-.58-.27-1.6.56-1.72l4.92-.72L11.05 3.8c.18-.37.55-.6.95-.6z"
-                                  fill={starred ? colors.gold : 'none'}
-                                  stroke={starred ? colors.gold : colors.subtle}
-                                  strokeWidth={1.8}
-                                  strokeLinejoin="round"
-                                  strokeLinecap="round"
-                                />
-                              </Svg>
-                            </Pressable>
+                          title={o.name}
+                          sub={o.exam}
+                          avatarBg={av}
+                          avatar={
                             <Pressable
                               onPress={() =>
-                                router.push({
-                                  pathname: '/chat',
-                                  params: { with: String(o.id), name: o.name || 'Chat', av: o.avatar || '' },
+                                setPeek({
+                                  name: o.name,
+                                  exam: o.exam,
+                                  avatar: o.avatar,
+                                  bioText: bioDisplay(o.bio || ''),
                                 })
                               }
-                              style={[styles.smBtn, { backgroundColor: colors.forest }]}
+                              accessibilityRole="button"
+                              accessibilityLabel={`View ${o.name}`}
                             >
-                              <Text style={[styles.smBtnText, { color: colors.paper }]}>Chat</Text>
+                              <View style={styles.avatarBox}>
+                                <Text style={{ fontSize: 17 }}>{o.avatar || initials(o.name)}</Text>
+                                <View
+                                  style={[
+                                    styles.presence,
+                                    {
+                                      borderColor: av,
+                                      backgroundColor: online ? colors.green : colors.subtle,
+                                      opacity: online ? 1 : 0.55,
+                                    },
+                                  ]}
+                                />
+                              </View>
                             </Pressable>
-                          </View>
-                        </View>
+                          }
+                          trailing={
+                            <>
+                              <Pressable
+                                onPress={() => toggleStar(o.id)}
+                                accessibilityRole="button"
+                                accessibilityLabel={starred ? 'Unstar' : 'Star'}
+                                hitSlop={8}
+                              >
+                                <Svg width={20} height={20} viewBox="0 0 24 24">
+                                  <Path
+                                    d="M12 3.2c.4 0 .77.23.95.6l2.18 4.46 4.92.72c.83.12 1.16 1.14.56 1.72l-3.56 3.47.84 4.9c.14.82-.72 1.45-1.46 1.06L12 17.8l-4.4 2.32c-.74.39-1.6-.24-1.46-1.06l.84-4.9-3.56-3.47c-.6-.58-.27-1.6.56-1.72l4.92-.72L11.05 3.8c.18-.37.55-.6.95-.6z"
+                                    fill={starred ? colors.gold : 'none'}
+                                    stroke={starred ? colors.gold : colors.subtle}
+                                    strokeWidth={1.8}
+                                    strokeLinejoin="round"
+                                    strokeLinecap="round"
+                                  />
+                                </Svg>
+                              </Pressable>
+                              <Pressable
+                                onPress={() =>
+                                  router.push({
+                                    pathname: '/chat',
+                                    params: { with: String(o.id), name: o.name || 'Chat', av: o.avatar || '' },
+                                  })
+                                }
+                                style={({ pressed }) => [
+                                  styles.addBtn,
+                                  { backgroundColor: colors.ink },
+                                  pressed && styles.pressed,
+                                ]}
+                              >
+                                <Text style={[styles.addBtnText, { color: colors.paper }]}>Chat</Text>
+                              </Pressable>
+                            </>
+                          }
+                          divider={i > 0}
+                        />
                       );
                     })}
-                  </View>
+                  </Card>
                 )}
                 {(conns.pending?.length || 0) > 0 && (
                   <>
-                    <Text style={[styles.sectionLabel, { color: colors.subtle }]}>Awaiting their reply</Text>
-                    <View style={[styles.listCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
+                    <Eyebrow style={styles.sectionLabel}>Awaiting their reply</Eyebrow>
+                    <Card>
                       {conns.pending.map((c, i) => {
                         const o = other(c);
                         return (
-                          <View
+                          <ListItem
                             key={String(c.id)}
-                            style={[
-                              styles.row,
-                              { borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line },
-                            ]}
-                          >
-                            <View
-                              style={[
-                                styles.avatarRing,
-                                { borderColor: examColor(o.exam), backgroundColor: colors.paper2 },
-                              ]}
-                            >
-                              {o.avatar ? (
-                                <Text style={{ fontSize: 22 }}>{o.avatar}</Text>
-                              ) : (
-                                <Text style={{ fontSize: 15, color: colors.forest, fontWeight: '600' }}>
-                                  {initials(o.name)}
-                                </Text>
-                              )}
-                            </View>
-                            <View style={styles.grow}>
-                              <Text style={[styles.name, { color: colors.ink }]} numberOfLines={1}>
-                                {o.name}
-                              </Text>
-                              <Text style={[styles.meta, { color: examColor(o.exam), fontWeight: '700' }]}>
-                                {o.exam}
-                              </Text>
-                            </View>
-                            <View style={[styles.pendingPill, { backgroundColor: colors.paper2 }]}>
-                              <Text style={[styles.pendingPillText, { color: colors.gold }]}>PENDING</Text>
-                            </View>
-                          </View>
+                            title={o.name}
+                            sub={o.exam}
+                            avatarBg={examColor(o.exam)}
+                            avatar={
+                              <Text style={{ fontSize: 17 }}>{o.avatar || initials(o.name)}</Text>
+                            }
+                            trailing={<Pill tone="gold">PENDING</Pill>}
+                            divider={i > 0}
+                          />
                         );
                       })}
-                    </View>
+                    </Card>
                   </>
                 )}
               </>
@@ -559,71 +623,72 @@ export default function PartnersScreen() {
                     sub="When someone asks to study with you, they'll appear here."
                   />
                 )}
-                {conns.requests.length > 0 && (
-                  <View style={[styles.listCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
-                    {conns.requests.map((c, i) => {
+                {visibleRequests.length > 0 && (
+                  <Card>
+                    {visibleRequests.map((c, i) => {
                       const o = other(c);
                       const busy = respondingId === c.id;
                       return (
-                        <View
+                        <ListItem
                           key={String(c.id)}
-                          style={[
-                            styles.row,
-                            { borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line },
-                          ]}
-                        >
-                          <Pressable
-                            onPress={() => setPeek({ name: o.name, exam: o.exam, avatar: o.avatar, bio: o.bio })}
-                          >
-                            <View
-                              style={[
-                                styles.avatarRing,
-                                { borderColor: examColor(o.exam), backgroundColor: colors.paper2 },
-                              ]}
+                          title={o.name}
+                          sub={o.exam}
+                          avatarBg={examColor(o.exam)}
+                          avatar={
+                            <Pressable
+                              onPress={() =>
+                                setPeek({
+                                  name: o.name,
+                                  exam: o.exam,
+                                  avatar: o.avatar,
+                                  bioText: bioDisplay(o.bio || ''),
+                                })
+                              }
+                              accessibilityRole="button"
+                              accessibilityLabel={`View ${o.name}`}
                             >
-                              {o.avatar ? (
-                                <Text style={{ fontSize: 22 }}>{o.avatar}</Text>
-                              ) : (
-                                <Text style={{ fontSize: 15, color: colors.forest, fontWeight: '600' }}>
-                                  {initials(o.name)}
+                              <View style={styles.avatarBox}>
+                                <Text style={{ fontSize: 17 }}>{o.avatar || initials(o.name)}</Text>
+                              </View>
+                            </Pressable>
+                          }
+                          trailing={
+                            <View style={[styles.rowActions, { opacity: busy ? 0.5 : 1 }]}>
+                              <Pressable
+                                disabled={busy}
+                                onPress={() => respond(c.id, 'accept')}
+                                style={({ pressed }) => [
+                                  styles.addBtn,
+                                  { backgroundColor: colors.ink },
+                                  pressed && styles.pressed,
+                                ]}
+                              >
+                                <Text style={[styles.addBtnText, { color: colors.paper }]}>
+                                  {busy ? '…' : 'Accept'}
                                 </Text>
-                              )}
+                              </Pressable>
+                              <Pressable
+                                disabled={busy}
+                                onPress={() => respond(c.id, 'decline')}
+                                style={({ pressed }) => [
+                                  styles.addBtn,
+                                  styles.addGhost,
+                                  { borderColor: colors.ink },
+                                  pressed && styles.pressed,
+                                ]}
+                              >
+                                <Text style={[styles.addBtnText, { color: colors.ink }]}>✕</Text>
+                              </Pressable>
                             </View>
-                          </Pressable>
-                          <View style={styles.grow}>
-                            <Text style={[styles.name, { color: colors.ink }]} numberOfLines={1}>
-                              {o.name}
-                            </Text>
-                            <Text style={[styles.meta, { color: examColor(o.exam), fontWeight: '700' }]}>
-                              {o.exam}
-                            </Text>
-                          </View>
-                          <View style={[styles.rowActions, { opacity: busy ? 0.5 : 1 }]}>
-                            <Pressable
-                              disabled={busy}
-                              onPress={() => respond(c.id, 'accept')}
-                              style={[styles.smBtn, { backgroundColor: colors.forest }]}
-                            >
-                              <Text style={[styles.smBtnText, { color: colors.paper }]}>
-                                {busy ? '…' : 'Accept'}
-                              </Text>
-                            </Pressable>
-                            <Pressable
-                              disabled={busy}
-                              onPress={() => respond(c.id, 'decline')}
-                              style={[styles.smBtn, styles.smGhost, { borderColor: colors.forest }]}
-                            >
-                              <Text style={[styles.smBtnText, { color: colors.forest }]}>✕</Text>
-                            </Pressable>
-                          </View>
-                        </View>
+                          }
+                          divider={i > 0}
+                        />
                       );
                     })}
-                  </View>
+                  </Card>
                 )}
               </>
             )}
-          </View>
         </ScrollView>
 
         {/* toast */}
@@ -641,7 +706,7 @@ export default function PartnersScreen() {
             pointerEvents="none"
           >
             <View style={[styles.toast, { backgroundColor: colors.forest }]}>
-              <Text style={styles.toastText}>{toast}</Text>
+              <Text style={[styles.toastText, { color: colors.onForest }]}>{toast}</Text>
             </View>
           </Animated.View>
         )}
@@ -656,8 +721,8 @@ export default function PartnersScreen() {
               </View>
               <Text style={[styles.peekName, { color: colors.ink }]}>{peek.name}</Text>
               <Text style={[styles.peekExam, { color: colors.muted }]}>{peek.exam}</Text>
-              {!!peek.bio && (
-                <Text style={[styles.peekBio, { color: colors.muted }]}>“{peek.bio}”</Text>
+              {!!peek.bioText && (
+                <Text style={[styles.peekBio, { color: colors.muted }]}>“{peek.bioText}”</Text>
               )}
               <Pressable
                 onPress={() => setPeek(null)}
@@ -675,38 +740,40 @@ export default function PartnersScreen() {
 
 const styles = StyleSheet.create({
   wrap: { flex: 1 },
-  scroll: { paddingBottom: 24 },
-  hero: {
-    paddingHorizontal: 20,
-    paddingTop: 18,
-    paddingBottom: 32,
-    minHeight: 150,
-    overflow: 'hidden',
+  scroll: { paddingHorizontal: 18, paddingTop: 14, paddingBottom: 24, gap: 12 },
+  headRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  h1: { fontFamily: SERIF, fontSize: 30, lineHeight: 34, letterSpacing: -0.6, flex: 1 },
+  iconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 36 },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, color: '#fff' },
-  stats: { flexDirection: 'row', gap: 22, marginTop: 16 },
-  statNum: { fontFamily: SERIF, fontSize: 22, fontWeight: '900', lineHeight: 24, color: '#b98a2e' },
-  statLabel: {
-    fontSize: 9,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    opacity: 0.82,
-    marginTop: 3,
-    color: '#fff',
+  pressed: { opacity: 0.8 },
+  search: {
+    borderWidth: border.hair,
+    borderRadius: radius.input,
+    paddingHorizontal: 13,
+    paddingVertical: 11,
+    fontSize: 14,
   },
-  sheet: {
-    marginTop: -20,
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    paddingHorizontal: 16,
-    paddingTop: 18,
-    paddingBottom: 24,
-    minHeight: 400,
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 11,
+    borderRadius: radius.card,
+    paddingVertical: 13,
+    paddingHorizontal: 15,
   },
-  subText: { fontSize: 15, lineHeight: 22, marginTop: 5 },
-  matchNote: { fontSize: 11.5, lineHeight: 17, marginBottom: 14 },
+  liveDot: { width: 9, height: 9, borderRadius: 5, flexShrink: 0 },
+  bannerBody: { flex: 1, minWidth: 0 },
+  bannerTitle: { fontSize: 14.5, fontWeight: '700', lineHeight: 18, letterSpacing: -0.2 },
+  bannerSub: { fontSize: 12.5, lineHeight: 16, marginTop: 2 },
+  // the exam row bleeds past the screen padding so it can cut off at the edge
+  examSegRow: { marginHorizontal: -18, paddingLeft: 18, paddingRight: 18 },
+  examSeg: { flex: 0 },
+  matchNote: { fontSize: 11.5, lineHeight: 17, marginBottom: -2 },
   loading: { minHeight: 160, alignItems: 'center', justifyContent: 'center' },
   errWrap: { minHeight: 200, alignItems: 'center', justifyContent: 'center', gap: 10 },
   errTitle: { fontSize: 17, fontWeight: '700' },
@@ -715,65 +782,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 36,
     paddingHorizontal: 24,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    shadowColor: '#14281e',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 2,
+    borderRadius: radius.card,
+    borderWidth: border.hair,
   },
   emptyTitle: { fontWeight: '700', fontSize: 16, marginTop: 14, marginBottom: 6, textAlign: 'center' },
   emptySub: { fontSize: 13, lineHeight: 20, textAlign: 'center' },
-  listCard: { borderWidth: 1.5, borderRadius: 22, overflow: 'hidden' },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 13, paddingHorizontal: 16 },
-  avatarRing: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    borderWidth: 2.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
+  avatarBox: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  // the design stacks the score pill above the Add button, not beside it
+  trailingStack: { flexDirection: 'column', alignItems: 'flex-end', gap: 6 },
+  presence: {
+    position: 'absolute',
+    right: 3,
+    bottom: 3,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 1.5,
   },
-  grow: { flex: 1, minWidth: 0 },
-  nameRow: { flexDirection: 'row', alignItems: 'center' },
-  dot: { width: 9, height: 9, borderRadius: 5, marginRight: 7 },
-  name: { fontWeight: '700', fontSize: 18 },
-  meta: { fontSize: 13, marginTop: 3 },
-  metaWrap: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, marginTop: 3 },
-  matchPill: { borderRadius: 20, paddingVertical: 3, paddingHorizontal: 9 },
-  matchPillText: { fontSize: 10.5, fontWeight: '700' },
-  ctaBtn: { borderRadius: 999, paddingVertical: 10, paddingHorizontal: 16, flexShrink: 0 },
-  ctaBtnText: { color: '#fff', fontSize: 14, fontWeight: '600' },
-  rowActions: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0, marginLeft: 'auto' },
-  smBtn: { minWidth: 72, alignItems: 'center', borderRadius: 999, paddingVertical: 10, paddingHorizontal: 16 },
-  smGhost: { backgroundColor: 'transparent', borderWidth: 1.5, minWidth: 44 },
-  smBtnText: { fontSize: 14, fontWeight: '600' },
-  sectionLabel: {
-    fontSize: 10.5,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    marginTop: 18,
-    marginBottom: 8,
-    marginHorizontal: 2,
-  },
-  pendingPill: { borderRadius: 20, paddingVertical: 4, paddingHorizontal: 10, flexShrink: 0 },
-  pendingPillText: { fontSize: 12, fontWeight: '700' },
+  addBtn: { borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 14, flexShrink: 0 },
+  addBtnText: { fontSize: 13.5, fontWeight: '700' },
+  addGhost: { backgroundColor: 'transparent', borderWidth: border.hair, minWidth: 40 },
+  rowActions: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0 },
+  sectionLabel: { marginTop: 4, marginBottom: -4 },
   toastWrap: { position: 'absolute', left: 0, right: 0, bottom: 24, alignItems: 'center', paddingHorizontal: 16 },
   toast: {
     maxWidth: '90%',
     borderRadius: 999,
     paddingVertical: 11,
     paddingHorizontal: 20,
-    shadowColor: '#14281e',
+    shadowColor: '#171310',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
     elevation: 8,
   },
-  toastText: { color: '#fff', fontSize: 13, fontWeight: '700', textAlign: 'center' },
+  toastText: { fontSize: 13, fontWeight: '700', textAlign: 'center' },
   overlay: {
     position: 'absolute',
     left: 0,
@@ -796,7 +839,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 10,
   },
-  peekName: { fontFamily: SERIF, fontSize: 19, fontWeight: '700', textAlign: 'center' },
+  peekName: { fontFamily: SERIF, fontSize: 19, textAlign: 'center' },
   peekExam: { fontSize: 13, marginTop: 5, textAlign: 'center' },
   peekBio: { fontSize: 13, fontStyle: 'italic', marginTop: 8, lineHeight: 20, textAlign: 'center' },
   ghostBtn: { width: '100%', borderRadius: 999, paddingVertical: 14, alignItems: 'center', borderWidth: 1.5 },

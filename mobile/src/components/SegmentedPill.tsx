@@ -12,6 +12,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useTheme } from '../context/Theme';
+import { tick } from '../lib/haptics';
 
 export type SegmentedOption = {
   key: string;
@@ -51,6 +52,7 @@ export default function SegmentedPill({
   textStyle,
 }: Props) {
   const { colors } = useTheme();
+  const borderW = variant === 'bordered' ? (s.trackBordered.borderWidth ?? 0) : 0;
 
   const firstIndex = Math.max(
     0,
@@ -59,9 +61,15 @@ export default function SegmentedPill({
   const [pos] = useState(() => new Animated.Value(firstIndex));
   const [thumbSX] = useState(() => new Animated.Value(1));
   const [thumbSY] = useState(() => new Animated.Value(1));
-  const [labels] = useState(() =>
+  const [labels, setLabels] = useState(() =>
     options.map((o) => new Animated.Value(o.key === value ? 1 : 0))
   );
+  // options can change length after mount (e.g. exam filters arriving with
+  // async data) - keep the animated nodes in step or labels[i] is undefined
+  // and render crashes reading .interpolate of undefined.
+  if (labels.length !== options.length) {
+    setLabels(options.map((o, i) => labels[i] ?? new Animated.Value(o.key === value ? 1 : 0)));
+  }
   const posIndexRef = useRef(firstIndex);
   const animRef = useRef<Animated.CompositeAnimation | null>(null);
   const mountedRef = useRef(false);
@@ -70,6 +78,9 @@ export default function SegmentedPill({
   const [boxes, setBoxes] = useState<(Box | null)[]>(() =>
     options.map(() => null)
   );
+  if (boxes.length !== options.length) {
+    setBoxes(options.map((_, i) => boxes[i] ?? null));
+  }
   const ready = boxes.length === options.length && boxes.every((b) => b !== null);
 
   useEffect(() => {
@@ -102,24 +113,39 @@ export default function SegmentedPill({
       options.findIndex((o) => o.key === value)
     );
 
-    if (!mountedRef.current) {
-      mountedRef.current = true;
-      posIndexRef.current = target;
-      return;
-    }
-
-    const from = posIndexRef.current;
-    if (from === target) return;
-    posIndexRef.current = target;
-
-    animRef.current?.stop();
-
     const settle = () => {
       pos.setValue(target);
+      // an interrupted glide can strand the squash scales mid-sequence too
+      // (the frozen narrow thumb) - pin those home as well
+      thumbSX.setValue(1);
+      thumbSY.setValue(1);
       labels.forEach((v, i) =>
         v.setValue(options[i].key === value ? 1 : 0)
       );
     };
+
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      posIndexRef.current = target;
+      settle();
+      return;
+    }
+
+    animRef.current?.stop();
+    // A previous glide may have been cut off mid-flight: `options` is a new
+    // array on every parent render, so this effect re-runs constantly, and the
+    // old guard (ref already == target) early-returned - stranding the thumb
+    // and label colors between segments. Restart from the live position.
+    let from = posIndexRef.current;
+    pos.stopAnimation((v) => {
+      from = v;
+    });
+    if (from === target) {
+      // interrupted but already home (or never moved) - re-assert end state
+      settle();
+      return;
+    }
+    posIndexRef.current = target;
 
     if (reduceRef.current) {
       settle();
@@ -132,7 +158,10 @@ export default function SegmentedPill({
       return b0 && bi ? bi.x - b0.x : 0;
     };
     const dist = Math.abs(travel(target) - travel(from));
-    const peak = 1 + Math.min(PEAK_CAP, dist / PEAK_SPREAD);
+    const thumb0 = boxes[0];
+    const runway = thumb0 ? Math.max(0, thumb0.x - 1.5) : 0;
+    const room = thumb0 && thumb0.w > 0 ? (2 * runway) / thumb0.w : 0;
+    const peak = 1 + Math.min(PEAK_CAP, dist / PEAK_SPREAD, room);
 
     const squash = (v: Animated.Value, to: number) =>
       Animated.sequence([
@@ -174,7 +203,11 @@ export default function SegmentedPill({
     ]);
     animRef.current = comp;
     comp.start(({ finished }) => {
-      if (finished) animRef.current = null;
+      if (finished) {
+        animRef.current = null;
+        // pin the exact end state (kills float drift / half-faded labels)
+        settle();
+      }
     });
   }, [value, options, boxes, pos, labels, thumbSX, thumbSY]);
 
@@ -192,6 +225,15 @@ export default function SegmentedPill({
   };
 
   const b0 = boxes[0];
+  // the thumb tracks the SELECTED segment's width. Segments are natural-width
+  // in scroll rows (flex: 0), so sizing to boxes[0] parks a narrow capsule
+  // over wide labels. Plain prop: snaps on tap, no driver conflict with the
+  // native-driven glide.
+  const targetIdx = Math.max(
+    0,
+    options.findIndex((o) => o.key === value)
+  );
+  const thumbBox = (boxes[targetIdx] ?? b0) as Box;
   const thumb =
     ready && b0 ? (
       <Animated.View
@@ -199,10 +241,10 @@ export default function SegmentedPill({
         style={[
           s.thumb,
           {
-            backgroundColor: colors.forest,
-            left: b0.x,
-            top: b0.y,
-            width: b0.w,
+            backgroundColor: colors.ink,
+            left: b0.x - borderW,
+            top: b0.y - borderW,
+            width: thumbBox.w,
             height: b0.h,
           },
           {
@@ -211,6 +253,7 @@ export default function SegmentedPill({
                 translateX: pos.interpolate({
                   inputRange: options.map((_, i) => i),
                   outputRange: boxes.map((b) => (b as Box).x - b0.x),
+                  extrapolate: 'clamp',
                 }),
               },
               { scaleX: thumbSX },
@@ -234,12 +277,19 @@ export default function SegmentedPill({
       {thumb}
       {options.map((opt, i) => {
         const active = opt.key === value;
+        // nodes resync on the next pass when the option list changed length;
+        // skip this frame rather than reading .interpolate of undefined.
+        const lv = labels[i];
+        if (!lv) return null;
         return (
           <Pressable
             key={opt.key}
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
-            onPress={() => onChange(opt.key)}
+            onPress={() => {
+              tick();
+              onChange(opt.key);
+            }}
             onLayout={onSegLayout(i)}
             style={({ pressed }) => [
               s.seg,
@@ -254,7 +304,7 @@ export default function SegmentedPill({
                 variant === 'bordered' ? s.textBordered : s.textFlush,
                 textStyle,
                 {
-                  color: labels[i].interpolate({
+                  color: lv.interpolate({
                     inputRange: [0, 1],
                     outputRange: [colors.muted, colors.paper],
                   }),
@@ -268,9 +318,9 @@ export default function SegmentedPill({
                 style={[
                   s.dot,
                   {
-                    backgroundColor: labels[i].interpolate({
+                    backgroundColor: lv.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [opt.dot.color, opt.dot.activeColor ?? '#ffffff'],
+                      outputRange: [opt.dot.color, opt.dot.activeColor ?? colors.onForest],
                     }),
                   },
                 ]}
@@ -300,10 +350,11 @@ const s = StyleSheet.create({
   thumb: {
     position: 'absolute',
     borderRadius: 999,
-    shadowColor: '#1f4d3f',
-    shadowOpacity: 0.3,
-    shadowRadius: 9,
-    shadowOffset: { width: 0, height: 3 },
+    shadowColor: '#171310',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   seg: {
     flex: 1,

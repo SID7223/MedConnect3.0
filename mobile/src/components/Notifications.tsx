@@ -1,10 +1,13 @@
-import React from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Keyboard, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useNotifications, RequestRow, UnreadRow } from '../context/Notifications';
 import { useTheme } from '../context/Theme';
 import EcgIcon from './EcgIcon';
+import Icon from './Icon';
+import { SendIcon } from './ChatBits';
+import { api } from '../lib/api';
 
 type Colors = ReturnType<typeof useTheme>['colors'];
 
@@ -16,8 +19,12 @@ function Avatar({ emoji, colors }: { emoji: string; colors: Colors }) {
   );
 }
 
-function SectionLabel({ text, colors }: { text: string; colors: Colors }) {
-  return <Text style={[styles.sect, { color: colors.subtle }]}>{text}</Text>;
+function SectionLabel({ text, colors, mode }: { text: string; colors: Colors; mode: string }) {
+  return (
+    <Text style={[styles.sect, { color: mode === 'dark' ? '#FFFFFF' : colors.subtle }]}>
+      {text}
+    </Text>
+  );
 }
 
 function Row({
@@ -53,9 +60,16 @@ function Row({
 // Notification dropdown (port of the bell panel in src/App.jsx).
 // Mounted once from the root layout; opens from the TopBar bell.
 export default function NotificationsPanel() {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const insets = useSafeAreaInsets();
-  const { open, setOpen, requests, unread, totalCount, markAllRead, dismissOne } = useNotifications();
+  const { open, setOpen, requests, unread, totalCount, markAllRead, dismissOne, refresh } = useNotifications();
+  // inline quick-reply drafts + send state per conversation
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [sending, setSending] = useState<Record<string, boolean>>({});
+  // inline accept/decline state per request
+  const [responding, setResponding] = useState<Record<string, boolean>>({});
+  const scrollRef = useRef<ScrollView | null>(null);
+  const rowY = useRef<Record<string, number>>({});
 
   if (!open) return null;
 
@@ -77,6 +91,45 @@ export default function NotificationsPanel() {
 
   const dismissRow = (m: UnreadRow) => dismissOne(m.other_id);
 
+  // scroll a reply box above the keyboard (transparent Modal is blind to
+  // adjustResize, so we drive the ScrollView ourselves)
+  const revealReply = (key: string) => {
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ y: Math.max(0, (rowY.current[key] ?? 0) - 8), animated: true });
+    }, 300);
+  };
+
+  const sendReply = async (m: UnreadRow) => {
+    const key = String(m.other_id);
+    const text = (drafts[key] || '').trim();
+    if (!text || sending[key]) return;
+    setSending((s) => ({ ...s, [key]: true }));
+    try {
+      await api.sendMessage(m.other_id, text);
+      setDrafts((d) => ({ ...d, [key]: '' }));
+      Keyboard.dismiss();
+      refresh();
+    } catch {
+      // keep the text in place so one more tap retries
+    } finally {
+      setSending((s) => ({ ...s, [key]: false }));
+    }
+  };
+
+  const respond = async (c: RequestRow, action: 'accept' | 'decline') => {
+    const key = String(c.id);
+    if (responding[key]) return;
+    setResponding((s) => ({ ...s, [key]: true }));
+    try {
+      await api.respond(c.id, action);
+      refresh();
+    } catch {
+      // row stays so one more tap retries
+    } finally {
+      setResponding((s) => ({ ...s, [key]: false }));
+    }
+  };
+
   const empty = requests.length === 0 && unread.length === 0;
 
   return (
@@ -95,72 +148,139 @@ export default function NotificationsPanel() {
           )}
         </View>
 
-        <ScrollView style={styles.body} contentContainerStyle={{ paddingBottom: 8 }}>
+        <ScrollView
+          ref={scrollRef}
+          style={styles.body}
+          contentContainerStyle={{ paddingBottom: 8 }}
+          keyboardShouldPersistTaps="handled"
+        >
           {empty && (
             <View style={styles.emptyWrap}>
-              <Text style={{ fontSize: 32, marginBottom: 10 }}>🔔</Text>
+              <View style={[styles.emptyTile, { backgroundColor: colors.tintGold }]}>
+                <Icon name="bell" size={28} color={colors.gold} strokeWidth={1.9} />
+              </View>
               <Text style={[styles.emptyTitle, { color: colors.ink }]}>You&apos;re all caught up</Text>
-              <Text style={[styles.emptySub, { color: colors.subtle }]}>
-                New messages and connection requests will appear here.
+              <Text style={[styles.emptySub, { color: colors.muted }]}>
+                Nothing needs you right now. New messages and requests will pop in here.
               </Text>
             </View>
           )}
 
           {unread.length > 0 && (
             <View>
-              <SectionLabel text="New Messages" colors={colors} />
-              {unread.map((m) => (
-                <Row key={String(m.other_id)} colors={colors} onPress={() => openChat(m)} onDismiss={() => dismissRow(m)}>
-                  <Avatar emoji={m.avatar || '🩺'} colors={colors} />
-                  <View style={styles.rowMain}>
-                    <Text style={[styles.rowName, { color: colors.ink }]} numberOfLines={1}>
-                      {m.name || 'Someone'}
-                    </Text>
-                    <Text style={[styles.rowSub, { color: colors.muted }]}>
-                      {m.unread} new message{m.unread > 1 ? 's' : ''}
-                    </Text>
+              <SectionLabel text="New Messages" colors={colors} mode={mode} />
+              {unread.map((m) => {
+                const rkey = String(m.other_id);
+                const rbusy = !!sending[rkey];
+                const rtext = drafts[rkey] || '';
+                return (
+                  <View
+                    key={rkey}
+                    onLayout={(e) => {
+                      rowY.current[rkey] = e.nativeEvent.layout.y;
+                    }}
+                  >
+                    <Row colors={colors} onPress={() => openChat(m)} onDismiss={() => dismissRow(m)}>
+                      <Avatar emoji={m.avatar || '🩺'} colors={colors} />
+                      <View style={styles.rowMain}>
+                        <Text style={[styles.rowName, { color: colors.ink }]} numberOfLines={1}>
+                          {m.name || 'Someone'}
+                        </Text>
+                        <Text style={[styles.rowSub, { color: colors.muted }]}>
+                          {m.unread} new message{m.unread > 1 ? 's' : ''}
+                        </Text>
+                      </View>
+                      <View style={[styles.countBadge, { backgroundColor: colors.orange }]}>
+                        <Text style={[styles.countText, { color: colors.onForest }]}>
+                          {m.unread > 9 ? '9+' : m.unread}
+                        </Text>
+                      </View>
+                    </Row>
+                    <View style={[styles.replyBar, { borderTopColor: colors.line }]}>
+                      <TextInput
+                        value={rtext}
+                        onChangeText={(t) => setDrafts((d) => ({ ...d, [rkey]: t }))}
+                        onFocus={() => revealReply(rkey)}
+                        placeholder="Reply…"
+                        placeholderTextColor={colors.subtle}
+                        returnKeyType="send"
+                        onSubmitEditing={() => sendReply(m)}
+                        style={[
+                          styles.replyInput,
+                          {
+                            backgroundColor: colors.paper,
+                            borderColor: colors.line,
+                            color: colors.ink,
+                          },
+                        ]}
+                      />
+                      <Pressable
+                        onPress={() => sendReply(m)}
+                        disabled={rbusy || !rtext.trim()}
+                        accessibilityLabel={`Reply to ${m.name || 'them'}`}
+                        style={[
+                          styles.sendBtn,
+                          {
+                            backgroundColor: colors.forest,
+                            opacity: rbusy || !rtext.trim() ? 0.45 : 1,
+                          },
+                        ]}
+                      >
+                        <SendIcon color={colors.onForest} size={18} />
+                      </Pressable>
+                    </View>
                   </View>
-                  <View style={styles.countBadge}>
-                    <Text style={styles.countText}>{m.unread > 9 ? '9+' : m.unread}</Text>
-                  </View>
-                </Row>
-              ))}
+                );
+              })}
             </View>
           )}
 
           {requests.length > 0 && (
             <View>
-              <SectionLabel text="Connection Requests" colors={colors} />
-              {requests.map((c: RequestRow) => (
-                <Row key={String(c.id)} colors={colors} onPress={openRequests}>
-                  <Avatar emoji={c.requester_avatar || '🩺'} colors={colors} />
-                  <View style={styles.rowMain}>
-                    <Text style={[styles.rowName, { color: colors.ink }]} numberOfLines={1}>
-                      {c.requester_name || 'Someone'}
-                    </Text>
-                    <Text style={[styles.rowSub, { color: colors.muted }]} numberOfLines={1}>
-                      wants to study with you{c.requester_exam ? ` · ${c.requester_exam}` : ''}
-                    </Text>
-                  </View>
-                  <View style={[styles.reqDot, { backgroundColor: colors.rust }]} />
-                </Row>
-              ))}
+              <SectionLabel text="Connection Requests" colors={colors} mode={mode} />
+              {requests.map((c: RequestRow) => {
+                const qkey = String(c.id);
+                const qbusy = !!responding[qkey];
+                return (
+                  <Row key={qkey} colors={colors} onPress={openRequests}>
+                    <Avatar emoji={c.requester_avatar || '🩺'} colors={colors} />
+                    <View style={styles.rowMain}>
+                      <Text style={[styles.rowName, { color: colors.ink }]} numberOfLines={1}>
+                        {c.requester_name || 'Someone'}
+                      </Text>
+                      <Text style={[styles.rowSub, { color: colors.muted }]} numberOfLines={1}>
+                        wants to study with you{c.requester_exam ? ` · ${c.requester_exam}` : ''}
+                      </Text>
+                      <View style={styles.reqActions}>
+                        <Pressable
+                          onPress={() => respond(c, 'accept')}
+                          disabled={qbusy}
+                          accessibilityLabel={`Accept ${c.requester_name || 'request'}`}
+                          style={[
+                            styles.acceptBtn,
+                            { backgroundColor: colors.forest, opacity: qbusy ? 0.5 : 1 },
+                          ]}
+                        >
+                          <Text style={[styles.acceptText, { color: colors.onForest }]}>Accept</Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={() => respond(c, 'decline')}
+                          disabled={qbusy}
+                          hitSlop={8}
+                          accessibilityLabel={`Decline ${c.requester_name || 'request'}`}
+                          style={{ opacity: qbusy ? 0.5 : 1 }}
+                        >
+                          <Text style={[styles.declineText, { color: colors.muted }]}>Decline</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                    <View style={[styles.reqDot, { backgroundColor: colors.rust }]} />
+                  </Row>
+                );
+              })}
             </View>
           )}
         </ScrollView>
-
-        {requests.length > 0 && (
-          <Pressable
-            onPress={openRequests}
-            style={({ pressed }) => [
-              styles.footer,
-              { borderTopColor: colors.line, backgroundColor: colors.card },
-              pressed && { opacity: 0.7 },
-            ]}
-          >
-            <Text style={[styles.footerText, { color: colors.forest }]}>View all requests →</Text>
-          </Pressable>
-        )}
       </View>
     </Modal>
   );
@@ -175,7 +295,7 @@ const styles = StyleSheet.create({
     maxHeight: '60%',
     borderRadius: 18,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: '#171310',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.22,
     shadowRadius: 16,
@@ -193,6 +313,14 @@ const styles = StyleSheet.create({
   markAll: { fontSize: 11.5, fontWeight: '700' },
   body: { flexGrow: 0, flexShrink: 1 },
   emptyWrap: { alignItems: 'center', paddingVertical: 44, paddingHorizontal: 18 },
+  emptyTile: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+  },
   emptyTitle: { fontSize: 14, fontWeight: '600', marginBottom: 4 },
   emptySub: { fontSize: 12.5, textAlign: 'center' },
   sect: {
@@ -220,15 +348,40 @@ const styles = StyleSheet.create({
     minWidth: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: '#a8442a',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 5,
   },
-  countText: { color: '#fff', fontSize: 10, fontWeight: '800' },
+  countText: { fontSize: 10, fontWeight: '800' },
   reqDot: { width: 8, height: 8, borderRadius: 4 },
+  reqActions: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 8 },
+  acceptBtn: { borderRadius: 999, paddingVertical: 7, paddingHorizontal: 16 },
+  acceptText: { fontSize: 12.5, fontWeight: '800' },
+  declineText: { fontSize: 12.5, fontWeight: '600' },
+  replyBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    marginLeft: 52,
+    borderTopWidth: 1,
+  },
+  replyInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    fontSize: 13,
+  },
+  sendBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   dismiss: { padding: 4 },
   dismissText: { fontSize: 13 },
-  footer: { paddingVertical: 13, paddingHorizontal: 18, alignItems: 'center', borderTopWidth: 1 },
-  footerText: { fontSize: 13, fontWeight: '700' },
 });

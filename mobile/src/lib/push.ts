@@ -68,7 +68,7 @@ export async function requestPushPermission(): Promise<boolean> {
     try {
       fn(granted);
     } catch {
-      // listener threw — keep notifying the rest
+      // listener threw - keep notifying the rest
     }
   });
   return granted;
@@ -87,7 +87,7 @@ export async function sendLocalNotification(title: string, body: string): Promis
 
 export async function sendTestNotification(): Promise<void> {
   await sendLocalNotification(
-    'MedConnect local test 🔔',
+    'MedPeers local test 🔔',
     'If you see THIS, your device can show notifications. (This is a local test.)'
   );
 }

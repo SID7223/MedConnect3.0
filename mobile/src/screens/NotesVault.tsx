@@ -15,6 +15,7 @@ import {
 import Screen from '../components/Screen';
 import { confirmAlert } from '../components/ConfirmDialog';
 import { useTheme } from '../context/Theme';
+import { useKeyboardLift } from '../lib/keyboard';
 import { api } from '../lib/api';
 import { SERIF } from '../theme/fonts';
 
@@ -49,16 +50,34 @@ function NoteEditor({
   const [title, setTitle] = useState(note?.title || '');
   const [body, setBody] = useState(note?.body || '');
   const [tags, setTags] = useState(note?.tags || '');
+  // ST5 attachments (manual-first, offline): file names / links, comma-separated.
+  // Stored as `att:<name>` tokens in tags so no server schema change is needed;
+  // a native picker + object storage is the follow-up (founder: storage TBD).
+  const [attach, setAttach] = useState(() =>
+    String(note?.tags || '').split(',').map((t) => t.trim()).filter((t) => t.startsWith('att:')).map((t) => t.slice(4)).join(', '),
+  );
   const [saving, setSaving] = useState(false);
   const canSave = !!title.trim();
+
+  // transparent Modal ignores adjustResize on Android - lift like Logbook.
+  // The ref sits on the ScrollView viewport (outside the growing content)
+  // and the padding on its parent, so re-measures converge instead of
+  // compounding.
+  const scrollRef = useRef<ScrollView | null>(null);
+  // ScrollView carries measureInWindow at runtime but not in its static
+  // type - cast once at the boundary (hook only calls measureInWindow).
+  const lift = useKeyboardLift(scrollRef as unknown as Parameters<typeof useKeyboardLift>[0]);
 
   const save = async () => {
     if (!title.trim()) return;
     setSaving(true);
     try {
+      const baseTags = String(tags).split(',').map((t) => t.trim()).filter((t) => t && !t.startsWith('att:'));
+      const atts = String(attach).split(',').map((t) => t.trim()).filter(Boolean).slice(0, 5);
+      const mergedTags = [...baseTags, ...atts.map((a) => `att:${a}`)].join(', ');
       const res = note?.id
-        ? await api.noteUpdate(note.id, title.trim(), body, tags)
-        : await api.noteCreate(title.trim(), body, tags);
+        ? await api.noteUpdate(note.id, title.trim(), body, mergedTags)
+        : await api.noteCreate(title.trim(), body, mergedTags);
       onSave(res.note);
     } catch (e) {
       Alert.alert('Could not save note', (e as Error)?.message || 'Please try again.');
@@ -70,12 +89,13 @@ function NoteEditor({
   return (
     <Modal visible animationType="fade" onRequestClose={onClose} transparent>
       <View style={s.editorBackdrop}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={s.editorInner}
-        >
-          <ScrollView
-            style={s.editorScroll}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={[s.editorInner, { paddingBottom: lift }]}
+          >
+            <ScrollView
+              ref={scrollRef}
+              style={s.editorScroll}
             contentContainerStyle={s.editorScrollContent}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator
@@ -136,6 +156,18 @@ function NoteEditor({
               maxLength={60}
               autoCapitalize="none"
             />
+            <TextInput
+              style={[
+                s.editorInput,
+                { backgroundColor: colors.card, borderColor: colors.line, color: colors.ink, fontSize: 13, marginBottom: 14 },
+              ]}
+              value={attach}
+              onChangeText={setAttach}
+              placeholder="Attachments: file names or links, comma-separated (max 5)"
+              placeholderTextColor={colors.subtle}
+              maxLength={300}
+              autoCapitalize="none"
+            />
 
             <Pressable
               onPress={save}
@@ -145,7 +177,7 @@ function NoteEditor({
                 { backgroundColor: canSave ? colors.forest : colors.line, opacity: saving ? 0.7 : 1 },
               ]}
             >
-              <Text style={[s.editorSaveText, { color: canSave ? '#fff' : colors.muted }]}>
+              <Text style={[s.editorSaveText, { color: canSave ? colors.onForest : colors.muted }]}>
                 {saving ? 'Saving…' : note?.id ? 'Save changes' : 'Create note'}
               </Text>
             </Pressable>
@@ -198,7 +230,7 @@ export default function NotesVaultScreen() {
       setNotes((prev) => prev.filter((n) => n.id !== id));
       showToast('Note deleted');
     } catch {
-      /* ignore failed deletes, like the web catch (_) {} */
+      showToast('Could not delete - check your connection');
     }
   };
 
@@ -230,13 +262,13 @@ export default function NotesVaultScreen() {
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={s.scroll}>
         {/* hero */}
-        <View style={[s.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[s.hero, { backgroundColor: colors.tintGold }]}>
           <Text style={s.heroEmoji} pointerEvents="none">
             📝
           </Text>
-          <Text style={[s.eyebrow, { color: colors.gold }]}>✦ Notes Vault</Text>
-          <Text style={s.h1}>My Notes</Text>
-          <Text style={s.heroSub}>Personal notes &amp; mnemonics.</Text>
+          <Text style={[s.eyebrow, { color: colors.muted }]}>✦ Notes Vault</Text>
+          <Text style={[s.h1, { color: colors.ink }]}>My Notes</Text>
+          <Text style={[s.heroSub, { color: colors.ink }]}>Personal notes &amp; mnemonics.</Text>
         </View>
 
         {/* sheet */}
@@ -259,7 +291,7 @@ export default function NotesVaultScreen() {
               accessibilityLabel="New note"
               style={[s.addBtn, { backgroundColor: colors.forest }]}
             >
-              <Text style={s.addBtnText}>+</Text>
+              <Text style={[s.addBtnText, { color: colors.onForest }]}>+</Text>
             </Pressable>
           </View>
 
@@ -287,7 +319,10 @@ export default function NotesVaultScreen() {
             visible.map((n) => (
               <Pressable
                 key={n.id}
-                onPress={() => setEditor(n)}
+                onPress={() => {
+                  setEditor(n);
+                  import('../lib/essentialsRecent').then((m) => m.pushRecent(n.title, 'Note')).catch(() => {});
+                }}
                 onLongPress={() => confirmDelete(n.id)}
                 style={[s.noteCard, { backgroundColor: colors.card, borderColor: colors.line }]}
               >
@@ -302,7 +337,7 @@ export default function NotesVaultScreen() {
                   <Text style={[s.noteTime, { color: colors.muted }]}>{fmt(n.updated_at)}</Text>
                   <Pressable
                     onPress={() => confirmDelete(n.id)}
-                    style={[s.deleteBtn, { borderColor: '#fde0d8' }]}
+                    style={[s.deleteBtn, { borderColor: colors.tintRust }]}
                   >
                     <Text style={[s.deleteBtnText, { color: colors.rust }]}>Delete</Text>
                   </Pressable>
@@ -324,7 +359,7 @@ export default function NotesVaultScreen() {
       {/* toast */}
       {toast !== '' && (
         <View style={s.toastWrap} pointerEvents="none">
-          <Text style={[s.toast, { backgroundColor: colors.forest }]}>{toast}</Text>
+          <Text style={[s.toast, { backgroundColor: colors.forest, color: colors.onForest }]}>{toast}</Text>
         </View>
       )}
     </Screen>
@@ -348,8 +383,8 @@ const s = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -376,13 +411,13 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    shadowColor: '#1f4d3f',
+    shadowColor: '#171310',
     shadowOpacity: 0.28,
     shadowRadius: 7,
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
   },
-  addBtnText: { color: '#fff', fontSize: 22, fontWeight: '300', lineHeight: 24 },
+  addBtnText: { fontSize: 22, fontWeight: '300', lineHeight: 24 },
 
   loading: { minHeight: 120, alignItems: 'center', justifyContent: 'center' },
   empty: { alignItems: 'center', paddingVertical: 36, paddingHorizontal: 20 },
@@ -409,7 +444,10 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.45)',
     alignItems: 'center',
-    justifyContent: 'center',
+    // bottom-anchored sheet (not centered): measured viewport bottom stays
+    // pinned while lift applies, so the keyboard hook converges (see overlay
+    // note in StudyPlanner)
+    justifyContent: 'flex-end',
     paddingVertical: 20,
     paddingHorizontal: 14,
   },
@@ -423,7 +461,7 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 14,
   },
-  editorTitle: { fontFamily: SERIF, fontWeight: '900', fontSize: 18 },
+  editorTitle: { fontFamily: SERIF, fontSize: 18 },
   editorClose: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   editorCloseText: { fontSize: 18, lineHeight: 20 },
   editorInput: {
@@ -446,7 +484,6 @@ const s = StyleSheet.create({
 
   toastWrap: { position: 'absolute', left: 0, right: 0, bottom: 80, alignItems: 'center', zIndex: 3000 },
   toast: {
-    color: '#fff',
     fontSize: 13,
     fontWeight: '700',
     paddingVertical: 11,

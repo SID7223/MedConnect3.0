@@ -3,8 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import Icon from '../components/Icon';
 import Screen from '../components/Screen';
+import Wordmark from '../components/Wordmark';
 import { useTheme } from '../context/Theme';
-import { SERIF } from '../theme/fonts';
 
 type Feature = [string, string, string, boolean?];
 
@@ -21,9 +21,9 @@ export default function ProScreen() {
   const isPro = false;
 
   const notify = async () => {
-    const subject = encodeURIComponent('Notify me about MedConnect Pro');
+    const subject = encodeURIComponent('Notify me about MedPeers Pro');
     const body = encodeURIComponent(
-      "Hi MedConnect team,\n\nI'd love to be notified when MedConnect Pro becomes available.\n\nThanks!"
+      "Hi MedPeers team,\n\nI'd love to be notified when MedPeers Pro becomes available.\n\nThanks!"
     );
     try {
       await Linking.openURL(`mailto:medconnectsupport.io@gmail.com?subject=${subject}&body=${body}`);
@@ -44,10 +44,13 @@ export default function ProScreen() {
           <Text style={[styles.eyebrow, { color: colors.gold }]}>
             {isPro ? '✦ Active' : '✦ Coming soon'}
           </Text>
-          <Text style={styles.h1}>MedConnect Pro</Text>
-          <Text style={styles.heroSub}>
+          <View style={styles.titleRow}>
+            <Wordmark size={26} color={colors.onForest} />
+            <Text style={[styles.titlePro, { color: colors.onForest }]}>Pro</Text>
+          </View>
+          <Text style={[styles.heroSub, { color: colors.onForest }]}>
             {isPro
-              ? "You're a Pro member. Thank you for supporting MedConnect 💛"
+              ? "You're a Pro member. Thank you for supporting MedPeers 💛"
               : 'Built for doctors who are serious about their exams: more tools, deeper content, no compromises.'}
           </Text>
         </View>
@@ -61,7 +64,7 @@ export default function ProScreen() {
                   <Text style={[styles.featureTitle, { color: colors.ink }]}>{title}</Text>
                   {!isPro && <Icon name="pro" size={13} color={colors.subtle} />}
                   {featured && (
-                    <View style={styles.badge}>
+                    <View style={[styles.badge, { backgroundColor: colors.tintGold }]}>
                       <Text style={[styles.badgeText, { color: colors.gold }]}>NEW</Text>
                     </View>
                   )}
@@ -76,7 +79,7 @@ export default function ProScreen() {
             <View style={styles.featureBody}>
               <View style={styles.featureTitleRow}>
                 <Text style={[styles.featureTitle, { color: colors.ink }]}>Tutors for exams</Text>
-                <View style={styles.badge}>
+                <View style={[styles.badge, { backgroundColor: colors.tintGold }]}>
                   <Text style={[styles.badgeText, { color: colors.gold }]}>SOON</Text>
                 </View>
               </View>
@@ -132,8 +135,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, maxWidth: '84%', color: '#fff' },
+  titleRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
+  titlePro: { lineHeight: 30, fontSize: 26, fontWeight: '800', letterSpacing: -0.4 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, maxWidth: '84%' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -160,7 +164,6 @@ const styles = StyleSheet.create({
   },
   featureTitle: { fontSize: 14.5, fontWeight: '700', flexShrink: 1 },
   badge: {
-    backgroundColor: '#f6edd6',
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 3,

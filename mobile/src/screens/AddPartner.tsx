@@ -5,6 +5,7 @@ import Screen from '../components/Screen';
 import { useTheme } from '../context/Theme';
 import { SERIF } from '../theme/fonts';
 import { api } from '../lib/api';
+import { bioDisplay } from '../lib/bio';
 import { examColor } from '../lib/examColors';
 
 const one = (v?: string | string[]): string | undefined => (Array.isArray(v) ? v[0] : v);
@@ -62,6 +63,8 @@ export default function AddPartnerScreen() {
     }
   };
 
+  const profBio = profile ? bioDisplay(profile.bio || '') : '';
+
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
@@ -81,7 +84,7 @@ export default function AddPartnerScreen() {
                 You can’t send yourself a connection request.
               </Text>
               <Pressable onPress={goHome} style={[styles.ctaBtn, { backgroundColor: colors.forest }]}>
-                <Text style={styles.ctaBtnText}>Back home</Text>
+                <Text style={[styles.ctaBtnText, { color: colors.onForest }]}>Back home</Text>
               </Pressable>
             </View>
           )}
@@ -94,7 +97,7 @@ export default function AddPartnerScreen() {
                 This member may have left, or the link is out of date.
               </Text>
               <Pressable onPress={goHome} style={[styles.ctaBtn, { backgroundColor: colors.forest }]}>
-                <Text style={styles.ctaBtnText}>Back home</Text>
+                <Text style={[styles.ctaBtnText, { color: colors.onForest }]}>Back home</Text>
               </Pressable>
             </View>
           )}
@@ -107,7 +110,7 @@ export default function AddPartnerScreen() {
                 {profile.name} will be notified when they accept. You can keep browsing until then.
               </Text>
               <Pressable onPress={goHome} style={[styles.ctaBtn, { backgroundColor: colors.forest }]}>
-                <Text style={styles.ctaBtnText}>Done</Text>
+                <Text style={[styles.ctaBtnText, { color: colors.onForest }]}>Done</Text>
               </Pressable>
             </View>
           )}
@@ -127,14 +130,14 @@ export default function AddPartnerScreen() {
               {!!profile.country && (
                 <Text style={[styles.sub, { color: colors.muted, marginTop: 4 }]}>📍 {profile.country}</Text>
               )}
-              {!!profile.bio && (
-                <Text style={[styles.bio, { color: colors.muted }]}>“{profile.bio}”</Text>
+              {!!profBio && (
+                <Text style={[styles.bio, { color: colors.muted }]}>“{profBio}”</Text>
               )}
               <Text style={[styles.how, { color: colors.muted }]}>
                 {how === 'group' ? 'Add this member to your study group.' : 'Send a connection request to start studying together.'}
               </Text>
               <Pressable onPress={send} style={[styles.ctaBtn, { backgroundColor: colors.rust }]}>
-                <Text style={styles.ctaBtnText}>
+                <Text style={[styles.ctaBtnText, { color: colors.onForest }]}>
                   {how === 'group' ? 'Add to group' : 'Send connection request'}
                 </Text>
               </Pressable>
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1.5,
     padding: 24,
-    shadowColor: '#14281e',
+    shadowColor: '#171310',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 12,
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   },
   center: { alignItems: 'center' },
   emoji: { fontSize: 40, marginBottom: 10 },
-  title: { fontFamily: SERIF, fontSize: 21, fontWeight: '700', textAlign: 'center' },
+  title: { fontFamily: SERIF, fontSize: 21, textAlign: 'center' },
   sub: { fontSize: 14, lineHeight: 21, textAlign: 'center', marginTop: 8 },
   muted: { fontSize: 13, marginTop: 10 },
   avatar: {
@@ -178,7 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 12,
   },
-  name: { fontFamily: SERIF, fontSize: 22, fontWeight: '700', textAlign: 'center' },
+  name: { fontFamily: SERIF, fontSize: 22, textAlign: 'center' },
   exam: { fontSize: 13, fontWeight: '700', marginTop: 5, textAlign: 'center' },
   bio: { fontSize: 13.5, fontStyle: 'italic', lineHeight: 20, textAlign: 'center', marginTop: 12 },
   how: { fontSize: 13, lineHeight: 19, textAlign: 'center', marginTop: 14, marginBottom: 4 },
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 12,
   },
-  ctaBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  ctaBtnText: { fontSize: 16, fontWeight: '600' },
   ghostBtn: {
     width: '100%',
     borderRadius: 999,

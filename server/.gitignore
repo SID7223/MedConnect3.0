@@ -1,0 +1,8 @@
+build/
+.gradle/
+.env
+*.log
+*.err
+*out.txt
+*err.txt
+test-*.txt

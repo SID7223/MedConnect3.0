@@ -1,10 +1,26 @@
 import { sql, getUserId, readBody, applyCors } from './_shared/util.js';
 
-// POST /api/moderation { action: 'block'|'report'|'delete_chat', targetId, reason? }
+// GET  /api/moderation                     -> { blocked: [...] } people I have blocked
+// POST /api/moderation { action: 'block'|'unblock'|'unfriend'|'report'|'delete_chat', targetId, reason? }
 export default async function handler(req, res) {
   if (applyCors(req, res)) return res.status(204).end();
   const uid = getUserId(req);
   if (!uid) return res.status(401).json({ error: 'Not authenticated' });
+
+  if (req.method === 'GET') {
+    try {
+      const blocked = await sql`
+        SELECT u.id, u.name, u.avatar, u.exam, u.country, b.created_at
+        FROM blocks b
+        JOIN users u ON u.id = b.blocked
+        WHERE b.blocker = ${uid}
+        ORDER BY b.created_at DESC`;
+      return res.status(200).json({ blocked });
+    } catch (e) {
+      return res.status(500).json({ error: 'Failed to load blocked users: ' + e.message });
+    }
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
@@ -30,6 +46,11 @@ export default async function handler(req, res) {
         WHERE (sender = ${uid} AND recipient = ${tid})
            OR (sender = ${tid} AND recipient = ${uid})`;
       return res.status(200).json({ ok: true, message: 'User blocked' });
+    }
+
+    if (action === 'unblock') {
+      await sql`DELETE FROM blocks WHERE blocker = ${uid} AND blocked = ${tid}`;
+      return res.status(200).json({ ok: true, message: 'User unblocked' });
     }
 
     if (action === 'unfriend') {

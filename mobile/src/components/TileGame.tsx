@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   fsHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
   restartBtn: { borderWidth: 1.5, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 7 },
   restartText: { fontWeight: '700', fontSize: 12.5 },
-  fsTitle: { fontFamily: SERIF, fontSize: 18, fontWeight: '800' },
+  fsTitle: { fontFamily: SERIF, fontSize: 18 },
   closeBtn: { width: 34, height: 34, borderRadius: 999, alignItems: 'center', justifyContent: 'center' },
   fsBoardArea: { flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 0 },
   winOverlay: {
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   winCard: { borderRadius: 18, paddingHorizontal: 22, paddingVertical: 28, alignItems: 'center', width: '100%', maxWidth: 320 },
-  winTitle: { fontFamily: SERIF, fontSize: 22, fontWeight: '900', marginBottom: 4 },
+  winTitle: { fontFamily: SERIF, fontSize: 22, marginBottom: 4 },
   winSub: { fontSize: 13.5, marginBottom: 16 },
   winBest: { fontSize: 12, fontWeight: '700', marginBottom: 12 },
   winBtns: { flexDirection: 'row', gap: 8, alignSelf: 'stretch' },

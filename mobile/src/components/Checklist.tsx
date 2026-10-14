@@ -69,7 +69,7 @@ function ColorPicker({
 }
 
 export default function Checklist() {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const [draft, setDraft] = useState('');
   const [draftColor, setDraftColor] = useState<string>('none');
   const [pickingFor, setPickingFor] = useState<number | null>(null);
@@ -104,7 +104,7 @@ export default function Checklist() {
   return (
     <View style={styles.wrap}>
       <View style={styles.headRow}>
-        <Text style={[styles.headTitle, { color: colors.gold }]}>📋 Today&apos;s checklist</Text>
+        <Text style={[styles.headTitle, { color: mode === 'dark' ? '#FFFFFF' : colors.gold }]}>📋 Today&apos;s checklist</Text>
         {items.length > 0 && (
           <Text style={[styles.headCount, { color: colors.subtle }]}>
             {done} / {items.length}
@@ -113,7 +113,7 @@ export default function Checklist() {
       </View>
 
       {items.length === 0 && (
-        <Text style={[styles.empty, { color: colors.subtle }]}>
+        <Text style={[styles.empty, { color: mode === 'dark' ? '#FFFFFF' : colors.subtle }]}>
           No tasks yet. Add one below and pick a color to organise.
         </Text>
       )}
@@ -149,7 +149,7 @@ export default function Checklist() {
                   justifyContent: 'center',
                 }}
               >
-                {i.done && <Text style={styles.check}>✓</Text>}
+                {i.done && <Text style={[styles.check, { color: colors.onForest }]}>✓</Text>}
               </Pressable>
               <Text
                 numberOfLines={2}
@@ -193,7 +193,7 @@ export default function Checklist() {
             accessibilityLabel="Add task"
             style={[styles.addBtn, { backgroundColor: colors.forest }]}
           >
-            <Text style={styles.addBtnText}>+</Text>
+            <Text style={[styles.addBtnText, { color: colors.onForest }]}>+</Text>
           </Pressable>
         </View>
         <View style={styles.draftPicker}>
@@ -235,6 +235,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  addBtnText: { color: '#fff', fontSize: 22, fontWeight: '400', lineHeight: 24 },
-  check: { color: '#fff', fontSize: 11, fontWeight: '800' },
+  addBtnText: { fontSize: 22, fontWeight: '400', lineHeight: 24 },
+  check: { fontSize: 11, fontWeight: '800' },
 });

@@ -75,10 +75,16 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
   const bubbleRefs = useRef<Record<string, any>>({});
   const lift = useKeyboardLift(rootRef);
 
+  // poll generation: a slow poll must never overwrite a newer arrival
+  const seq = useRef(0);
   const load = useCallback(() => {
+    const my = ++seq.current;
     api
       .group(groupId)
-      .then((d) => setData(d))
+      .then((d) => {
+        if (my !== seq.current) return; // stale poll: drop, don't paint
+        setData(d);
+      })
       .catch(() => {});
   }, [groupId]);
 
@@ -102,7 +108,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
     setSending(true);
     const b = text.trim();
     setText('');
-    // show it instantly — don't wait on the network before it appears
+    // show it instantly - don't wait on the network before it appears
     const tempId = 'temp-' + Date.now();
     setData((prev) => ({
       ...prev,
@@ -122,9 +128,31 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
       await api.sendGroupMessage(groupId, b);
       await load(); // reconciles with the real saved message, replacing the temp one
     } catch {
+      // keep the bubble with a failed flag - tap retries instead of vanishing
       setData((prev) => ({
         ...prev,
-        messages: (prev.messages || []).filter((m) => m.id !== tempId), // roll back if it failed
+        messages: (prev.messages || []).map((m) => (m.id === tempId ? { ...m, failed: true } : m)),
+      }));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const retry = async (id: string | number) => {
+    const target = (data.messages || []).find((m) => String(m.id) === String(id));
+    if (!target || sending) return;
+    setSending(true);
+    setData((prev) => ({
+      ...prev,
+      messages: (prev.messages || []).map((m) => (m.id === id ? { ...m, failed: false } : m)),
+    }));
+    try {
+      await api.sendGroupMessage(groupId, target.body);
+      await load();
+    } catch {
+      setData((prev) => ({
+        ...prev,
+        messages: (prev.messages || []).map((m) => (m.id === id ? { ...m, failed: true } : m)),
       }));
     } finally {
       setSending(false);
@@ -299,6 +327,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                   <Pressable
                     ref={(r) => { bubbleRefs.current[String(m.id)] = r; }}
                     onLongPress={() => openPicker(m.id, mine)}
+                    onPress={() => { if ((m as any).failed) retry(m.id); }}
                     delayLongPress={450}
                     style={[
                       styles.bubble,
@@ -312,12 +341,12 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                         {m.sender_name}
                       </Text>
                     )}
-                    <Text style={{ fontSize: 14, color: mine ? '#ffffff' : colors.ink }}>
+                    <Text style={{ fontSize: 14, color: mine ? colors.onForest : colors.ink }}>
                       {parts.map((p, i) =>
                         /^https?:\/\//.test(p) ? (
                           <Text
                             key={i}
-                            style={{ color: mine ? '#cdeee2' : colors.forest, textDecorationLine: 'underline' }}
+                            style={{ color: mine ? colors.mint : colors.forest, textDecorationLine: 'underline' }}
                             onPress={() => Linking.openURL(p).catch(() => {})}
                           >
                             {p}
@@ -327,7 +356,13 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                         ),
                       )}
                     </Text>
-                    <Stamp ts={m.created_at} light={mine} />
+                    {(m as any).failed ? (
+                      <Text style={{ fontSize: 12, color: colors.rust, marginTop: 4 }}>
+                        Not sent - tap to retry
+                      </Text>
+                    ) : (
+                      <Stamp ts={m.created_at} light={mine} />
+                    )}
                   </Pressable>
                 </View>
                 {msgReactions && Object.keys(msgReactions).length > 0 && (
@@ -380,7 +415,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
             accessibilityLabel="Send"
             style={[styles.sendBtn, { backgroundColor: colors.forest, opacity: sending ? 0.6 : 1 }]}
           >
-            <SendIcon color="#fff" />
+            <SendIcon color={colors.onForest} />
           </Pressable>
         </View>
 
@@ -405,14 +440,14 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
           </>
         )}
 
-        {/* reaction picker — long-press a bubble to open */}
+        {/* reaction picker - long-press a bubble to open */}
         {pickerFor !== null && (
           <>
             <Pressable style={StyleSheet.absoluteFill} onPress={closePicker} />
             <View
               style={[
                 styles.reactionPicker,
-                { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#000' },
+                { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#171310' },
                 pickerPos,
               ]}
             >
@@ -476,7 +511,7 @@ export default function GroupChat({ me, groupId, onBack }: Props) {
                       onPress={() => addMember(f.id)}
                       style={({ pressed }) => [styles.addRow, pressed && { backgroundColor: colors.paper2 }]}
                     >
-                      <Text style={styles.addRowText}>
+                      <Text style={[styles.addRowText, { color: colors.ink }]}>
                         {f.avatar || '🩺'} {f.name}
                       </Text>
                       <Text style={[styles.addRowLink, { color: colors.forest }]}>Add ›</Text>
@@ -558,7 +593,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1.5,
     padding: 6,
-    shadowColor: '#000',
+    shadowColor: '#171310',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.16,
     shadowRadius: 28,
@@ -605,7 +640,7 @@ const styles = StyleSheet.create({
   memberName: { fontSize: 14, fontWeight: '600', flex: 1 },
   memberRole: { fontSize: 11 },
   addRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 13, paddingHorizontal: 15, borderRadius: 9 },
-  addRowText: { fontSize: 15, color: '#15201c', flex: 1 },
+  addRowText: { fontSize: 15, flex: 1 },
   addRowLink: { fontSize: 15, fontWeight: '600' },
   ghostBtn: { width: '100%', borderRadius: 999, paddingVertical: 14, alignItems: 'center', borderWidth: 1.5 },
   ghostBtnText: { fontSize: 16, fontWeight: '600' },

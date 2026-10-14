@@ -1,0 +1,775 @@
+[
+  {
+    "id": "L6-001",
+    "exams": ["FCPS"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Hip fracture - timing of surgery",
+    "difficulty": "moderate",
+    "stem": "An 82-year-old woman is admitted with a displaced intracapsular fracture of the hip after a fall at home. She has correctable comorbidities but they have been treated and no longer delay surgery. According to NICE guidance, when should her surgery be performed?",
+    "image": null,
+    "options": {
+      "A": "Within 6 hours of admission as an emergency case during the night",
+      "B": "On the day of, or the day after, admission, using a planned trauma list",
+      "C": "Within 7 days of admission, once osteoporosis treatment has been started",
+      "D": "Only after an MRI scan has confirmed the fracture in every case",
+      "E": "On day 3 of admission after completion of the physiotherapy assessment"
+    },
+    "answer": "B",
+    "explanation": "NICE CG124 recommends performing hip fracture surgery on the day of, or the day after, admission (recommendation 1.2.1) and scheduling it on a planned trauma list (recommendation 1.5.1), which is restated in quality standard QS16. Correctable comorbidities such as anaemia or volume depletion should be identified and treated immediately rather than used to justify delaying surgery. MRI is reserved for suspected occult fractures when plain X-rays of adequate standard are negative.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Hip fracture: management - recommendations",
+        "org": "NICE",
+        "year": "2011",
+        "url": "https://www.nice.org.uk/guidance/cg124/chapter/Recommendations"
+      },
+      {
+        "title": "Hip fracture in adults - quality statements",
+        "org": "NICE",
+        "year": "2012",
+        "url": "https://www.nice.org.uk/guidance/qs16"
+      }
+    ]
+  },
+  {
+    "id": "L6-002",
+    "exams": ["NEET"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Distal radius fracture - Colles fracture",
+    "difficulty": "easy",
+    "stem": "A 60-year-old woman falls onto an outstretched hand. The radiographs are shown. Which diagnosis best corresponds to the findings?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Collesfracture.jpg?width=800",
+      "alt": "Anteroposterior and lateral wrist radiographs showing a dorsally displaced distal radius fracture with ulnar styloid fracture",
+      "caption": "AP and lateral radiographs demonstrating a dorsally displaced distal radial fracture with ulnar styloid fracture (Colles fracture)",
+      "source": "Wikimedia Commons - File:Collesfracture.jpg (CC BY-SA 3.0, Lucien Monfils)"
+    },
+    "options": {
+      "A": "Colles fracture - dorsally displaced fracture of the distal radius with ulnar styloid fracture",
+      "B": "Smith fracture - volar displacement of the distal radial fragment",
+      "C": "Barton fracture - fracture-dislocation involving the radiocarpal joint surface",
+      "D": "Galeazzi fracture - distal radius fracture with disruption of the distal radioulnar joint"
+    },
+    "answer": "A",
+    "explanation": "The radiographs show a fracture of the distal radius with dorsal displacement of the distal fragment together with an ulnar styloid fracture, which is the classic Colles fracture. NICE NG38 recommends using Bier's block (intravenous regional anaesthesia) to reduce dorsally displaced distal radius fractures in adults, followed by manipulation and plaster or K-wire fixation depending on stability.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Fractures (non-complex): assessment and management - recommendations",
+        "org": "NICE",
+        "year": "2016",
+        "url": "https://www.nice.org.uk/guidance/ng38/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "L6-003",
+    "exams": ["USMLE"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Open fracture - early antibiotic management",
+    "difficulty": "hard",
+    "stem": "A 24-year-old motorcyclist is brought to the emergency department after a road traffic collision. Examination shows a 3 cm wound over the tibia communicating with a grossly displaced closed fracture; the foot is pale with a capillary refill of 4 seconds. He is haemodynamically stable. Which of the following is the most appropriate immediate action in the emergency department?",
+    "image": null,
+    "options": {
+      "A": "Give intravenous antibiotics only after wound cultures have been obtained in theatre",
+      "B": "Administer intravenous antibiotics immediately, before any further investigation or transfer",
+      "C": "Perform wound excision and delayed primary closure in the emergency department",
+      "D": "Obtain an MRI of the tibia to define soft-tissue injury before starting antibiotics",
+      "E": "Give tetanus prophylaxis alone and start antibiotics only if fever develops"
+    },
+    "answer": "B",
+    "explanation": "NICE NG37 recommends giving intravenous antibiotics immediately in the emergency department for patients with an open fracture (recommendation 1.2.22), and pre-hospital antibiotics should be given within 1 hour of injury when available (recommendation 1.1.1). Antibiotics should not wait for cultures, imaging or transfer; wound excision (1.2.28) and fixation with soft-tissue cover within 72 hours (1.2.29) follow as part of the same pathway. Tetanus prophylaxis is given in addition, never instead.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Open fractures: assessment and management - recommendations",
+        "org": "NICE",
+        "year": "2016",
+        "url": "https://www.nice.org.uk/guidance/ng37/chapter/recommendations"
+      },
+      {
+        "title": "Trauma - quality statements",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/qs166"
+      }
+    ]
+  },
+  {
+    "id": "L6-004",
+    "exams": ["MRCP"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Low back pain - diagnostic imaging",
+    "difficulty": "moderate",
+    "stem": "A 42-year-old man presents with 6 weeks of mechanical low back pain. He has no night pain, fever, weight loss, history of cancer or trauma, and neurological examination is normal. In a non-specialist setting, what is the most appropriate imaging decision?",
+    "image": null,
+    "options": {
+      "A": "Plain radiography of the lumbar spine routinely at the first visit",
+      "B": "Urgent MRI of the lumbar spine to exclude malignancy",
+      "C": "Do not routinely offer imaging; reassess if specific causes or red flags emerge",
+      "D": "CT of the lumbar spine because it involves less radiation than MRI",
+      "E": "Bone scintigraphy to screen for occult metastatic disease"
+    },
+    "answer": "C",
+    "explanation": "NICE NG59 recommends that clinicians do not routinely offer imaging for low back pain in a non-specialist setting (recommendation 1.1.4). Assessment should first exclude specific causes such as cancer, infection, trauma and inflammatory conditions (recommendation 1.1.1), with imaging arranged only if these or other red flags are identified.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Low back pain and sciatica in over 16s: assessment and management - recommendations",
+        "org": "NICE",
+        "year": "2016",
+        "url": "https://www.nice.org.uk/guidance/ng59/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "L6-005",
+    "exams": ["MRCP"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Lower limb immobilisation - VTE prophylaxis",
+    "difficulty": "moderate",
+    "stem": "A 55-year-old woman immobilised in a below-knee cast after an ankle fracture has no bleeding risk factors and no contraindication to anticoagulation. Her venous thromboembolism risk is judged to outweigh her bleeding risk. According to NICE NG89, which management is recommended?",
+    "image": null,
+    "options": {
+      "A": "No thromboprophylaxis is needed because she can mobilise with crutches",
+      "B": "Aspirin 75 mg daily for the duration of immobilisation as first-line prophylaxis",
+      "C": "Anti-embolism stockings alone, applied over the cast",
+      "D": "Pharmacological prophylaxis with LMWH or fondaparinux, considering stopping it if immobilisation continues beyond 42 days",
+      "E": "Insertion of an inferior vena cava filter before discharge"
+    },
+    "answer": "D",
+    "explanation": "NICE NG89 recommends considering pharmacological VTE prophylaxis with LMWH or fondaparinux for people with lower limb immobilisation when the risk of VTE outweighs the risk of bleeding, and considering stopping prophylaxis if immobilisation continues beyond 42 days (recommendation 1.11.1). The decision always requires the individual VTE-versus-bleeding balance (1.1.6), and aspirin is not a recommended option for this scenario.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Venous thromboembolism in over 16s: reducing the risk of hospital-acquired deep vein thrombosis or pulmonary embolism - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng89/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "L6-006",
+    "exams": ["USMLE"],
+    "region": "Limbs and skin",
+    "system": "Trauma and orthopaedics",
+    "topic": "Acute compartment syndrome - management",
+    "difficulty": "hard",
+    "stem": "A 32-year-old man, 8 hours after intramedullary nailing of a tibial diaphyseal fracture, reports pain out of proportion and pain on passive movement of the toes. The calf is tense, distal pulses are palpable, and compartment pressure measures 45 mm Hg with a diastolic pressure of 60 mm Hg. Which of the following is the most appropriate next step?",
+    "image": null,
+    "options": {
+      "A": "Elevate the limb above heart level and observe for 4 hours",
+      "B": "Obtain serial compartment pressure measurements every 6 hours to document the trend",
+      "C": "Start therapeutic heparin for presumed deep vein thrombosis",
+      "D": "Give analgesia and reassess at the next planned ward round",
+      "E": "Perform urgent surgical decompression"
+    },
+    "answer": "E",
+    "explanation": "The clinical diagnosis of acute compartment syndrome is supported by pain out of proportion, pain on passive stretch and a tense compartment; BOAST states that once the diagnosis is made, immediate surgical decompression should be carried out. A pressure differential (diastolic minus compartment pressure) below 30 mmHg, as here, or an absolute pressure above 40 mmHg increases the risk and supports urgent fasciotomy rather than watchful waiting. If the diagnosis is genuinely uncertain, circumferential dressings are released and the limb re-evaluated within 30 minutes, but measurement must never delay decompression in a clear case.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "BOAST-10: Compartment syndrome of the limbs",
+        "org": "British Orthopaedic Association Standards for Trauma",
+        "year": "2025",
+        "url": "https://www.boa.ac.uk/resource/boast-10-pdf.html"
+      }
+    ]
+  },
+  {
+    "id": "L6-007",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Suspected sepsis - risk stratification and antibiotic timing",
+    "difficulty": "moderate",
+    "stem": "A 70-year-old man presents with fever and confusion. His NEWS2 score is 8 (respiratory rate 26, SpO2 92% on air, systolic blood pressure 88 mm Hg, heart rate 124, temperature 38.9 °C). Sepsis is suspected. According to NICE NG253, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "He is at high risk; give broad-spectrum intravenous antibiotics within 1 hour of the initial assessment",
+      "B": "Antibiotics should be delayed until blood culture results are available",
+      "C": "He is at low risk; start oral antibiotics and review in 24 hours",
+      "D": "Give a 500 mL crystalloid bolus and reassess after 4 hours before considering antibiotics",
+      "E": "Target oxygen saturation of 88-92% because he is at risk of hypercapnic respiratory failure"
+    },
+    "answer": "A",
+    "explanation": "NICE NG253 recommends giving broad-spectrum intravenous antibiotics within 1 hour of the initial assessment for people at high risk of sepsis, identified by a NEWS2 score of 7 or more at initial assessment (recommendation 1.8.3), reflecting the guideline's 1-, 3- and 6-hour time limits matched to risk level. Oxygen saturation should be targeted at 94-98% unless there is a risk of hypercapnic respiratory failure (88-92%), and initial fluid boluses are 250 mL. Antibiotics must not wait for culture results.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected sepsis in people aged 16 or over: recognition, assessment and early management - antibiotic therapy, intravenous fluid and oxygen",
+        "org": "NICE",
+        "year": "2025",
+        "url": "https://www.nice.org.uk/guidance/ng253/chapter/Antibiotic-therapy-intravenous-fluid-and-oxygen"
+      }
+    ]
+  },
+  {
+    "id": "L6-008",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Status epilepticus - second-line treatment",
+    "difficulty": "moderate",
+    "stem": "A 34-year-old woman with known epilepsy has a generalised tonic-clonic seizure that has lasted 12 minutes despite two doses of intravenous lorazepam given in the emergency department. Which is the most appropriate second-line treatment?",
+    "image": null,
+    "options": {
+      "A": "Intramuscular midazolam 10 mg",
+      "B": "Intravenous phenobarbital 15 mg/kg",
+      "C": "Intravenous levetiracetam, phenytoin or valproate",
+      "D": "A third consecutive dose of intravenous lorazepam before any other drug",
+      "E": "Intranasal midazolam with concurrent intravenous magnesium sulfate"
+    },
+    "answer": "C",
+    "explanation": "NICE NG217 gives a benzodiazepine as first-line treatment for status epilepticus (a seizure lasting 5 minutes or longer), and if the seizure has not stopped after the first-line doses, the second-line options are intravenous levetiracetam, phenytoin or valproate (recommendation 7.1.9). Repeated benzodiazepine dosing beyond the recommended two doses risks respiratory depression without replacing second-line therapy.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Epilepsies in children, young people and adults - 7 Treating status epilepticus, repeated or cluster seizures, and prolonged seizures",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/ng217/chapter/7-Treating-status-epilepticus-repeated-or-cluster-seizures-and-prolonged-seizures"
+      }
+    ]
+  },
+  {
+    "id": "L6-009",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Anaphylaxis - first-line treatment",
+    "difficulty": "easy",
+    "stem": "A 20-year-old man develops stridor, wheeze and hypotension within minutes of eating a peanut. What is the first-line drug and route?",
+    "image": null,
+    "options": {
+      "A": "Intravenous hydrocortisone 200 mg",
+      "B": "Intramuscular adrenaline into the anterolateral thigh",
+      "C": "Nebulised salbutamol 5 mg",
+      "D": "Intravenous chlorphenamine 10 mg",
+      "E": "Subcutaneous adrenaline into the upper arm"
+    },
+    "answer": "B",
+    "explanation": "Resuscitation Council UK's emergency treatment of anaphylaxis guidance gives intramuscular adrenaline into the anterolateral thigh as the first-line treatment, repeated after 5 minutes if there is no improvement. Adjuncts such as corticosteroids, antihistamines and bronchodilators are second-line and never replace adrenaline. The intramuscular thigh route gives the fastest reliable absorption during shock.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Emergency treatment of anaphylaxis",
+        "org": "Resuscitation Council UK",
+        "year": "2021",
+        "url": "https://www.resus.org.uk/sites/default/files/2021-05/Emergency%20Treatment%20of%20Anaphylaxis%20May%202021_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "L6-010",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Diabetic ketoacidosis - fluid and insulin adjustment",
+    "difficulty": "hard",
+    "stem": "A 19-year-old with type 1 diabetes presents with vomiting and Kussmaul breathing: glucose 18 mmol/L, ketones 6.2 mmol/L, pH 7.12, potassium 5.3 mmol/L. He is started on 0.9% saline and a fixed-rate intravenous insulin infusion of 0.1 units/kg/hour. One hour later his glucose has fallen to 9 mmol/L but ketones remain at 6.0 mmol/L. According to JBDS-IP guidance, what is the most appropriate next step?",
+    "image": null,
+    "options": {
+      "A": "Stop the insulin infusion because euglycaemia has been achieved",
+      "B": "Give an intravenous insulin bolus of 10 units",
+      "C": "Switch to intramuscular insulin and continue 0.9% saline only",
+      "D": "Add 10% glucose 125 mL/hour and reduce the fixed-rate insulin to 0.05 units/kg/hour",
+      "E": "Commence continuous renal replacement therapy for the acidosis"
+    },
+    "answer": "D",
+    "explanation": "JBDS-IP guidance states that when the glycaemic target (14 mmol/L or below) is reached while ketonaemia persists, 10% glucose 125 mL/hour should be added and the fixed-rate insulin reduced to 0.05 units/kg/hour, maintaining a ketone fall of at least 0.5 mmol/L/hour. Simply stopping insulin would halt ketone clearance, and a bolus is not indicated. Potassium of 5.3 mmol/L means no potassium is added to the first litre at this stage.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Guidelines for the management of diabetic ketoacidosis in adults",
+        "org": "Joint British Diabetes Societies (JBDS-IP) / ABCD",
+        "year": "2023",
+        "url": "https://abcd.care/sites/default/files/site_uploads/JBDS_Guidelines_Current/JBDS_02_DKA_Guideline_with_QR_code_March_2023.pdf"
+      }
+    ]
+  },
+  {
+    "id": "L6-011",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Hyperkalaemia - emergency medical treatment",
+    "difficulty": "moderate",
+    "stem": "A 64-year-old man with chronic kidney disease has a serum potassium of 6.8 mmol/L with peaked T waves on ECG. Which drug should be given first?",
+    "image": null,
+    "options": {
+      "A": "Intravenous calcium gluconate 10% to stabilise the myocardium",
+      "B": "Intravenous insulin with glucose to shift potassium into cells",
+      "C": "Nebulised salbutamol 12.5 g",
+      "D": "Oral sodium zirconium cyclosilicate"
+    },
+    "answer": "A",
+    "explanation": "UK Kidney Association guidance gives intravenous calcium gluconate 30 mL of 10% (or calcium chloride 10 mL of 10%) for severe hyperkalaemia with potassium of 6.5 mmol/L or above, particularly with ECG changes; it stabilises the myocardium without lowering potassium. Insulin with glucose and high-dose nebulised salbutamol then shift potassium intracellularly, and elimination strategies follow. Oral binders act too slowly for emergency stabilisation.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Clinical practice guideline for hyperkalaemia - Section II: Hospital",
+        "org": "UK Kidney Association",
+        "year": "2024",
+        "url": "https://guidelines.ukkidney.org/hyperkalaemia/6-summary-of-clinical-practice-guideline-for-hyperkalaemia/6-2-section-ii-hospital"
+      }
+    ]
+  },
+  {
+    "id": "L6-012",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Emergency and critical care",
+    "topic": "Major trauma - rapid sequence intubation timing",
+    "difficulty": "moderate",
+    "stem": "A patient with major trauma requires drug-assisted rapid sequence intubation in the emergency department. According to NICE quality standard QS166, within what time frame of the initial call should this be performed?",
+    "image": null,
+    "options": {
+      "A": "Within 15 minutes",
+      "B": "Within 30 minutes",
+      "C": "Within 45 minutes",
+      "D": "Within 60 minutes",
+      "E": "Within 90 minutes"
+    },
+    "answer": "C",
+    "explanation": "NICE QS166 (Trauma) specifies that people needing drug-assisted rapid sequence intubation receive it within 45 minutes of the initial call as part of airway management in major trauma. The same quality standard requires open fracture fixation with definitive soft-tissue cover within 72 hours of injury when this is not performed at the time of wound excision.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Trauma - quality statements",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/qs166/chapter/quality-statements"
+      }
+    ]
+  },
+  {
+    "id": "L6-013",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Medical ethics and statistics",
+    "topic": "Mental Capacity Act - assessment of capacity",
+    "difficulty": "moderate",
+    "stem": "A 67-year-old man with moderate dementia refuses a recommended hip replacement, saying he prefers to live with the pain. His MMSE is 18/30. His daughter argues that he must lack capacity because he has dementia. Which statement about the assessment of capacity is correct?",
+    "image": null,
+    "options": {
+      "A": "Capacity is absent automatically once a diagnosis of dementia is made",
+      "B": "Capacity is a permanent global trait, so one assessment applies to all future decisions",
+      "C": "Capacity is decision-specific and time-specific, and an unwise decision does not itself prove incapacity",
+      "D": "Only a psychiatrist may assess capacity, and best interests determine whether capacity is present",
+      "E": "The daughter, as next of kin, must consent whenever the patient refuses treatment"
+    },
+    "answer": "C",
+    "explanation": "Under section 3 of the Mental Capacity Act 2005, a person is unable to make a decision if they cannot understand, retain, use or weigh the relevant information, or communicate the decision, and the OPG guidance requires the assessment to be specific to the particular decision at the particular time. A diagnosis such as dementia does not by itself remove capacity, and an unwise or eccentric decision is not evidence of incapacity (principle 3). Where incapacity is established, treatment decisions are then made in the person's best interests.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Mental Capacity Act 2005, section 3: inability to make decisions",
+        "org": "legislation.gov.uk",
+        "year": "2005",
+        "url": "https://www.legislation.gov.uk/ukpga/2005/9/section/3"
+      },
+      {
+        "title": "Making decisions: a guide for people who work in health and social care",
+        "org": "GOV.UK / Office of the Public Guardian",
+        "year": "2026",
+        "url": "https://www.gov.uk/government/publications/health-and-social-care-workers-mental-capacity-act-decisions/making-decisions-about-your-health-welfare-or-finances"
+      }
+    ]
+  },
+  {
+    "id": "L6-014",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Medical ethics and statistics",
+    "topic": "DNACPR decisions",
+    "difficulty": "moderate",
+    "stem": "An 80-year-old man with advanced heart failure asks his cardiologist to record a 'do not attempt cardiopulmonary resuscitation' decision in his notes. Which statement is correct?",
+    "image": null,
+    "options": {
+      "A": "The patient has the legal right to demand CPR, so the doctor must comply",
+      "B": "The decision is made by a doctor, applies only to CPR, and the patient should be involved and informed unless this would cause harm",
+      "C": "The patient's written consent is a legal requirement for a valid DNACPR decision",
+      "D": "The decision automatically applies to all other treatments, including antibiotics and intravenous fluids",
+      "E": "Any trained healthcare assistant may record the decision after a family meeting"
+    },
+    "answer": "B",
+    "explanation": "NHS guidance states that the DNACPR decision is made by a doctor (or other trained, competent clinician) after discussion, and that a patient cannot demand CPR that would be futile, although they may seek a second opinion. The decision covers cardiopulmonary resuscitation only, not other treatments, and formal consent is not required, but the patient must be involved and informed unless being told would cause them harm. Decisions are individual and never applied as blanket policies.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Do not attempt cardiopulmonary resuscitation (DNACPR) decisions",
+        "org": "NHS",
+        "year": "2023",
+        "url": "https://www.nhs.uk/conditions/do-not-attempt-cardiopulmonary-resuscitation-dnacpr-decisions/"
+      }
+    ]
+  },
+  {
+    "id": "L6-015",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Medical ethics and statistics",
+    "topic": "Sensitivity of a diagnostic test",
+    "difficulty": "easy",
+    "stem": "In a study of a new screening test, 90 of 100 people with the disease test positive and 10 test negative; among 100 people without the disease, 80 test negative and 20 test positive. What is the sensitivity of the test?",
+    "image": null,
+    "options": {
+      "A": "90%",
+      "B": "80%",
+      "C": "82%",
+      "D": "85%"
+    },
+    "answer": "A",
+    "explanation": "Sensitivity is the proportion of diseased people who test positive: true positives divided by (true positives + false negatives) = 90/100 = 90%. Specificity here is 80% (option B), the positive predictive value is 90/110, about 82% (option C), and overall accuracy is 170/200 = 85% (option D).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnostic tests 1: sensitivity and specificity",
+        "org": "BMJ",
+        "year": "1994",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2540489/"
+      }
+    ]
+  },
+  {
+    "id": "L6-016",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Medical ethics and statistics",
+    "topic": "Likelihood ratios of diagnostic tests",
+    "difficulty": "hard",
+    "stem": "A new diagnostic test has a sensitivity of 90% and a specificity of 80%. What is its positive likelihood ratio?",
+    "image": null,
+    "options": {
+      "A": "0.13",
+      "B": "4.5",
+      "C": "1.1",
+      "D": "7.2",
+      "E": "0.25"
+    },
+    "answer": "B",
+    "explanation": "The positive likelihood ratio is sensitivity divided by (1 - specificity): 0.90 / (1 - 0.80) = 4.5. The negative likelihood ratio would be (1 - 0.90) / 0.80 = 0.125 (option A). A positive likelihood ratio above 10 is generally regarded as generating a large and often conclusive shift in probability.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnostic tests 4: likelihood ratios",
+        "org": "BMJ",
+        "year": "2004",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC478236/"
+      }
+    ]
+  },
+  {
+    "id": "L6-017",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Medical ethics and statistics",
+    "topic": "Montgomery - disclosure of material risks",
+    "difficulty": "moderate",
+    "stem": "A 29-year-old woman in labour is advised to have an emergency caesarean section. She asks what would have happened if she had been told about a small risk of a serious complication and had declined. Under the Montgomery ruling, when is a doctor negligent for failing to disclose a risk?",
+    "image": null,
+    "options": {
+      "A": "Only when the risk exceeds 1 in 100, as set by a fixed numerical threshold",
+      "B": "When a responsible body of doctors would not have disclosed it (the professional standard)",
+      "C": "Only when the undisclosed risk actually materialised and caused harm",
+      "D": "When a reasonable person in the patient's position would be likely to attach significance to the risk and the patient would have chosen differently",
+      "E": "When the patient has signed a blanket consent form accepting all risks"
+    },
+    "answer": "D",
+    "explanation": "In Montgomery v Lanarkshire Health Board [2015] UKSC 11 the Supreme Court held that doctors must take reasonable care to ensure patients are aware of material risks involved in recommended treatment and of reasonable alternatives, replacing the professional-standard approach with a patient-centred test. A risk is material if a reasonable person in the patient's position would be likely to attach significance to it. There is no fixed numerical threshold, and GMC consent guidance restates this duty.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Montgomery v Lanarkshire Health Board [2015] UKSC 11",
+        "org": "UK Supreme Court / Find Case Law",
+        "year": "2015",
+        "url": "https://caselaw.nationalarchives.gov.uk/uksc/2015/11"
+      },
+      {
+        "title": "Consent: patients and doctors making decisions together",
+        "org": "General Medical Council",
+        "year": "2020",
+        "url": "https://irp.cdn-website.com/5600b461/files/uploaded/GMC-consent-guidelines-2020.pdf"
+      }
+    ]
+  },
+  {
+    "id": "L6-018",
+    "exams": ["NEET"],
+    "region": "Basic sciences",
+    "system": "Pathology",
+    "topic": "Coagulative necrosis",
+    "difficulty": "easy",
+    "stem": "The photomicrograph shows myocardium obtained several days after coronary artery occlusion. Which pathological process is demonstrated?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Histopathology%20of%20coagulative%20necrosis%20of%20cardiomyocytes.jpg?width=800",
+      "alt": "Histopathology of myocardium showing cardiomyocytes with hypereosinophilic cytoplasm",
+      "caption": "Coagulative necrosis of cardiomyocytes with cytoplasmic hypereosinophilia after ischaemic injury",
+      "source": "Wikimedia Commons - File:Histopathology of coagulative necrosis of cardiomyocytes.jpg (CC BY 3.0, Katarzyna Michaud et al.)"
+    },
+    "options": {
+      "A": "Coagulative necrosis with preserved cell outlines and eosinophilic cytoplasm",
+      "B": "Caseous necrosis with granular debris and a rim of epithelioid cells",
+      "C": "Liquefactive necrosis with complete loss of architecture and pus formation",
+      "D": "Fat necrosis with shadowy cell outlines and calcium soap formation"
+    },
+    "answer": "A",
+    "explanation": "Ischaemic injury to the heart produces coagulative necrosis: the cytoplasm becomes intensely eosinophilic while the basic cell outlines are preserved in the early stages, with nuclei undergoing pyknosis, karyorrhexis and karyolysis. Caseous necrosis is typical of tuberculosis, liquefactive necrosis of brain infarcts and bacterial abscesses, and fat necrosis of acute pancreatitis or trauma to fat.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Histopathology of coagulative necrosis of cardiomyocytes",
+        "org": "Wikimedia Commons",
+        "year": "2019",
+        "url": "https://commons.wikimedia.org/wiki/File:Histopathology_of_coagulative_necrosis_of_cardiomyocytes.jpg"
+      }
+    ]
+  },
+  {
+    "id": "L6-019",
+    "exams": ["USMLE"],
+    "region": "Basic sciences",
+    "system": "Pathology",
+    "topic": "Hallmarks of cancer - enabling characteristics",
+    "difficulty": "moderate",
+    "stem": "In the current (2022) formulation of the hallmarks of cancer, which of the following is classified as an enabling characteristic that facilitates the acquisition of hallmark capabilities, rather than a hallmark capability itself?",
+    "image": null,
+    "options": {
+      "A": "Sustaining proliferative signalling",
+      "B": "Avoiding immune destruction",
+      "C": "Tumour-promoting inflammation",
+      "D": "Inducing angiogenesis",
+      "E": "Activating invasion and metastasis"
+    },
+    "answer": "C",
+    "explanation": "The 2022 depiction comprises eight hallmark capabilities (the original six, now including reprogramming cellular metabolism and avoiding immune destruction) plus two enabling characteristics: genome instability and mutation, and tumour-promoting inflammation. The 2022 review also proposed emerging dimensions of unlocking phenotypic plasticity, non-mutational epigenetic reprogramming, polymorphic microbiomes and senescent cells. Options A, B, D and E are all hallmark capabilities, not enabling characteristics.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Hallmarks of Cancer: New Dimensions",
+        "org": "Cancer Discovery (AACR)",
+        "year": "2022",
+        "url": "https://aacrjournals.org/cancerdiscovery/article/12/1/31/675608/Hallmarks-of-Cancer-New-DimensionsHallmarks-of"
+      },
+      {
+        "title": "Biological Hallmarks of Cancer",
+        "org": "Wiley",
+        "year": "2022",
+        "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781119000822.hfcm002.pub2"
+      }
+    ]
+  },
+  {
+    "id": "L6-020",
+    "exams": ["MRCP"],
+    "region": "Basic sciences",
+    "system": "Pathology",
+    "topic": "Coagulation screening tests - factor VII deficiency",
+    "difficulty": "hard",
+    "stem": "A 22-year-old man presents with recurrent bleeding after dental extraction. His full blood count and platelet count are normal, the prothrombin time is prolonged, the activated partial thromboplastin time is normal, and mixing studies correct the prothrombin time. Which factor deficiency explains these findings?",
+    "image": null,
+    "options": {
+      "A": "Factor VIII",
+      "B": "Factor IX",
+      "C": "Factor XI",
+      "D": "Factor XIII",
+      "E": "Factor VII"
+    },
+    "answer": "E",
+    "explanation": "The prothrombin time tests the extrinsic pathway (factors I, II, V, VII and X) while the activated partial thromboplastin time tests the intrinsic pathway (factors I, II, V, VIII, IX, XI and XII), so an isolated prolonged PT with a normal aPTT localises the defect to the extrinsic limb - most often factor VII deficiency, which also corrects on mixing. Platelet counts are unaffected. Factor XIII deficiency would give normal screening tests, and factors VIII, IX or XI would prolong the aPTT.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Coagulation profile",
+        "org": "LITFL Critical Care Compendium",
+        "year": "2023",
+        "url": "https://litfl.com/coagulation-profile/"
+      },
+      {
+        "title": "Factor VII Deficiency: Clinical Phenotype, Genotype and Therapy",
+        "org": "NCBI PubMed Central",
+        "year": "2017",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5406770/"
+      }
+    ]
+  },
+  {
+    "id": "L6-021",
+    "exams": ["USMLE"],
+    "region": "Basic sciences",
+    "system": "Pharmacology",
+    "topic": "Zero-order (saturation) kinetics - phenytoin",
+    "difficulty": "moderate",
+    "stem": "A patient with epilepsy is started on phenytoin. After several days of dosing, each small dose increase produces a disproportionately large rise in the serum concentration, and the apparent half-lengthens as the dose rises. Which of the following best explains this observation?",
+    "image": null,
+    "options": {
+      "A": "Phenytoin induces its own metabolism, so concentrations fall with continued dosing",
+      "B": "Phenytoin follows zero-order kinetics because its metabolic enzymes become saturated, so a constant amount is eliminated per unit time",
+      "C": "Phenytoin has an extremely small volume of distribution, confining it to the plasma compartment",
+      "D": "Protein binding increases at higher doses, trapping more drug in plasma",
+      "E": "Phenytoin is excreted unchanged by the kidneys in direct proportion to dose"
+    },
+    "answer": "B",
+    "explanation": "At therapeutic concentrations the enzymes metabolising phenytoin become saturated, so the drug follows zero-order (saturation) kinetics: a constant amount rather than a constant fraction is eliminated per unit time, so small dose increments cause disproportionately large rises in concentration and the half-life lengthens as concentration rises. This contrasts with first-order kinetics, where the half-life is constant. Phenytoin has a large volume of distribution influenced by lipophilicity and protein binding, which is why loading doses are calculated from volume of distribution rather than clearance.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Pharmacokinetic characteristics of antiepileptic drugs (AEDs)",
+        "org": "NCBI PubMed Central",
+        "year": "2016",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6009244/"
+      }
+    ]
+  },
+  {
+    "id": "L6-022",
+    "exams": ["NEET"],
+    "region": "Basic sciences",
+    "system": "Pharmacology",
+    "topic": "Volume of distribution",
+    "difficulty": "easy",
+    "stem": "A drug has a volume of distribution of 20 L/kg of body weight. Which statement about this drug is correct?",
+    "image": null,
+    "options": {
+      "A": "The drug is largely confined to the plasma compartment",
+      "B": "The drug is extensively distributed into body tissues, and a loading dose may be needed to reach therapeutic concentrations quickly",
+      "C": "Its clearance from the body is necessarily reduced",
+      "D": "It can only be given as a continuous intravenous infusion"
+    },
+    "answer": "B",
+    "explanation": "Volume of distribution is the apparent volume into which the drug distributes (amount in the body divided by plasma concentration); a value of 20 L/kg, far above plasma volume of about 0.07 L/kg, indicates extensive uptake into tissues, influenced by lipophilicity and protein binding. A loading dose calculated as target concentration multiplied by weight and volume of distribution can achieve therapeutic levels rapidly when the volume of distribution is large. Clearance and route of administration are independent of volume of distribution.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Pharmacokinetic characteristics of antiepileptic drugs (AEDs)",
+        "org": "NCBI PubMed Central",
+        "year": "2016",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6009244/"
+      }
+    ]
+  },
+  {
+    "id": "L6-023",
+    "exams": ["FCPS"],
+    "region": "Basic sciences",
+    "system": "Pharmacology",
+    "topic": "Daptomycin - mechanism of action",
+    "difficulty": "hard",
+    "stem": "A patient with meticillin-resistant Staphylococcus aureus bacteraemia is started on daptomycin. Which statement about daptomycin is correct?",
+    "image": null,
+    "options": {
+      "A": "It inhibits cell-wall synthesis by binding penicillin-binding proteins",
+      "B": "It binds the 50S ribosomal subunit and prevents translocation",
+      "C": "It inhibits nucleic acid synthesis and is active against Gram-negative bacilli",
+      "D": "It binds phosphatidylglycerol in a calcium-dependent manner to depolarise the cytoplasmic membrane of Gram-positive bacteria, and it is inactivated by pulmonary surfactant",
+      "E": "It blocks folate synthesis and is used for uncomplicated urinary tract infection"
+    },
+    "answer": "D",
+    "explanation": "Daptomycin is a cyclic lipopeptide whose insertion into the cytoplasmic membrane of Gram-positive bacteria requires calcium and depends on binding to membrane phosphatidylglycerol, causing rapid depolarisation and cell death. Because pulmonary surfactant inactivates it, daptomycin is not used to treat pneumonia despite its Gram-positive activity. Options A, B, C and E describe beta-lactams, macrolides, fluoroquinolones/nitroimidazoles and trimethoprim-sulfamethoxazole respectively.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "More Than a Pore: A Current Perspective on the In Vivo Mode of Action of the Lipopeptide Antibiotic Daptomycin",
+        "org": "NCBI PubMed Central",
+        "year": "2020",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7168178/"
+      }
+    ]
+  },
+  {
+    "id": "L6-024",
+    "exams": ["FCPS"],
+    "region": "Basic sciences",
+    "system": "Microbiology",
+    "topic": "Sterilisation and disinfection - Spaulding classification",
+    "difficulty": "moderate",
+    "stem": "In the Spaulding classification used to guide disinfection and sterilisation of patient-care items, which pairing is correct?",
+    "image": null,
+    "options": {
+      "A": "Critical items - low-level disinfection",
+      "B": "Semicritical items - sterilisation is mandatory in every case",
+      "C": "Semicritical items such as laryngoscope blades - high-level disinfection",
+      "D": "Noncritical items such as blood pressure cuffs - sterilisation",
+      "E": "Semicritical items - low-level disinfection is sufficient"
+    },
+    "answer": "C",
+    "explanation": "The CDC's rational approach classifies items by infection risk: critical items (entering sterile tissue or the vascular system) must be sterile, semicritical items (contacting mucous membranes or non-intact skin, such as laryngoscope blades) require at least high-level disinfection, and noncritical items contacting intact skin (such as blood pressure cuffs) require cleaning and low-level disinfection. High-level disinfection eliminates all microorganisms except small numbers of bacterial spores.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "A rational approach to disinfection and sterilization (Guideline for Disinfection and Sterilization in Healthcare Facilities)",
+        "org": "CDC",
+        "year": "2008",
+        "url": "https://www.cdc.gov/infection-control/hcp/disinfection-sterilization/rational-approach.html"
+      }
+    ]
+  },
+  {
+    "id": "L6-025",
+    "exams": ["NEET"],
+    "region": "Basic sciences",
+    "system": "Microbiology",
+    "topic": "Gram stain - Staphylococcus aureus",
+    "difficulty": "easy",
+    "stem": "The Gram stain shown was prepared from pus obtained from a wound abscess. Which is the most likely causative organism?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Staphylococcus%20aureus%20Gram%20stain.jpg?width=800",
+      "alt": "Gram stain showing purple Gram-positive cocci arranged in clusters",
+      "caption": "Gram-positive cocci in grape-like clusters, typical of staphylococci",
+      "source": "Wikimedia Commons - File:Staphylococcus aureus Gram stain.jpg (CC BY-SA 4.0, Dr Graham Beards)"
+    },
+    "options": {
+      "A": "Escherichia coli",
+      "B": "Staphylococcus aureus",
+      "C": "Streptococcus pyogenes",
+      "D": "Pseudomonas aeruginosa"
+    },
+    "answer": "B",
+    "explanation": "The smear shows Gram-positive (purple) cocci arranged in grape-like clusters, which is characteristic of staphylococci and, from a pus sample, most consistent with Staphylococcus aureus. Streptococcus pyogenes would appear as Gram-positive cocci in chains, while Escherichia coli and Pseudomonas aeruginosa are Gram-negative rods that appear pink.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Staphylococcus aureus Gram stain",
+        "org": "Wikimedia Commons",
+        "year": "2021",
+        "url": "https://commons.wikimedia.org/wiki/File:Staphylococcus_aureus_Gram_stain.jpg"
+      }
+    ]
+  },
+  {
+    "id": "L6-026",
+    "exams": ["FCPS"],
+    "region": "Basic sciences",
+    "system": "Microbiology",
+    "topic": "WHO bacterial priority pathogens list - critical group",
+    "difficulty": "moderate",
+    "stem": "Which of the following pathogens belongs to the critical priority group of the WHO Bacterial Priority Pathogens List 2024?",
+    "image": null,
+    "options": {
+      "A": "Carbapenem-resistant Acinetobacter baumannii",
+      "B": "Carbapenem-resistant Pseudomonas aeruginosa",
+      "C": "Meticillin-resistant Staphylococcus aureus",
+      "D": "Vancomycin-resistant Enterococcus faecium",
+      "E": "Fluoroquinolone-resistant Salmonella Typhi"
+    },
+    "answer": "A",
+    "explanation": "The WHO Bacterial Priority Pathogens List 2024 places carbapenem-resistant Acinetobacter baumannii, carbapenem-resistant Enterobacterales, third-generation cephalosporin-resistant Enterobacterales and rifampicin-resistant Mycobacterium tuberculosis in the critical priority group. Carbapenem-resistant Pseudomonas aeruginosa, meticillin-resistant Staphylococcus aureus, vancomycin-resistant Enterococcus faecium and fluoroquinolone-resistant Salmonella Typhi are in the high priority group. The list covers 24 pathogens across 15 families to guide research, development and public-health action against antimicrobial resistance.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "WHO bacterial priority pathogens list, 2024: bacterial pathogens of public health importance to guide research, development and strategies to prevent and control antimicrobial resistance",
+        "org": "World Health Organization",
+        "year": "2024",
+        "url": "https://www.who.int/publications/i/item/9789240093461"
+      }
+    ]
+  }
+]

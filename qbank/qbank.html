@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MedPeers Qbank — State-of-the-art MCQs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1e1b17;--head:#234a3d;--card:#2a2723;--line:#3a362f;--ink:#ece6d6;--mut:#a9a595;--teal:#5fae94;--gold:#e8c96a;--sel:#243a31;--ok:#5fae94;--bad:#e07a5f}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4ee;--card:#fff;--line:#e2ddd0;--ink:#1f2a25;--mut:#6b6a60;--teal:#2f7a63;--gold:#8a6d12;--sel:#e3f0ea;--ok:#2f7a63;--bad:#b8492c}}
+:root[data-theme="light"]{--bg:#f6f4ee;--card:#fff;--line:#e2ddd0;--ink:#1f2a25;--mut:#6b6a60;--teal:#2f7a63;--gold:#8a6d12;--sel:#e3f0ea;--ok:#2f7a63;--bad:#b8492c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 'DM Sans',system-ui,sans-serif}
+.wrap{max-width:560px;margin:0 auto;min-height:100vh;padding-bottom:110px}
+header{background:var(--head);color:#ece6d6;padding:20px 18px 24px;border-radius:0 0 26px 26px}
+.logo{font:italic 600 21px 'Fraunces',Georgia,serif;color:var(--gold)}
+h1{font:600 28px 'Fraunces',Georgia,serif;margin:8px 0 4px}
+header p{margin:0;color:#c9d6cd;font-size:13.5px;line-height:1.5}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#dfe9e2;font-size:11.5px;padding:3px 9px;border-radius:999px}
+.controls{padding:14px 16px 4px}
+input[type=search]{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);font:400 14.5px 'DM Sans',sans-serif;padding:11px 15px;border-radius:999px}
+input[type=search]::placeholder{color:var(--mut)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--mut);font:500 12.5px 'DM Sans',sans-serif;padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sel);border-color:var(--teal);color:var(--teal);font-weight:700}
+.chip:focus-visible,button:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+select{background:var(--card);border:1px solid var(--line);color:var(--ink);font:400 13px 'DM Sans',sans-serif;padding:8px 10px;border-radius:10px;max-width:100%}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+label.ck{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:13px;cursor:pointer;user-select:none}
+.stats{margin:14px 16px 0;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--mut);font-size:12.5px;line-height:1.6}
+.stats b{color:var(--ink)}
+.startbar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line)}
+.startbar div{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.go{flex:1;border:0;background:var(--teal);color:#0f2a21;font:700 15px 'DM Sans',sans-serif;padding:13px;border-radius:999px;cursor:pointer}
+.go:disabled{opacity:.45;cursor:default}
+.secondary{background:none;border:1px solid var(--line);color:var(--mut);font:500 13.5px 'DM Sans',sans-serif;padding:11px 16px;border-radius:999px;cursor:pointer}
+.hidden{display:none!important}
+.prog{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 16px 0;color:var(--mut);font-size:12.5px}
+.bar{height:5px;background:var(--line);border-radius:99px;margin:8px 16px 0;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .25s}
+.qcard{margin:14px 16px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--sel);color:var(--teal)}
+.tag.g{background:rgba(232,201,106,.14);color:var(--gold)}
+.tag.n{background:rgba(224,122,95,.14);color:var(--bad)}
+.stem{font-size:15px;line-height:1.62;margin:0 0 12px}
+figure{margin:0 0 12px}
+figure img{width:100%;border-radius:12px;border:1px solid var(--line);background:#111;display:block}
+figcaption{color:var(--mut);font-size:11.5px;line-height:1.5;margin-top:6px}
+figcaption a{color:var(--teal)}
+.opt{width:100%;display:flex;gap:10px;align-items:flex-start;text-align:left;background:none;border:1px solid var(--line);color:var(--ink);font:400 14px/1.5 'DM Sans',sans-serif;padding:11px 12px;border-radius:12px;cursor:pointer;margin-top:8px}
+.opt .k{flex:none;font-weight:700;color:var(--teal);min-width:16px}
+.opt:hover:not(:disabled){border-color:var(--teal);background:var(--sel)}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.correct .k{color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.opt.wrong .k{color:var(--bad)}
+.verdict{margin-top:12px;font-weight:700;font-size:14px}
+.verdict.ok{color:var(--ok)}
+.verdict.bad{color:var(--bad)}
+.expl{margin-top:10px;background:var(--sel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:11px 13px;font-size:13.8px;line-height:1.6}
+.expl b{color:var(--gold)}
+.refs{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.refs h4{margin:0 0 6px;font:600 12px 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.refs li{font-size:12.5px;line-height:1.55;color:var(--mut);margin-bottom:6px}
+.refs a{color:var(--teal);text-decoration:none;word-break:break-word}
+.refs a:hover{text-decoration:underline}
+.refs ul{margin:0;padding-left:18px}
+.nav{display:flex;gap:8px;margin-top:14px}
+.nav .go{padding:11px}
+.summary{text-align:center;padding:34px 18px}
+.summary .big{font:600 54px 'Fraunces',serif;color:var(--teal)}
+.summary p{color:var(--mut);font-size:14px}
+.foot{margin:22px 18px 0;color:var(--mut);font-size:11.5px;line-height:1.6}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Medpeers</div>
+    <h1>Qbank</h1>
+    <p>State-of-the-art MCQs for USMLE, MRCP, FCPS and NEET — every answer keyed to a verified guideline reference. Figure-based questions included.</p>
+    <div class="meta"><span id="m-count">– questions</span><span>Data currency: 2026 mid-quarter</span><span id="m-imgs">– image Qs</span><span id="m-refs">– references</span></div>
+  </header>
+
+  <!-- FILTER VIEW -->
+  <div id="view-filters">
+    <div class="controls">
+      <input id="q" type="search" placeholder="Search stems, topics, systems" aria-label="Search questions">
+      <div class="chips" id="exam-chips" role="group" aria-label="Exam filters"></div>
+      <div class="row">
+        <select id="region-sel" aria-label="Region"><option value="">All regions</option></select>
+        <select id="system-sel" aria-label="System"><option value="">All systems</option></select>
+        <select id="diff-sel" aria-label="Difficulty">
+          <option value="">Any difficulty</option><option>easy</option><option>moderate</option><option>hard</option>
+        </select>
+      </div>
+      <div class="row">
+        <label class="ck"><input type="checkbox" id="img-only"> Image questions only</label>
+        <label class="ck"><input type="checkbox" id="shuf"> Shuffle order</label>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <p class="foot">Every question carries its source: guideline/society/PMC/government references were fetched and verified at build time. Image questions use public-domain or CC-licensed Wikimedia Commons figures with attribution shown.</p>
+    <div class="startbar"><div><button class="go" id="start">Start practice</button></div></div>
+  </div>
+
+  <!-- QUIZ VIEW -->
+  <div id="view-quiz" class="hidden">
+    <div class="prog"><span id="q-pos">Q 1 / 1</span><span id="q-score">Score 0 / 0</span><button class="secondary" id="quit">Exit</button></div>
+    <div class="bar"><i id="q-bar" style="width:0%"></i></div>
+    <div class="qcard" id="qcard"></div>
+    <div class="nav" id="q-nav">
+      <button class="secondary" id="prev">← Previous</button>
+      <button class="go hidden" id="next">Next →</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY VIEW -->
+  <div id="view-done" class="hidden">
+    <div class="summary">
+      <div class="big" id="d-pct">0%</div>
+      <p id="d-line"></p>
+      <div class="chips" style="justify-content:center" id="d-break"></div>
+      <div class="row" style="justify-content:center;margin-top:20px">
+        <button class="go" id="again" style="flex:0 1 auto;padding:12px 26px">Practice again</button>
+        <button class="secondary" id="back">Change filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="qbank-data.js"></script>
+<script>
+(function(){
+const D = window.QBANK;
+if(!D || !Array.isArray(D.questions)) {
+  document.body.insertAdjacentHTML('afterbegin','<p style="padding:20px">qbank-data.js failed to load.</p>');
+  return;
+}
+const QS = D.questions, EXAMS = ['USMLE','MRCP','FCPS','NEET'];
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---- header meta ---- */
+const nImgs = QS.filter(q=>q.image).length;
+const nRefs = new Set(QS.flatMap(q=>q.references.map(r=>r.url))).size;
+$('#m-count').textContent = QS.length + ' questions';
+$('#m-imgs').textContent = nImgs + ' image Qs';
+$('#m-refs').textContent = nRefs + ' verified sources';
+
+/* ---- stats block ---- */
+function counts(key){
+  return QS.reduce((a,q)=>{ const ks = Array.isArray(q[key])?q[key]:[q[key]]; ks.forEach(k=>a[k]=(a[k]||0)+1); return a; },{});
+}
+const byExam = counts('exams'), byDiff = counts('difficulty');
+$('#stats').innerHTML =
+  '<b>By exam:</b> ' + EXAMS.map(e=>e+' '+(byExam[e]||0)).join(' · ') +
+  '<br><b>Difficulty:</b> easy '+(byDiff.easy||0)+' · moderate '+(byDiff.moderate||0)+' · hard '+(byDiff.hard||0) +
+  '<br><b>Coverage:</b> ' + Object.keys(counts('system')).length + ' systems across ' + Object.keys(counts('region')).length + ' regions.';
+
+/* ---- filters ---- */
+const activeExams = new Set();
+const examChips = $('#exam-chips');
+examChips.innerHTML = EXAMS.map(e=>`<button class="chip" data-e="${e}" aria-pressed="false">${e}</button>`).join('');
+examChips.addEventListener('click', ev=>{
+  const b = ev.target.closest('.chip'); if(!b) return;
+  const e = b.dataset.e;
+  activeExams.has(e) ? activeExams.delete(e) : activeExams.add(e);
+  b.setAttribute('aria-pressed', activeExams.has(e));
+  update();
+});
+const regions = [...new Set(QS.map(q=>q.region))].sort();
+$('#region-sel').insertAdjacentHTML('beforeend', regions.map(r=>`<option>${esc(r)}</option>`).join(''));
+$('#region-sel').addEventListener('change', ()=>{
+  const r = $('#region-sel').value;
+  const systems = [...new Set(QS.filter(q=>!r||q.region===r).map(q=>q.system))].sort();
+  $('#system-sel').innerHTML = '<option value="">All systems</option>' + systems.map(s=>`<option>${esc(s)}</option>`).join('');
+  update();
+});
+['#system-sel','#diff-sel','#img-only','#q'].forEach(sel=>{
+  $(sel).addEventListener(sel==='#q'?'input':'change', update);
+});
+
+function filtered(){
+  const f = $('#q').value.trim().toLowerCase();
+  const r = $('#region-sel').value, s = $('#system-sel').value, d = $('#diff-sel').value;
+  const imgOnly = $('#img-only').checked;
+  return QS.filter(q=>{
+    if(activeExams.size && !q.exams.some(e=>activeExams.has(e))) return false;
+    if(r && q.region !== r) return false;
+    if(s && q.system !== s) return false;
+    if(d && q.difficulty !== d) return false;
+    if(imgOnly && !q.image) return false;
+    if(f && !(q.stem+' '+q.topic+' '+q.system+' '+q.id).toLowerCase().includes(f)) return false;
+    return true;
+  });
+}
+function update(){
+  const n = filtered().length;
+  $('#start').textContent = n ? `Start practice (${n} question${n===1?'':'s'})` : 'No questions match';
+  $('#start').disabled = !n;
+}
+update();
+
+/* ---- quiz ---- */
+let queue = [], idx = 0, score = 0, answered = false, picked = null, results = [];
+
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function start(){
+  queue = filtered();
+  if($('#shuf').checked) queue = shuffle(queue);
+  idx = 0; score = 0; results = [];
+  show('view-quiz'); render();
+}
+function show(id){
+  ['view-filters','view-quiz','view-done'].forEach(v=>$('#'+v).classList.toggle('hidden', v!==id));
+  window.scrollTo(0,0);
+}
+function render(){
+  const q = queue[idx];
+  answered = false; picked = null;
+  $('#q-pos').textContent = `Q ${idx+1} / ${queue.length}`;
+  $('#q-score').textContent = `Score ${score} / ${results.length}`;
+  $('#q-bar').style.width = (idx / queue.length * 100) + '%';
+  $('#prev').disabled = idx === 0;
+  $('#next').classList.add('hidden');
+
+  const tags = q.exams.map(e=>`<span class="tag">${esc(e)}</span>`).join('')
+    + `<span class="tag g">${esc(q.system)}</span>`
+    + `<span class="tag">${esc(q.topic)}</span>`
+    + `<span class="tag ${q.difficulty==='hard'?'n':''}">${esc(q.difficulty)}</span>`
+    + `<span class="tag g">${esc(q.id)}</span>`;
+
+  let html = `<div class="tags">${tags}</div><p class="stem">${esc(q.stem)}</p>`;
+  if(q.image){
+    html += `<figure><img src="${esc(q.image.url)}" alt="${esc(q.image.alt||'Question figure')}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('figure').classList.add('imgfail');this.remove()">
+      <figcaption>${esc(q.image.caption||'')}<br>Source: <a href="${esc(q.image.url)}" target="_blank" rel="noopener">${esc(q.image.source||'Wikimedia Commons')}</a></figcaption></figure>`;
+  }
+  html += Object.keys(q.options).map(k=>
+    `<button class="opt" data-k="${k}"><span class="k">${k}</span><span>${esc(q.options[k])}</span></button>`).join('');
+  html += `<div id="fb"></div>`;
+  $('#qcard').innerHTML = html;
+}
+function answer(k){
+  if(answered) return;
+  const q = queue[idx];
+  answered = true; picked = k;
+  const right = k === q.answer;
+  if(right) score++;
+  results[idx] = right;
+  document.querySelectorAll('#qcard .opt').forEach(b=>{
+    b.disabled = true;
+    if(b.dataset.k === q.answer) b.classList.add('correct');
+    else if(b.dataset.k === k) b.classList.add('wrong');
+  });
+  $('#q-score').textContent = `Score ${score} / ${results.length}`;
+  const refs = q.references.map(r=>
+    `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a> — ${esc(r.org)}, ${esc(r.year)}</li>`).join('');
+  $('#fb').innerHTML =
+    `<div class="verdict ${right?'ok':'bad'}">${right?'Correct':`Incorrect — answer is <b>${q.answer}</b>`}</div>
+     <div class="expl"><b>Why:</b> ${esc(q.explanation)}</div>
+     <div class="refs"><h4>Verified references</h4><ul>${refs}</ul></div>`;
+  $('#next').classList.remove('hidden');
+  $('#next').textContent = idx === queue.length-1 ? 'See results →' : 'Next →';
+}
+$('#qcard').addEventListener('click', ev=>{
+  const b = ev.target.closest('.opt'); if(!b) return;
+  answer(b.dataset.k);
+});
+$('#next').addEventListener('click', ()=>{
+  if(idx === queue.length-1){ finish(); }
+  else { idx++; render(); window.scrollTo(0,0); }
+});
+$('#prev').addEventListener('click', ()=>{ if(idx>0){ idx--; render(); window.scrollTo(0,0);} });
+$('#quit').addEventListener('click', ()=> show('view-filters'));
+
+function finish(){
+  const attempted = results.length;
+  const pct = attempted ? Math.round(score/attempted*100) : 0;
+  $('#d-pct').textContent = pct + '%';
+  $('#d-line').textContent = `${score} correct out of ${attempted} attempted (${queue.length} in set).`;
+  const wrong = queue.filter((q,i)=>results[i]===false);
+  $('#d-break').innerHTML = wrong.length
+    ? wrong.slice(0,8).map(q=>`<span class="chip" aria-pressed="false" style="cursor:default">${esc(q.id)} · ${esc(q.answer)}</span>`).join('')
+      + (wrong.length>8?`<span class="chip" aria-pressed="false" style="cursor:default">+${wrong.length-8} more</span>`:'')
+    : '<span class="chip" aria-pressed="true">Perfect set — no misses</span>';
+  show('view-done');
+}
+$('#start').addEventListener('click', start);
+$('#again').addEventListener('click', start);
+$('#back').addEventListener('click', ()=> show('view-filters'));
+
+document.addEventListener('keydown', e=>{
+  if($('#view-quiz').classList.contains('hidden')) return;
+  const k = e.key.toUpperCase();
+  if(!answered && 'ABCDE'.includes(k) && k){
+    const btn = document.querySelector(`#qcard .opt[data-k="${k}"]`);
+    if(btn) answer(k);
+  } else if(answered && (e.key === 'Enter' || e.key === 'ArrowRight')) {
+    $('#next').click();
+  }
+});
+})();
+</script>
+</body>
+</html>

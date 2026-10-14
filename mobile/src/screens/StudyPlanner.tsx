@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -13,9 +13,12 @@ import {
   View,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import Screen from '../components/Screen';
 import { useAuth } from '../context/Auth';
 import { useTheme } from '../context/Theme';
+import { useKeyboardLift } from '../lib/keyboard';
 import { api } from '../lib/api';
 import { SERIF } from '../theme/fonts';
 
@@ -26,12 +29,8 @@ const COLORS = [
   { id: 'c3', bar: '#1f9bb8', label: 'Blue' },
   { id: 'c4', bar: '#d24a30', label: 'Red' },
 ];
-const colorBar = (id?: string) => (COLORS.find((c) => c.id === id) || COLORS[0]).bar;
 const DURATIONS = ['30 min', '45 min', '1 hour', '90 min', '2 hours', '3 hours'];
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const MON_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const DOW = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const WD_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 // local YYYY-MM-DD (no UTC shift)
 const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -76,6 +75,10 @@ function BlockEditor({
   const [color, setColor] = useState(block?.color || 'c1');
   const [saving, setSaving] = useState(false);
 
+  // transparent Modal ignores adjustResize on Android - lift like Logbook
+  const cardRef = useRef<View | null>(null);
+  const lift = useKeyboardLift(cardRef);
+
   const save = async () => {
     if (!topic.trim()) return;
     setSaving(true);
@@ -103,7 +106,8 @@ function BlockEditor({
           pointerEvents="box-none"
         >
           <Pressable
-            style={[styles.editorCard, { backgroundColor: colors.paper }]}
+            ref={cardRef}
+            style={[styles.editorCard, { backgroundColor: colors.paper, paddingBottom: 20 + lift }]}
             onPress={() => {}}
           >
             <View style={styles.editorHead}>
@@ -221,7 +225,7 @@ function BlockEditor({
                   textAlign: 'center',
                   fontSize: 14,
                   fontWeight: '800',
-                  color: topic.trim() ? '#fff' : colors.muted,
+                  color: topic.trim() ? colors.onForest : colors.muted,
                 }}
               >
                 {saving ? 'Saving…' : block?.id ? 'Save changes' : 'Add to calendar'}
@@ -255,37 +259,86 @@ export default function StudyPlannerScreen() {
   const { colors } = useTheme();
   const { user } = useAuth();
   const today = new Date();
-  const [viewMonth, setViewMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
   const [selected, setSelected] = useState(() => ymd(today));
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [fetchedKey, setFetchedKey] = useState<string | null>(null); // last loaded month range
   const [editor, setEditor] = useState<null | 'new' | Block>(null); // null | 'new' | block
 
-  // derived (not set synchronously in the effect): true until this month range loads
-  const rangeKey = monthRange(viewMonth).key;
+  // month range follows the selected day (no view-month state: range is derived)
+  const [selYy, selMm] = selected.split('-').map(Number);
+  const rangeKey = monthRange(new Date(selYy, selMm - 1, 1)).key;
   const loading = fetchedKey !== rangeKey;
 
   const examRaw = user?.exam_date;
   const examDateStr = typeof examRaw === 'string' ? examRaw : undefined;
   const examDate = examDateStr ? new Date(examDateStr) : null;
   const hasExam = !!examDate && !isNaN(examDate.getTime());
-  const examYmd = hasExam && examDate ? ymd(examDate) : null;
   const daysToExam =
     hasExam && examDate ? Math.ceil((examDate.getTime() - today.getTime()) / 86400000) : null;
 
-  // load blocks for the visible month (+/- to catch edges)
+  // load blocks for the selected month (+/- to catch edges)
   useEffect(() => {
-    const { from, to, key } = monthRange(viewMonth);
+    const [sy, sm] = selected.split('-').map(Number);
+    const { from, to, key } = monthRange(new Date(sy, sm - 1, 1));
+    let alive = true;
     api.blocks(from, to).then(
       (d: { blocks?: Block[] }) => {
+        if (!alive) return;
         setBlocks(d.blocks || []);
         setFetchedKey(key);
       },
       () => {
-        setFetchedKey(key);
+        if (alive) setFetchedKey(key);
       },
     );
-  }, [viewMonth]);
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected.slice(0, 7)]);
+
+  // mockup suggested blocks (free-time suggestions until calendar sync lands)
+  const [skipped, setSkipped] = useState<Record<string, string[]>>({});
+  const [doneSug, setDoneSug] = useState<Record<string, string[]>>({});
+  useEffect(() => {
+    AsyncStorage.getItem('planner_skipped_v1').then((raw) => {
+      if (raw) setSkipped(JSON.parse(raw));
+    }).catch(() => {});
+    AsyncStorage.getItem('planner_suggest_done_v1').then((raw) => {
+      if (raw) setDoneSug(JSON.parse(raw));
+    }).catch(() => {});
+  }, []);
+
+  const shiftWeek = (dir: 1 | -1) => {
+    const [y, m, d] = selected.split('-').map(Number);
+    const next = new Date(y, m - 1, d + dir * 7);
+    setSelected(ymd(next));
+  };
+
+  const SUGGESTED = [
+    { key: 'qbank', time: '7:00 pm', title: 'Qbank: Cardiology', meta: '20 questions · suggested', minutes: 20, to: '/qbank-practice' },
+    { key: 'flashcards', time: '8:15 pm', title: 'Flashcards', meta: '15 min · suggested', minutes: 15, to: '/flashcards' },
+    { key: 'drill', time: '8:45 pm', title: 'Skills drill', meta: '10 min · suggested', minutes: 10, to: '/daily-drill' },
+  ];
+
+  const skipSuggested = (key: string) => {
+    setSkipped((prev) => {
+      const next = { ...prev, [selected]: [...(prev[selected] || []), key] };
+      AsyncStorage.setItem('planner_skipped_v1', JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  };
+
+  const doneSuggested = async (key: string, minutes: number) => {
+    setDoneSug((prev) => {
+      const next = { ...prev, [selected]: [...(prev[selected] || []), key] };
+      AsyncStorage.setItem('planner_suggest_done_v1', JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+    try {
+      const { addStudyMinutes } = await import('../lib/studyTime');
+      await addStudyMinutes(minutes);
+      api.markStudy().catch(() => {});
+    } catch { /* best-effort */ }
+  };
 
   const handleSave: SaveHandler = async (block, deleteId) => {
     if (deleteId != null) {
@@ -314,203 +367,186 @@ export default function StudyPlannerScreen() {
     }
   };
 
-  // build the calendar grid (Mon-first)
-  const year = viewMonth.getFullYear();
-  const month = viewMonth.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const startOffset = (firstDay.getDay() + 6) % 7; // Mon=0
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells: (number | null)[] = [];
-  for (let i = 0; i < startOffset; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-
-  const dayKey = (d: string) => d.slice(0, 10);
   const blocksByDay: Record<string, Block[]> = {};
   blocks.forEach((b) => {
-    const k = dayKey(b.day);
+    const k = b.day.slice(0, 10);
     (blocksByDay[k] = blocksByDay[k] || []).push(b);
   });
 
   const selBlocks = (blocksByDay[selected] || [])
     .slice()
     .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
-  const [selY, selM, selD] = selected.split('-').map(Number);
-  const selDate = new Date(selY, selM - 1, selD);
-  const selLabel = `${WD_SHORT[selDate.getDay()]} ${selD} ${MON_SHORT[selM - 1]}`;
+
+  // mockup week strip: Mon–Sun week containing the selected day
+  const [selY2, selM2, selD2] = selected.split('-').map(Number);
+  const selDateObj = new Date(selY2, selM2 - 1, selD2);
+  const monOffset = (selDateObj.getDay() + 6) % 7;
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(selY2, selM2 - 1, selD2 - monOffset + i);
+    return ymd(d);
+  });
 
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        {/* hero */}
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
-          <Text style={styles.heroEmoji} pointerEvents="none">
-            📅
-          </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Study Planner</Text>
-          <Text style={styles.h1}>Your Calendar</Text>
-          {daysToExam != null && daysToExam >= 0 && (
-            <View style={styles.examRow}>
-              <Text style={[styles.examNum, { color: colors.gold }]}>{daysToExam}</Text>
-              <Text style={styles.examText}>days until your exam</Text>
-            </View>
-          )}
-        </View>
+        <Text style={[styles.h1, { color: colors.ink }]}>Study planner</Text>
 
-        {/* sheet */}
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
-          {/* month nav */}
-          <View style={styles.monthNav}>
+          {/* mockup top row: calendar state + countdown */}
+          <View style={styles.topRow}>
+            <View style={[styles.connPill, { backgroundColor: colors.paper2 }]}>
+              <Text style={[styles.connText, { color: colors.ink }]}>Manual planning</Text>
+            </View>
+            {daysToExam != null && daysToExam >= 0 && (
+              <Text style={[styles.examText, { color: colors.muted }]}>{`${daysToExam} days to exam`}</Text>
+            )}
+          </View>
+
+          {/* mockup week strip */}
+          <View style={styles.weekStrip}>
             <Pressable
-              style={[styles.navBtn, { backgroundColor: colors.card, borderColor: colors.line }]}
-              onPress={() => setViewMonth(new Date(year, month - 1, 1))}
-              accessibility-label="Previous month"
+              onPress={() => shiftWeek(-1)}
+              accessibilityLabel="Previous week"
+              style={[styles.weekNav, { backgroundColor: colors.card, borderColor: colors.line }]}
             >
               <Text style={[styles.navBtnText, { color: colors.forest }]}>‹</Text>
             </Pressable>
-            <Text style={[styles.monthLabel, { color: colors.ink }]}>
-              {MONTHS[month]} {year}
-            </Text>
+            {weekDays.map((ds) => {
+              const dt = new Date(Number(ds.slice(0, 4)), Number(ds.slice(5, 7)) - 1, Number(ds.slice(8, 10)));
+              const isSel = ds === selected;
+              const isToday = ds === ymd(today);
+              return (
+                <Pressable key={ds} onPress={() => setSelected(ds)} style={styles.weekCell}>
+                  <Text style={[styles.weekDow, { color: colors.muted }]}>{DOW[(dt.getDay() + 6) % 7]}</Text>
+                  <View style={[
+                    styles.weekNum,
+                    { backgroundColor: isSel ? colors.ink : isToday ? colors.paper2 : 'transparent' },
+                  ]}>
+                    <Text style={[styles.weekNumText, { color: isSel ? colors.paper : colors.ink, fontWeight: isSel || isToday ? '800' : '600' }]}>
+                      {dt.getDate()}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            })}
             <Pressable
-              style={[styles.navBtn, { backgroundColor: colors.card, borderColor: colors.line }]}
-              onPress={() => setViewMonth(new Date(year, month + 1, 1))}
-              accessibility-label="Next month"
+              onPress={() => shiftWeek(1)}
+              accessibilityLabel="Next week"
+              style={[styles.weekNav, { backgroundColor: colors.card, borderColor: colors.line }]}
             >
               <Text style={[styles.navBtnText, { color: colors.forest }]}>›</Text>
             </Pressable>
           </View>
 
-          {/* calendar */}
-          <View style={[styles.calCard, { backgroundColor: colors.card, shadowColor: '#1f4d3f' }]}>
-            <View style={styles.calRow}>
-              {DOW.map((d, i) => (
-                <View key={`dow-${i}`} style={styles.calWrap}>
-                  <Text style={[styles.calDow, { color: colors.muted }]}>{d}</Text>
-                </View>
-              ))}
-            </View>
-            <View style={styles.calGrid}>
-              {cells.map((d, i) => {
-                if (!d) return <View key={`pad-${i}`} style={styles.calWrap} />;
-                const ds = ymd(new Date(year, month, d));
-                const isToday = ds === ymd(today);
-                const isSel = ds === selected;
-                const isExam = ds === examYmd;
-                const dayBlocks = blocksByDay[ds] || [];
-                const dotCount = Math.min(dayBlocks.length, 3);
-                let bg = 'transparent';
-                let col = colors.ink;
-                let fw: '600' | '800' = '600';
-                if (isSel) {
-                  bg = colors.forest;
-                  col = '#fff';
-                  fw = '800';
-                } else if (isExam) {
-                  bg = '#fde0d8';
-                  col = colors.rust;
-                  fw = '800';
-                } else if (isToday) {
-                  bg = colors.paper2;
-                  fw = '800';
-                }
-                return (
-                  <Pressable key={ds} style={styles.calWrap} onPress={() => setSelected(ds)}>
-                    <View style={[styles.calCell, { backgroundColor: bg }]}>
-                      <Text style={{ fontSize: 12.5, fontWeight: fw, color: col }}>{d}</Text>
-                      {dotCount > 0 && (
-                        <View style={styles.dots}>
-                          {Array.from({ length: dotCount }).map((_, k) => (
-                            <View
-                              key={k}
-                              style={[
-                                styles.dot,
-                                { backgroundColor: isSel ? '#fff' : colors.gold },
-                              ]}
-                            />
-                          ))}
-                        </View>
-                      )}
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
+          <Text style={[styles.todayHead, { color: colors.rust }]}>TODAY</Text>
 
-          {/* selected day header */}
-          <View style={styles.selHead}>
-            <Text style={[styles.selLabel, { color: colors.ink }]}>{selLabel}</Text>
-            <Pressable
-              style={[styles.addBtn, { backgroundColor: colors.forest }]}
-              onPress={() => setEditor('new')}
-            >
-              <Text style={[styles.addBtnText, { color: '#fff' }]}>+ Add block</Text>
-            </Pressable>
-          </View>
-
-          {/* blocks for selected day */}
+          {/* blocks for selected day: manual blocks + mockup suggested rows */}
           {loading ? (
             <View style={styles.loadingBox}>
               <ActivityIndicator size="small" color={colors.forest} />
             </View>
-          ) : selBlocks.length === 0 ? (
-            <View style={styles.emptyBox}>
-              <Text style={{ fontSize: 32 }}>🗓️</Text>
-              <Text style={[styles.emptyText, { color: colors.muted }]}>
-                No study blocks this day.
-              </Text>
-              <Text style={[styles.emptyText, { color: colors.muted }]}>
-                {'Tap "Add block" to plan one.'}
-              </Text>
-            </View>
           ) : (
-            selBlocks.map((b) => (
-              <View
-                key={b.id}
-                style={[
-                  styles.blockRow,
-                  { backgroundColor: colors.card, shadowColor: '#1f4d3f' },
-                  !!b.done && { opacity: 0.55 },
-                ]}
-              >
-                <View style={[styles.blockBar, { backgroundColor: colorBar(b.color) }]} />
-                {!!b.time && (
-                  <Text style={[styles.blockTime, { color: colors.muted }]}>{b.time}</Text>
-                )}
-                <Pressable style={styles.blockBody} onPress={() => setEditor(b)}>
-                  <Text
-                    style={[
-                      styles.blockTopic,
-                      { color: colors.ink },
-                      !!b.done && { textDecorationLine: 'line-through' },
-                    ]}
-                  >
-                    {b.topic}
-                  </Text>
-                  {(b.duration || b.note) && (
-                    <Text style={[styles.blockMeta, { color: colors.muted }]}>
-                      {[b.duration, b.note].filter(Boolean).join(' · ')}
-                    </Text>
-                  )}
-                </Pressable>
-                <Pressable
-                  onPress={() => toggleDone(b.id)}
-                  accessibility-label={b.done ? 'Mark as not done' : 'Mark as done'}
+            <>
+              {selBlocks.map((b) => (
+                <View
+                  key={b.id}
                   style={[
-                    styles.check,
-                    {
-                      backgroundColor: b.done ? colors.forest : 'transparent',
-                      borderColor: b.done ? 'transparent' : colors.line,
-                    },
+                    styles.dayRow,
+                    { backgroundColor: colors.card, borderColor: colors.line },
+                    !!b.done && { opacity: 0.55 },
                   ]}
                 >
-                  {!!b.done && (
-                    <Svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
-                      <Path d="M5 12l5 5L20 7" />
-                    </Svg>
+                  {!!b.time && (
+                    <Text style={[styles.dayTime, { color: colors.ink }]}>{b.time}</Text>
                   )}
+                  <Pressable style={styles.dayBody} onPress={() => setEditor(b)}>
+                    <Text
+                      style={[
+                        styles.dayTitle,
+                        { color: colors.ink },
+                        !!b.done && { textDecorationLine: 'line-through' },
+                      ]}
+                    >
+                      {b.topic}
+                    </Text>
+                    {(b.duration || b.note) && (
+                      <Text style={[styles.dayMeta, { color: colors.muted }]}>
+                        {[b.duration, b.note].filter(Boolean).join(' · ')}
+                      </Text>
+                    )}
+                  </Pressable>
+                  <Pressable
+                    onPress={() => toggleDone(b.id)}
+                    accessibility-label={b.done ? 'Mark as not done' : 'Mark as done'}
+                    style={[
+                      styles.check,
+                      {
+                        backgroundColor: b.done ? colors.forest : 'transparent',
+                        borderColor: b.done ? 'transparent' : colors.line,
+                      },
+                    ]}
+                  >
+                    {!!b.done && (
+                      <Svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke={colors.onForest} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                        <Path d="M5 12l5 5L20 7" />
+                      </Svg>
+                    )}
+                  </Pressable>
+                </View>
+              ))}
+              {SUGGESTED.filter((s) => !(skipped[selected] || []).includes(s.key)).map((s) => {
+                const done = (doneSug[selected] || []).includes(s.key);
+                return (
+                  <View
+                    key={s.key}
+                    style={[
+                      styles.dayRow,
+                      { backgroundColor: colors.card, borderColor: colors.line },
+                      done && { opacity: 0.55 },
+                    ]}
+                  >
+                    <Text style={[styles.dayTime, { color: colors.ink }]}>{s.time}</Text>
+                    <Pressable style={styles.dayBody} onPress={() => router.push(s.to as never)}>
+                      <Text style={[styles.dayTitle, { color: colors.ink }]}>{s.title}</Text>
+                      <Text style={[styles.dayMeta, { color: colors.muted }]}>{s.meta}</Text>
+                    </Pressable>
+                    {done ? (
+                      <View style={[styles.check, { backgroundColor: colors.forest, borderColor: 'transparent' }]}>
+                        <Svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke={colors.onForest} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                          <Path d="M5 12l5 5L20 7" />
+                        </Svg>
+                      </View>
+                    ) : (
+                      <View style={styles.sugActions}>
+                        <Pressable onPress={() => doneSuggested(s.key, s.minutes)}>
+                          <Text style={[styles.sugDone, { color: colors.forest }]}>Done</Text>
+                        </Pressable>
+                        <Pressable onPress={() => skipSuggested(s.key)}>
+                          <Text style={[styles.sugSkip, { color: colors.subtle }]}>Skip</Text>
+                        </Pressable>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
+              <Text style={[styles.sugNote, { color: colors.muted }]}>
+                Blocks are suggested in your free time. Move, skip or mark them done. Done blocks count toward your study time.
+              </Text>
+              <View style={styles.bottomRow}>
+                <Pressable
+                  onPress={() => router.push('/tracker')}
+                  style={[styles.halfBtn, { backgroundColor: colors.card, borderColor: colors.line }]}
+                >
+                  <Text style={[styles.halfBtnText, { color: colors.ink }]}>Edit weekly hours</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setEditor('new')}
+                  style={[styles.halfBtnDark, { backgroundColor: colors.ink }]}
+                >
+                  <Text style={[styles.halfBtnDarkText, { color: colors.paper }]}>Add block</Text>
                 </Pressable>
               </View>
-            ))
+            </>
           )}
         </View>
       </ScrollView>
@@ -538,10 +574,10 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -6, bottom: -14, fontSize: 84, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 24, lineHeight: 33, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 24, lineHeight: 25 },
   examRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6, marginTop: 8 },
-  examNum: { fontFamily: SERIF, fontWeight: '900', fontSize: 20 },
-  examText: { fontSize: 12, opacity: 0.85, color: '#fff' },
+  examNum: { fontFamily: SERIF, fontSize: 20 },
+  examText: { fontSize: 12, opacity: 0.85 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -565,7 +601,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   navBtnText: { fontSize: 16, fontWeight: '700', lineHeight: 18 },
-  monthLabel: { fontFamily: SERIF, fontWeight: '900', fontSize: 16 },
+  monthLabel: { fontFamily: SERIF, fontSize: 16 },
+  topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
+  connPill: { borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8 },
+  connText: { fontSize: 12.5, fontWeight: '700' },
+  weekStrip: { flexDirection: 'row', alignItems: 'center', gap: 2, marginBottom: 14 },
+  weekNav: { width: 30, height: 44, borderRadius: 10, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  weekCell: { flex: 1, alignItems: 'center', gap: 4 },
+  weekDow: { fontSize: 10, fontWeight: '600' },
+  weekNum: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  weekNumText: { fontSize: 13 },
+  todayHead: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, marginBottom: 8 },
+  dayRow: { flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: 1.5, borderRadius: 14, padding: 13, marginBottom: 8 },
+  dayTime: { fontSize: 12, fontWeight: '700', width: 56 },
+  dayBody: { flex: 1, gap: 1 },
+  dayTitle: { fontSize: 14, fontWeight: '700' },
+  dayMeta: { fontSize: 12 },
+  sugActions: { alignItems: 'flex-end', gap: 4 },
+  sugDone: { fontSize: 13, fontWeight: '700' },
+  sugSkip: { fontSize: 12, fontWeight: '600' },
+  sugNote: { fontSize: 12, lineHeight: 17, marginTop: 4, marginBottom: 12 },
+  bottomRow: { flexDirection: 'row', gap: 10, marginBottom: 8 },
+  halfBtn: { flex: 1, borderWidth: 1.5, borderRadius: 999, paddingVertical: 14, alignItems: 'center' },
+  halfBtnText: { fontSize: 14, fontWeight: '700' },
+  halfBtnDark: { flex: 1, borderRadius: 999, paddingVertical: 14, alignItems: 'center' },
+  halfBtnDarkText: { fontSize: 14, fontWeight: '700' },
+  calNote: { fontSize: 12.5, lineHeight: 18, marginBottom: 12 },
   calCard: {
     borderRadius: 18,
     paddingVertical: 12,
@@ -633,7 +694,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.45)',
     alignItems: 'center',
-    justifyContent: 'center',
+    // bottom-anchored sheet (not centered): the measured card bottom stays
+    // pinned while lift applies, so the keyboard hook converges instead of
+    // compounding into runaway lift and a blank sheet
+    justifyContent: 'flex-end',
     paddingVertical: 20,
     paddingHorizontal: 14,
   },
@@ -645,7 +709,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 14,
   },
-  editorTitle: { fontFamily: SERIF, fontWeight: '900', fontSize: 18 },
+  editorTitle: { fontFamily: SERIF, fontSize: 18 },
   closeBtn: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   fLabel: {
     fontSize: 11,

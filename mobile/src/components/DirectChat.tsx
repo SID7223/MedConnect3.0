@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Linking,
   Platform,
@@ -20,7 +19,7 @@ import { useTheme } from '../context/Theme';
 import { useSettings } from '../context/Settings';
 import { User } from '../context/Auth';
 import Icon from './Icon';
-import { IcoBan, IcoFlag, IcoLeave, IcoTrash, SendIcon, Stamp, confirmAlert } from './ChatBits';
+import { IcoBan, IcoLeave, IcoTrash, SendIcon, Stamp, confirmAlert } from './ChatBits';
 
 interface Props {
   me: User | null;
@@ -35,6 +34,7 @@ interface Msg {
   sender: string | number;
   body: string;
   created_at?: string;
+  failed?: boolean;
 }
 
 interface Peer {
@@ -90,8 +90,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
   const [pickerFor, setPickerFor] = useState<string | number | null>(null);
   const [pickerAnchor, setPickerAnchor] = useState<{ x: number; y: number; w: number; h: number; mine: boolean } | null>(null);
   const [rootSize, setRootSize] = useState({ w: 0, h: 0 });
-  const [reportOpen, setReportOpen] = useState(false);
-  const [reportReason, setReportReason] = useState('');
+
   const scrollRef = useRef<ScrollView | null>(null);
   const rootRef = useRef<View | null>(null);
   const bubbleRefs = useRef<Record<string, any>>({});
@@ -102,10 +101,14 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
 
   const { get, set } = useSettings();
 
+  // poll generation: a slow poll must never overwrite a newer arrival
+  const seq = useRef(0);
   const load = useCallback(() => {
+    const my = ++seq.current;
     api
       .conversation(withId)
       .then((d) => {
+        if (my !== seq.current) return; // stale poll: drop, don't paint
         setMessages(d.messages || []);
         if (d.avatars) setAvatars(d.avatars);
         if (d.peer) setPeer(d.peer);
@@ -136,7 +139,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
     setSending(true);
     const body = text.trim();
     setText('');
-    // show it instantly — don't wait on the network before it appears
+    // show it instantly - don't wait on the network before it appears
     const tempId = 'temp-' + Date.now();
     setMessages((prev) => [
       ...prev,
@@ -146,7 +149,23 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
       await api.sendMessage(withId, body);
       await load(); // reconciles with the real saved message, replacing the temp one
     } catch {
-      setMessages((prev) => prev.filter((m) => m.id !== tempId)); // roll back if it failed to send
+      // keep the bubble with a failed flag - tap retries instead of vanishing
+      setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...m, failed: true } : m)));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const retry = async (id: string | number) => {
+    const target = messages.find((m) => String(m.id) === String(id));
+    if (!target || sending) return;
+    setSending(true);
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, failed: false } : m)));
+    try {
+      await api.sendMessage(withId, target.body);
+      await load();
+    } catch {
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, failed: true } : m)));
     } finally {
       setSending(false);
     }
@@ -215,19 +234,6 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
       // ignore
     }
   };
-  const doReport = async () => {
-    setMenu(false);
-    const reason = reportReason.trim();
-    setReportReason('');
-    setReportOpen(false);
-    try {
-      await api.reportUser(withId, reason);
-      Alert.alert('Report submitted. Thank you.');
-    } catch {
-      // ignore
-    }
-  };
-
   const Avatar = ({ emoji, init }: { emoji?: string; init: string }) => (
     <View style={[styles.msgAvatar, { backgroundColor: colors.paper2, borderColor: colors.line }]}>
       <Text style={{ fontSize: emoji ? 16 : 11, color: colors.forest, fontWeight: '700' }}>{emoji || init}</Text>
@@ -288,7 +294,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
               </Text>
             </View>
             {peer && isOnline(peer.last_seen) && (
-              <View style={[styles.presenceDot, { backgroundColor: '#3aaa6f', borderColor: colors.paper }]} />
+              <View style={[styles.presenceDot, { backgroundColor: colors.green, borderColor: colors.paper }]} />
             )}
           </Pressable>
           <Pressable style={styles.headerText} onPress={() => setShowPeer(true)}>
@@ -341,6 +347,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
                   <Pressable
                     ref={(r) => { bubbleRefs.current[String(m.id)] = r; }}
                     onLongPress={() => openPicker(m.id, mine)}
+                    onPress={() => { if (m.failed) retry(m.id); }}
                     delayLongPress={450}
                     style={[
                       styles.bubble,
@@ -349,12 +356,12 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
                         : { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.line },
                     ]}
                   >
-                    <Text style={{ fontSize: 14, color: mine ? '#ffffff' : colors.ink }}>
+                    <Text style={{ fontSize: 14, color: mine ? colors.onForest : colors.ink }}>
                       {parts.map((p, i) =>
                         /^https?:\/\//.test(p) ? (
                           <Text
                             key={i}
-                            style={{ color: mine ? '#cdeee2' : colors.forest, textDecorationLine: 'underline' }}
+                            style={{ color: mine ? colors.mint : colors.forest, textDecorationLine: 'underline' }}
                             onPress={() => Linking.openURL(p).catch(() => {})}
                           >
                             {p}
@@ -364,7 +371,13 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
                         ),
                       )}
                     </Text>
-                    <Stamp ts={m.created_at} light={mine} />
+                    {m.failed ? (
+                      <Text style={{ fontSize: 12, color: colors.rust, marginTop: 4 }}>
+                        Not sent - tap to retry
+                      </Text>
+                    ) : (
+                      <Stamp ts={m.created_at} light={mine} />
+                    )}
                   </Pressable>
                   {mine && <Avatar emoji={avatars[String(m.sender)] || me?.avatar} init={myInit} />}
                 </View>
@@ -421,7 +434,7 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
             accessibilityLabel="Send"
             style={[styles.sendBtn, { backgroundColor: colors.forest, opacity: sending ? 0.6 : 1 }]}
           >
-            <SendIcon color="#fff" />
+            <SendIcon color={colors.onForest} />
           </Pressable>
         </View>
 
@@ -438,22 +451,18 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
               {menuItem(<IcoTrash color={colors.ink} />, 'Delete chat', doDelete)}
               {menuItem(<IcoLeave color={colors.ink} />, 'Unfriend', doUnfriend)}
               {menuItem(<IcoBan color={colors.ink} />, 'Block user', doBlock)}
-              {menuItem(<IcoFlag color={colors.rust} />, 'Report user', () => {
-                setMenu(false);
-                setReportOpen(true);
-              }, true)}
             </View>
           </>
         )}
 
-        {/* reaction picker — long-press a bubble to open */}
+        {/* reaction picker - long-press a bubble to open */}
         {pickerFor !== null && (
           <>
             <Pressable style={StyleSheet.absoluteFill} onPress={closePicker} />
             <View
               style={[
                 styles.reactionPicker,
-                { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#000' },
+                { backgroundColor: colors.card, borderColor: colors.line, shadowColor: '#171310' },
                 pickerPos,
               ]}
             >
@@ -486,40 +495,6 @@ export default function DirectChat({ me, withId, withName, withAv, onBack }: Pro
                   style={[styles.ghostBtn, { borderColor: colors.forest, marginTop: 14 }]}
                 >
                   <Text style={[styles.ghostBtnText, { color: colors.forest }]}>Close</Text>
-                </Pressable>
-              </View>
-            </View>
-          </>
-        )}
-
-        {/* report prompt (web window.prompt) */}
-        {reportOpen && (
-          <>
-            <Pressable style={StyleSheet.absoluteFill} onPress={() => setReportOpen(false)} />
-            <View style={styles.modalWrap}>
-              <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}>
-                <Text style={[styles.modalTitle, { color: colors.ink }]}>Report user</Text>
-                <TextInput
-                  style={[
-                    styles.input,
-                    { backgroundColor: colors.paper, borderColor: colors.line, color: colors.ink, marginBottom: 0 },
-                  ]}
-                  placeholder="Briefly, what are you reporting? (optional)"
-                  placeholderTextColor={colors.subtle}
-                  value={reportReason}
-                  onChangeText={setReportReason}
-                />
-                <Pressable onPress={doReport} style={[styles.forestBtn, { backgroundColor: colors.forest, marginTop: 12 }]}>
-                  <Text style={[styles.forestBtnText, { color: colors.paper }]}>Submit report</Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setReportOpen(false);
-                    setReportReason('');
-                  }}
-                  style={[styles.ghostBtn, { borderColor: colors.forest, marginTop: 8 }]}
-                >
-                  <Text style={[styles.ghostBtnText, { color: colors.forest }]}>Cancel</Text>
                 </Pressable>
               </View>
             </View>
@@ -611,7 +586,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1.5,
     padding: 6,
-    shadowColor: '#000',
+    shadowColor: '#171310',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.16,
     shadowRadius: 28,

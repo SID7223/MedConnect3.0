@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import Screen from '../components/Screen';
+import Wordmark from '../components/Wordmark';
 import { useTheme } from '../context/Theme';
 import { APP_VERSION } from '../lib/version';
 import { SERIF } from '../theme/fonts';
@@ -12,13 +13,13 @@ export default function AboutScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.paper2 }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             🌍
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Our story</Text>
-          <Text style={styles.h1}>About MedConnect</Text>
-          <Text style={styles.heroSub}>
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Our story</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>About MedPeers</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>
             Built by doctors, for doctors and dentists preparing for their licensing exams.
           </Text>
         </View>
@@ -27,7 +28,7 @@ export default function AboutScreen() {
           <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}>
             <Text style={[styles.p, { color: colors.ink, marginBottom: 14 }]}>
               Preparing for medical and dental licensing exams is a rigorous and often isolating journey.
-              MedConnect was created to change that.
+              MedPeers was created to change that.
             </Text>
             <Text style={[styles.p, { color: colors.ink, marginBottom: 12 }]}>
               We connect doctors and dentists worldwide preparing for the same professional milestones,
@@ -41,7 +42,7 @@ export default function AboutScreen() {
               environment for your study journey.
             </Text>
             <Text style={[styles.p, { color: colors.ink, marginBottom: 12 }]}>
-              Built on the simple principle that clinicians study better together, MedConnect is designed
+              Built on the simple principle that clinicians study better together, MedPeers is designed
               to help you stay focused, practice effectively, and succeed, one revision at a time.
             </Text>
             <Text style={[styles.p, { color: colors.muted, fontWeight: '600' }]}>
@@ -50,7 +51,7 @@ export default function AboutScreen() {
           </View>
 
           <View style={[styles.card, styles.centerCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
-            <Text style={[styles.brand, { color: colors.forest }]}>MedConnect</Text>
+            <Wordmark size={22} color={colors.forest} />
             <Text style={[styles.tagline, { color: colors.rust }]}>Connect · Study · Succeed</Text>
             <Text style={[styles.version, { color: colors.subtle }]}>Version {APP_VERSION}</Text>
             <Text style={[styles.iosNote, { color: colors.muted }]}>
@@ -81,8 +82,8 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
   },
   centerCard: { alignItems: 'center' },
   p: { fontSize: 16, lineHeight: 26 },
-  brand: { fontFamily: SERIF, fontSize: 22, fontWeight: '900' },
   tagline: {
     fontSize: 12,
     letterSpacing: 2,

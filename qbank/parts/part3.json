@@ -1,0 +1,739 @@
+[
+  {
+    "id": "H3-001",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Acute ischaemic stroke - intravenous thrombolysis",
+    "difficulty": "moderate",
+    "stem": "A 68-year-old man is brought to the emergency department 3 hours after the abrupt onset of right-sided weakness and dysphasia. Non-contrast CT shows no intracranial haemorrhage and there are no contraindications to thrombolysis. Which of the following is the most appropriate additional acute treatment?",
+    "image": null,
+    "options": {
+      "A": "Intravenous thrombolysis with alteplase or tenecteplase within 4.5 hours of symptom onset, after excluding intracranial haemorrhage, in a well-organised stroke service",
+      "B": "Intravenous thrombolysis only after waiting 24 hours to confirm the diagnosis with a repeat CT scan",
+      "C": "Withhold all reperfusion treatment and give aspirin 300 mg immediately, since thrombolysis is only licensed for use within 2 hours of onset",
+      "D": "Intravenous heparin infusion to prevent propagation of the infarct before any reperfusion decision is made",
+      "E": "Referral for mechanical thrombectomy only, because thrombolysis is contraindicated whenever a large vessel occlusion is present"
+    },
+    "answer": "A",
+    "explanation": "NICE NG128 directs clinicians to technology appraisal guidance on tenecteplase (TA990) and alteplase (TA264) for treating acute ischaemic stroke within 4.5 hours of symptom onset once intracranial haemorrhage has been excluded, and thrombolytics must be given only within a well-organised stroke service with trained staff and neuroradiological support. Aspirin 300 mg is still given within 24 hours once imaging excludes haemorrhage, but it does not replace thrombolysis in a eligible patient. Thrombectomy is offered separately, within 6 hours, alongside thrombolysis when indicated.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Stroke and transient ischaemic attack in over 16s: diagnosis and initial management - recommendations",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG128/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-002",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Acute ischaemic stroke - mechanical thrombectomy",
+    "difficulty": "moderate",
+    "stem": "A 62-year-old woman develops a dense left hemiparesis and gaze deviation. CT angiography confirms a right internal carotid artery occlusion. She was last known to be well 5 hours ago, baseline imaging shows a small established infarct with salvageable tissue, and there are no contraindications. Which of the following is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Defer all intervention and repeat the imaging in 24 hours before deciding on treatment",
+      "B": "Offer thrombectomy as soon as possible and within 6 hours of symptom onset, together with intravenous thrombolysis if not contraindicated and within the licensed window",
+      "C": "Withhold thrombectomy because intravenous thrombolysis alone is superior beyond 4.5 hours",
+      "D": "Start dual antiplatelet therapy and arrange carotid endarterectomy within 48 hours as the definitive treatment",
+      "E": "Offer thrombectomy only if the occlusion involves the posterior circulation"
+    },
+    "answer": "B",
+    "explanation": "NICE NG128 recommends offering thrombectomy as soon as possible and within 6 hours of symptom onset together with intravenous thrombolysis when that is not contraindicated and is within its licensed window. For patients last known well up to 24 hours previously, including wake-up strokes, thrombectomy should be considered when imaging shows salvageable tissue, and it may be considered up to 24 hours in posterior circulation occlusion. Recanalisation therapies must still be delivered within an acute stroke service.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Stroke and transient ischaemic attack in over 16s: diagnosis and initial management - recommendations",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG128/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-003",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Intracerebral haemorrhage - acute blood pressure management",
+    "difficulty": "hard",
+    "stem": "A 70-year-old hypertensive man presents 3 hours after the acute onset of headache, vomiting and left hemiparesis. The non-contrast CT head is shown. His systolic blood pressure is 175 mm Hg and there are no exclusions to blood pressure lowering. According to NICE guidance, what is the target of rapid blood pressure lowering?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Intracerebral.jpg?width=800",
+      "alt": "CT scan of the brain showing an intracerebral haemorrhage",
+      "caption": "Non-contrast CT head demonstrating a spontaneous intracerebral haemorrhage",
+      "source": "Wikimedia Commons - File:Intracerebral.jpg (CC BY-SA 3.0, Lucien Monfils)"
+    },
+    "options": {
+      "A": "Lower systolic blood pressure to below 110 mm Hg within 1 hour to minimise haematoma expansion",
+      "B": "Maintain systolic blood pressure between 150 and 220 mm Hg and avoid any reduction during the first 24 hours",
+      "C": "Aim for a systolic blood pressure of 140 mm Hg or lower, ensuring the magnitude of the fall does not exceed 60 mm Hg within 1 hour of starting treatment",
+      "D": "No pharmacological blood pressure lowering is indicated because the haemorrhage is more than 2 hours old",
+      "E": "Reduce systolic blood pressure to 185 mm Hg or lower, which is the threshold for thrombolysis in ischaemic stroke"
+    },
+    "answer": "C",
+    "explanation": "NICE NG128 advises considering rapid blood pressure lowering in acute intracerebral haemorrhage when systolic pressure is between 150 and 220 mm Hg and there are no exclusions, with the aim of reaching a systolic pressure of 140 mm Hg or lower while ensuring the total fall does not exceed 60 mm Hg within 1 hour of starting treatment. Excessively rapid or deep lowering risks cerebral hypoperfusion. The 185/110 mm Hg threshold applies to thrombolysis candidacy in acute ischaemic stroke, not to intracerebral haemorrhage.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Stroke and transient ischaemic attack in over 16s: diagnosis and initial management - recommendations",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG128/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-004",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Convulsive status epilepticus",
+    "difficulty": "moderate",
+    "stem": "A 34-year-old man with known epilepsy is still convulsing 7 minutes after the start of a generalised tonic-clonic seizure in the emergency department. Intravenous access is established. Which of the following best describes the recommended treatment sequence?",
+    "image": null,
+    "options": {
+      "A": "Give a second-line intravenous antiepileptic immediately as first-line treatment, because the seizure has passed 5 minutes",
+      "B": "Begin continuous general anaesthesia as first-line therapy while awaiting EEG confirmation",
+      "C": "Treat with intramuscular antibiotics first, since sepsis is the most common cause of prolonged seizures in adults",
+      "D": "Give a benzodiazepine first; if the seizure has not stopped after 5 to 10 minutes give a second benzodiazepine dose, then treat with intravenous levetiracetam, phenytoin or valproate",
+      "E": "Administer a loading dose of phenytoin first and reserve benzodiazepines for patients who are not in status epilepticus"
+    },
+    "answer": "D",
+    "explanation": "NICE NG217 defines convulsive status epilepticus as a continuous convulsive seizure lasting 5 minutes or longer, or two or more seizures without full recovery of consciousness. First-line treatment is a benzodiazepine (intravenous lorazepam in hospital, or buccal midazolam or rectal diazepam in the community), with a second benzodiazepine dose if the seizure has not terminated after 5 to 10 minutes. Second-line treatment is intravenous levetiracetam, phenytoin or valproate, with valproate used only in line with MHRA advice on its precautions.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Epilepsies in children, young people and adults - treating status epilepticus, repeated or cluster seizures, and prolonged seizures",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/ng217/chapter/treating-status-epilepticus-repeated-or-cluster-seizures-and-prolonged-seizures"
+      }
+    ]
+  },
+  {
+    "id": "H3-005",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Transient ischaemic attack",
+    "difficulty": "easy",
+    "stem": "A 58-year-old man had 20 minutes of expressive dysphasia and right arm clumsiness which resolved completely. He is now neurologically normal. His ABCD2 score is 2. Which of the following is the most appropriate next step?",
+    "image": null,
+    "options": {
+      "A": "Arrange a routine outpatient clinic appointment in 2 weeks with an ABCD2-guided priority",
+      "B": "Discharge with clopidogrel 75 mg daily only and no specialist assessment, because his ABCD2 score is low",
+      "C": "Admit for 48 hours of observation before starting any antiplatelet medication",
+      "D": "Start low-dose aspirin 75 mg daily and review in 1 month if symptoms recur",
+      "E": "Give aspirin 300 mg immediately and arrange for him to be assessed by a specialist service within 24 hours"
+    },
+    "answer": "E",
+    "explanation": "NICE NG128 recommends offering aspirin 300 mg immediately to people with suspected transient ischaemic attack, in addition to starting clopidogrel once the diagnosis is confirmed, and referring for specialist assessment within 24 hours of presentation. Guidance explicitly states that the ABCD2 score should not be used to assess the risk of a subsequent stroke or to determine the urgency of referral. Delaying antiplatelet loading or relying on a low ABCD2 score risks early recurrent stroke.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Stroke and transient ischaemic attack in over 16s: diagnosis and initial management - recommendations",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG128/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-006",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Papilloedema and raised intracranial pressure",
+    "difficulty": "moderate",
+    "stem": "A 24-year-old woman presents with daily morning headaches, transient visual obscurations and a pulsatile sensation in her ears. Fundoscopy of her right eye is shown. Which of the following best describes the finding and its significance?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Fundal_photograph_showing_severe_papilloedema_in_the_right_eye.jpg?width=800",
+      "alt": "Fundus photograph of the right eye showing severe papilloedema with blurred optic disc margins",
+      "caption": "Fundal photograph showing severe papilloedema in the right eye",
+      "source": "Wikimedia Commons - File:Fundal photograph showing severe papilloedema in the right eye.jpg (CC BY 2.0, Bansal, Dabbs and Long)"
+    },
+    "options": {
+      "A": "A normal optic disc with sharp margins; the symptoms are diagnostic of migraine with aura",
+      "B": "Blurred, elevated optic disc margins with vessel blurring consistent with papilloedema, indicating raised intracranial pressure that requires urgent intracranial pressure work-up",
+      "C": "Pale optic disc with lost cupping, indicating established optic atrophy from prior glaucoma",
+      "D": "Hard exudates in a macular star pattern, indicating hypertensive retinopathy",
+      "E": "A dark red retinal spot with a white surround, indicating central retinal artery occlusion"
+    },
+    "answer": "B",
+    "explanation": "The photograph shows severe papilloedema, that is, swelling of the optic disc caused by increased intracranial pressure, which fits her headache pattern, morning worsening and transient visual obscurations. Papilloedema is an abnormal finding that mandates urgent assessment of intracranial pressure with neuroimaging and, when appropriate, lumbar puncture after imaging. The other options describe normal ageing, optic atrophy, diabetic or hypertensive retinopathy, and retinal artery occlusion, none of which produce disc swelling.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Fundal photograph showing severe papilloedema in the right eye",
+        "org": "Wikimedia Commons",
+        "year": "2008",
+        "url": "https://commons.wikimedia.org/wiki/File:Fundal_photograph_showing_severe_papilloedema_in_the_right_eye.jpg"
+      }
+    ]
+  },
+  {
+    "id": "H3-007",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Parkinson's disease - motor and non-motor complications",
+    "difficulty": "moderate",
+    "stem": "A 66-year-old man with Parkinson's disease of 8 years' duration, treated with levodopa, reports increasingly vivid visual hallucinations of unfamiliar people in the house, with distress to his family. Which of the following is the most appropriate pharmacological step?",
+    "image": null,
+    "options": {
+      "A": "Increase levodopa dose, because hallucinations always indicate dopaminergic under-treatment",
+      "B": "Stop levodopa abruptly and switch to a dopamine agonist to reduce hallucination risk",
+      "C": "Offer a drug holiday by stopping all antiparkinsonian medication for a week",
+      "D": "Start olanzapine 5 mg daily as the preferred atypical antipsychotic in Parkinson's disease",
+      "E": "Offer quetiapine, and if that is ineffective consider clozapine; do not offer olanzapine"
+    },
+    "answer": "E",
+    "explanation": "NICE NG71 recommends offering quetiapine for hallucinations in Parkinson's disease and, if quetiapine is ineffective, considering clozapine with haematological monitoring, while olanzapine should not be offered because it worsens parkinsonism. Levodopa remains first-line therapy when motor symptoms impact quality of life, so stopping it or using drug holidays would worsen disability; NG71 advises against drug holidays. Hallucinations in established Parkinson's disease are typically a complication of therapy or disease progression rather than under-treatment.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Parkinson's disease in adults - recommendations",
+        "org": "NICE",
+        "year": "2017",
+        "url": "https://www.nice.org.uk/guidance/ng71/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-008",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Alzheimer's disease - pharmacological management",
+    "difficulty": "moderate",
+    "stem": "A 74-year-old woman has a 2-year history of progressive amnesia and disorientation with a Montreal Cognitive Assessment score of 18, consistent with mild to moderate Alzheimer's disease. She lives at home with support. Which of the following is the most appropriate pharmacological treatment?",
+    "image": null,
+    "options": {
+      "A": "Memantine as first-line monotherapy for all stages of Alzheimer's disease",
+      "B": "Routine low-dose risperidone to prevent agitation and wandering",
+      "C": "A cholinesterase inhibitor such as donepezil, galantamine or rivastigmine",
+      "D": "High-dose vitamin E and ginseng supplements as disease-modifying therapy",
+      "E": "No pharmacological treatment until the patient can no longer dress herself"
+    },
+    "answer": "C",
+    "explanation": "NICE NG97 recommends offering a cholinesterase inhibitor (donepezil, galantamine or rivastigmine) for mild to moderate Alzheimer's disease. Memantine is reserved for moderate disease when cholinesterase inhibitors are contraindicated or not tolerated, or for severe Alzheimer's disease, and may be added to a cholinesterase inhibitor in severe disease. Antipsychotics should only be considered when there is a risk of harm to the person or others, or severe distress from agitation, hallucinations or delusions, and ginseng and vitamin E are not recommended.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Dementia: assessment, management and support for people living with dementia and their carers - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng97/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-009",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Acute treatment of migraine",
+    "difficulty": "easy",
+    "stem": "A 22-year-old woman gets disabling migraine attacks twice a week. Simple analgesic taken early gives only partial relief. Which of the following is the recommended acute treatment strategy?",
+    "image": null,
+    "options": {
+      "A": "Combination of an oral ergotamine preparation with a weak opioid",
+      "B": "Combination therapy with an oral triptan plus an NSAID, or an oral triptan plus paracetamol",
+      "C": "Propranolol 40 mg twice daily started as sole acute therapy for every attack",
+      "D": "Immediate intravenous metoclopramide monotherapy for every attack in the emergency department"
+    },
+    "answer": "B",
+    "explanation": "For the acute treatment of migraine, NICE CG150 recommends offering combination therapy with an oral triptan and an NSAID, or an oral triptan and paracetamol, taking account of preference, comorbidities and adverse events. If the person prefers a single agent, monotherapy with an oral triptan, NSAID, aspirin 900 mg or paracetamol may be considered. Ergots and opioids should not be offered, and prophylaxis such as propranolol is used to prevent attacks rather than treat them.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Headaches in over 12s: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2012",
+        "url": "https://www.nice.org.uk/guidance/cg150/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-010",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Neurology",
+    "topic": "Multiple sclerosis - acute relapse",
+    "difficulty": "hard",
+    "stem": "A 32-year-old woman with relapsing-remitting multiple sclerosis develops new left leg weakness 5 days ago, lasting more than 24 hours after 18 months of stability. Urinalysis is negative and she has no fever. The weakness prevents her from walking to work. Which of the following is the recommended treatment for this relapse?",
+    "image": null,
+    "options": {
+      "A": "Observe for 3 months because symptoms present for less than 3 months cannot be diagnosed as a relapse",
+      "B": "Start or escalate a disease-modifying therapy and give no acute treatment",
+      "C": "Intravenous immunoglobulin 0.4 g/kg daily for 5 days as first-line therapy",
+      "D": "Oral methylprednisolone 0.5 g once daily for 5 days",
+      "E": "Plasma exchange within 24 hours because more than 72 hours have elapsed since symptom onset"
+    },
+    "answer": "D",
+    "explanation": "NICE NG220 defines a relapse as new or worsened symptoms lasting more than 24 hours after a stable period of at least 1 month in the absence of infection, and recommends offering treatment for relapses that affect usual activities as early as possible and within 14 days of onset. The recommended treatment is oral methylprednisolone 0.5 g daily for 5 days, and non-specialists should discuss whether steroids are needed because not every relapse requires treatment. Infection must be excluded first, and symptoms lasting more than 3 months should not routinely be diagnosed as a relapse.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Multiple sclerosis in adults: management - recommendations",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/ng220/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-011",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "Depression - first-line treatment of a less severe episode",
+    "difficulty": "moderate",
+    "stem": "A 30-year-old man reports 6 weeks of low mood and anhedonia with a PHQ-9 score of 10 (less severe depression). He has no suicidal ideation and wants to start treatment. Which of the following is the recommended first-line approach?",
+    "image": null,
+    "options": {
+      "A": "Do not routinely offer antidepressant medication as first-line; offer a guided self-help or psychological intervention such as group behavioural activation, matched to his preference",
+      "B": "Start fluoxetine 20 mg daily immediately as first-line treatment for everyone with less severe depression",
+      "C": "Withhold all treatment for 8 weeks to see whether symptoms remit spontaneously",
+      "D": "Refer immediately for electroconvulsive therapy because the episode has lasted more than 1 month",
+      "E": "Offer an antipsychotic augmentation strategy before any psychological intervention"
+    },
+    "answer": "A",
+    "explanation": "NICE NG222 states that antidepressant medication should not be routinely offered as first-line treatment for less severe depression, and should only be offered if that is the person's informed preference. First-line options guided by table 1 include guided self-help materials based on CBT or behavioural activation, group behavioural activation and other psychological interventions matched to clinical need and preference. Escalation to medication or combination treatment applies to more severe depression (PHQ-9 of 16 or above).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Depression in adults: treatment and management - recommendations",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/ng222/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-012",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "Depression - antidepressant monitoring",
+    "difficulty": "moderate",
+    "stem": "A 19-year-old university student is started on sertraline for more severe depression after a full assessment and a shared management plan. When should she be reviewed after starting the medication?",
+    "image": null,
+    "options": {
+      "A": "Within 6 weeks, because antidepressants need a full 6 weeks to work and early review is unnecessary",
+      "B": "Within 3 days, because serotonin syndrome typically presents on day 2",
+      "C": "1 week after starting the antidepressant, because she is aged 18 to 25, and thereafter no later than 4 weeks (the usual first review for others is within 2 weeks)",
+      "D": "Only when she requests an appointment, since side effects are managed by the pharmacy",
+      "E": "At 3 months, aligned with the minimum duration of antidepressant treatment"
+    },
+    "answer": "C",
+    "explanation": "When prescribing antidepressants, NICE NG222 says the first review will usually be within 2 weeks to check symptoms and side effects, but should be 1 week after starting if the prescription is for a person aged 18 to 25 years or if there is particular concern about suicide risk, with further review no later than 4 weeks. It also advises telling the person that an effect, if the medicine is going to work, is usually seen within 4 weeks. Treatment typically continues for at least 6 months after remission but must be reviewed regularly.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Depression in adults: treatment and management - recommendations",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/ng222/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-013",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "Bipolar disorder - acute mania",
+    "difficulty": "hard",
+    "stem": "A 28-year-old woman diagnosed with bipolar I disorder presents with 5 days of reduced need for sleep, pressured speech, spending sprees and grandiosity. She has been taking fluoxetine 40 mg daily for presumed unipolar depression. Which of the following is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Continue fluoxetine unchanged and add lithium at the next routine appointment",
+      "B": "Start lamotrigine as first-line acute treatment because it is a mood stabiliser with a benign side-effect profile",
+      "C": "Offer fluoxetine plus olanzapine combination, which is first-line for this presentation",
+      "D": "Wait for spontaneous resolution because antidepressant-associated hypomania does not need treatment",
+      "E": "Stop the antidepressant and start an antipsychotic such as haloperidol, olanzapine, quetiapine or risperidone, with close monitoring of mental state and side effects"
+    },
+    "answer": "E",
+    "explanation": "NICE CG185 recommends that if a person taking an antidepressant alone develops mania or hypomania, the antidepressant should be stopped and treatment started with an antipsychotic - haloperidol, olanzapine, quetiapine or risperidone - with monitoring of mental state and side effects. Lamotrigine should not be offered as treatment for mania, and the fluoxetine-olanzapine or fluoxetine-quetiapine combinations apply to bipolar depression, not acute mania. Lithium is used for long-term prevention rather than as the acute agent in this scenario.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Bipolar disorder: assessment and management - recommendations",
+        "org": "NICE",
+        "year": "2014",
+        "url": "https://www.nice.org.uk/guidance/cg185/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-014",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "First-episode psychosis",
+    "difficulty": "moderate",
+    "stem": "A 21-year-old man is referred to the early intervention in psychosis service with 3 months of persecutory ideas, social withdrawal and auditory hallucinations. Physical assessment is complete. Which of the following is the recommended package of care at first presentation?",
+    "image": null,
+    "options": {
+      "A": "Offer oral antipsychotic medication together with psychological interventions - individual CBT and family intervention - and a care plan made in collaboration with the person",
+      "B": "Offer antipsychotic medication alone, because psychological interventions are ineffective in a first episode",
+      "C": "Offer individual CBT alone and defer any medication until after 6 months of unsupported follow-up",
+      "D": "Start an antidepressant and review in primary care in 6 weeks",
+      "E": "Begin clozapine immediately as the first-line antipsychotic for all first-episode presentations"
+    },
+    "answer": "A",
+    "explanation": "NICE CG178 recommends that people with a first episode psychosis are offered oral antipsychotic medication in conjunction with psychological interventions, specifically family intervention and individual CBT, delivered as described in the guideline, with a care plan written collaboratively after assessment. Early intervention in psychosis services should be accessible to all people with a first episode or first presentation of psychosis irrespective of age or duration of untreated psychosis. Antipsychotic medication should not be started for a first presentation in primary care unless in consultation with a consultant psychiatrist.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Psychosis and schizophrenia in adults: prevention and management - recommendations",
+        "org": "NICE",
+        "year": "2014",
+        "url": "https://www.nice.org.uk/guidance/CG178/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-015",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "Attention deficit hyperactivity disorder in adults - medication",
+    "difficulty": "hard",
+    "stem": "A 28-year-old man with confirmed ADHD has taken methylphenidate 60 mg daily for 6 weeks with only partial benefit and troublesome side effects. He wishes to continue medication. What is the recommended next step?",
+    "image": null,
+    "options": {
+      "A": "Add an antipsychotic to augment the stimulant response",
+      "B": "Continue methylphenidate unchanged for a further 6 months before considering any change",
+      "C": "Stop medication and offer only behavioural strategies because adult ADHD does not respond to drugs",
+      "D": "Switch to lisdexamfetamine; if that trial is inadequate or the drug is not tolerated, consider atomoxetine as an alternative",
+      "E": "Switch directly to an antipsychotic because motor side effects indicate a different diagnosis"
+    },
+    "answer": "D",
+    "explanation": "For adults, NICE NG87 recommends lisdexamfetamine or methylphenidate as first-line pharmacological treatment; if there is no response to an adequate trial of the first drug, an alternative should be tried, and a stimulant is only switched after a 6-week trial at an adequate dose. If both stimulants are ineffective or not tolerated, atomoxetine may be offered, with specialist review before stopping all medication. In children and young people aged 5 and over, methylphenidate is first-line, with lisdexamfetamine considered after a 6-week methylphenidate trial.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Attention deficit hyperactivity disorder: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng87/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-016",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Psychiatry",
+    "topic": "Alcohol withdrawal and delirium tremens",
+    "difficulty": "easy",
+    "stem": "A 52-year-old alcohol-dependent man is admitted for medically assisted withdrawal. On day 3 he becomes confused, frightened and visually hallucinated with tremor, tachycardia and hypertension. Which of the following is the recommended first-line treatment?",
+    "image": null,
+    "options": {
+      "A": "Haloperidol alone as monotherapy, with no benzodiazepine",
+      "B": "Oral lorazepam as first-line treatment; if symptoms persist or oral medication is declined, offer parenteral lorazepam or haloperidol",
+      "C": "Intravenous haloperidol first, reserving lorazepam for seizures",
+      "D": "No pharmacological treatment; symptoms resolve with reassurance alone",
+      "E": "High-dose antipsychotic depot injection followed by discharge"
+    },
+    "answer": "B",
+    "explanation": "NICE CG100 recommends oral lorazepam as first-line treatment for delirium tremens, offering parenteral lorazepam or haloperidol if symptoms persist or oral medication is declined, and reviewing the withdrawal drug regimen if delirium tremens develops during treatment. For the withdrawal syndrome itself, a benzodiazepine or carbamazepine is offered, with a symptom-triggered regimen used in hospital or settings with 24-hour monitoring. Clomethiazole is an alternative restricted to inpatient use with caution.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Alcohol-use disorders: diagnosis and management of physical complications - recommendations",
+        "org": "NICE",
+        "year": "2010",
+        "url": "https://www.nice.org.uk/guidance/cg100/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-017",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Ophthalmology",
+    "topic": "Glaucoma - initial treatment of chronic open angle glaucoma",
+    "difficulty": "hard",
+    "stem": "A 58-year-old man is newly diagnosed with non-advanced chronic open angle glaucoma: Goldmann applanation tonometry shows intraocular pressure of 26 mm Hg, with reproducible visual field loss and optic nerve head damage. He has no pigment dispersion syndrome. Which of the following is the recommended initial treatment?",
+    "image": null,
+    "options": {
+      "A": "No treatment until intraocular pressure exceeds 30 mm Hg",
+      "B": "Immediate trabeculectomy as first-line surgery for all newly diagnosed cases",
+      "C": "Timolol 0.5% eye drops twice daily as the mandatory first step in every patient",
+      "D": "Refer for cataract surgery, since raised intraocular pressure is usually lens related",
+      "E": "Offer 360-degree selective laser trabeculoplasty (SLT), which can delay the need for eye drops and may be repeated if its effect reduces"
+    },
+    "answer": "E",
+    "explanation": "NICE NG81 recommends offering 360-degree selective laser trabeculoplasty to people with newly diagnosed chronic open angle glaucoma that is not advanced (excluding pigment dispersion syndrome), and a second SLT may be considered if the initial effect diminishes. People are told that SLT can delay the need for eye drops but does not remove the chance they will be needed. Prostaglandin analogues are offered when people decline or are unsuitable for SLT, or need additional treatment, rather than being the automatic first step.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Glaucoma: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2017",
+        "url": "https://www.nice.org.uk/guidance/ng81/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-018",
+    "exams": ["USMLE"],
+    "region": "Head and neck",
+    "system": "Ophthalmology",
+    "topic": "Neovascular (wet) age-related macular degeneration",
+    "difficulty": "moderate",
+    "stem": "A 72-year-old woman reports sudden distortion of central vision in the right eye (metamorphopsia) over 10 days. Fundoscopy suggests active late (wet) age-related macular degeneration. Which of the following is the recommended referral and treatment pathway?",
+    "image": null,
+    "options": {
+      "A": "Routine referral with a target of assessment within 6 weeks, since painless visual loss can wait",
+      "B": "Refer to a macula service within 1 working day and start high-dose antioxidant vitamins while awaiting treatment",
+      "C": "Make an urgent referral to a macula service within 1 working day, and offer intravitreal anti-VEGF treatment as soon as possible, within 14 days of referral",
+      "D": "Observation for 3 months with home monitoring grids before any referral",
+      "E": "Refer for photodynamic therapy, which is the preferred first-line treatment for all wet AMD"
+    },
+    "answer": "C",
+    "explanation": "NICE NG82 recommends an urgent referral to a macula service for people with suspected active late (wet) AMD, whether or not they report visual impairment, normally made within 1 working day. For eyes with confirmed wet active AMD for which antiangiogenic treatment is recommended, treatment should be offered as soon as possible, within 14 days of referral to the macular service, and intravitreal anti-VEGF is the recommended pharmacological treatment. Smoking cessation is advised as a modifiable risk factor.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Age-related macular degeneration - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng82/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-019",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Ophthalmology",
+    "topic": "Proliferative diabetic retinopathy",
+    "difficulty": "moderate",
+    "stem": "A 55-year-old man with type 2 diabetes is found on screening to have proliferative diabetic retinopathy in both eyes with no vitreous haemorrhage. Which of the following is the recommended first treatment?",
+    "image": null,
+    "options": {
+      "A": "Panretinal photocoagulation, which is usually the first treatment for most people and is completed within 4 weeks of starting",
+      "B": "Intravitreal anti-VEGF as first-line treatment for every patient, with laser reserved only for failures",
+      "C": "Immediate vitrectomy in both eyes before any laser is considered",
+      "D": "Observation with 6-monthly review until tractional retinal detachment develops"
+    },
+    "answer": "A",
+    "explanation": "NICE NG242 states that panretinal photocoagulation is usually the first treatment for most people with proliferative diabetic retinopathy and should be offered when the person is first diagnosed, with the course completed within 4 weeks of starting treatment; for high-risk characteristics or difficulty attending, treatment can be started the same day. Anti-VEGF is offered for activity persisting after complete panretinal photocoagulation, and vitrectomy is considered for non-clearing vitreous haemorrhage lasting 3 months or for macula-involving retinal detachment.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diabetic retinopathy: management and monitoring - recommendations",
+        "org": "NICE",
+        "year": "2024",
+        "url": "https://www.nice.org.uk/guidance/ng242/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-020",
+    "exams": ["MRCP"],
+    "region": "Head and neck",
+    "system": "Ophthalmology",
+    "topic": "Giant cell (temporal) arteritis",
+    "difficulty": "hard",
+    "stem": "A 72-year-old woman describes a 3-week history of new temporal headache, jaw claudication while chewing and tenderness of the scalp. Her erythrocyte sedimentation rate is 4 mm/h. Which of the following is the correct interpretation?",
+    "image": null,
+    "options": {
+      "A": "A normal ESR excludes giant cell arteritis, so no further action is needed",
+      "B": "Giant cell arteritis is only diagnosable if the C-reactive protein is also raised",
+      "C": "Symptoms are typical of tension-type headache and should be reviewed in 3 months",
+      "D": "Temporal artery biopsy is unnecessary because jaw claudication has 100% specificity",
+      "E": "A normal ESR does not exclude giant cell arteritis - consider blood tests and follow local pathways for suspected giant cell (temporal) arteritis"
+    },
+    "answer": "E",
+    "explanation": "For adults with scalp tenderness or jaw claudication suggestive of temporal arteritis, NICE NG127 advises considering blood tests and following local pathways for suspected giant cell (temporal) arteritis, and explicitly warns that a normal ESR does not exclude the diagnosis. This matters because untreated arteritis carries a high risk of permanent visual loss from anterior ischaemic optic neuropathy. Diagnosis therefore rests on the clinical picture together with pathway-based investigation, not on a single normal inflammatory marker.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected neurological conditions: recognition and referral - recommendations for adults aged over 16",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG127/chapter/recommendations-for-adults-aged-over-16"
+      }
+    ]
+  },
+  {
+    "id": "H3-021",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Ophthalmology",
+    "topic": "Cataract - referral for surgery",
+    "difficulty": "easy",
+    "stem": "An 80-year-old woman has a unilateral cataract. Best-corrected visual acuity in the affected eye is 6/12, but she reports glare when driving at night and has stopped reading. She wants surgery. Which of the following best reflects NICE guidance on referral?",
+    "image": null,
+    "options": {
+      "A": "Surgery must be deferred until visual acuity falls below 6/24 in the affected eye",
+      "B": "Surgery should be offered only if both eyes are affected simultaneously",
+      "C": "The decision is based on a discussion of how the cataract affects vision and quality of life and whether the person wants surgery - access should not be restricted on the basis of visual acuity",
+      "D": "Referral is inappropriate because one eye still has normal acuity",
+      "E": "Referral should wait until the cataract is 'mature' and blocks all red reflex"
+    },
+    "answer": "C",
+    "explanation": "NICE NG77 says the decision to refer a person with a cataract for surgery should be based on a discussion covering how the cataract affects vision and quality of life, whether one or both eyes are affected, what surgery involves including risks and benefits, how quality of life might be affected without surgery, and whether the person wants surgery. It explicitly states not to restrict access to cataract surgery on the basis of visual acuity. Patient-reported functional limitation such as glare and reading difficulty therefore drives referral, not a fixed acuity cut-off.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Cataracts in adults: management - recommendations",
+        "org": "NICE",
+        "year": "2017",
+        "url": "https://www.nice.org.uk/guidance/ng77/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-022",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Otolaryngology",
+    "topic": "Acute otitis media",
+    "difficulty": "moderate",
+    "stem": "A 3-year-old child has had 2 days of fever and right ear pain. Otoscopy is shown. She is systemically well, there is no otorrhoea and neither ear is discharging, and she has no history of immunosuppression or craniofacial abnormality. Which of the following is the most appropriate management?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Acute_Otitis_Media_Stage_of_Resolution.jpg?width=800",
+      "alt": "Otoscopic image of acute otitis media showing mucopurulent exudate behind a bulging tympanic membrane",
+      "caption": "Otoscopic appearance of acute otitis media with bulging tympanic membrane and mucopurulent exudate",
+      "source": "Wikimedia Commons - File:Acute Otitis Media Stage of Resolution.jpg (CC BY 4.0, Michael Hawke MD)"
+    },
+    "options": {
+      "A": "No immediate antibiotic; give a back-up antibiotic prescription to be used if symptoms do not start to improve within 3 days or worsen rapidly or significantly",
+      "B": "Immediate amoxicillin for every child with acute otitis media and fever",
+      "C": "Immediate referral for grommet insertion before any medical treatment",
+      "D": "Immediate intravenous co-amoxiclav and admission, since middle ear infection always requires parenteral therapy"
+    },
+    "answer": "A",
+    "explanation": "NICE NG91 recommends considering no antibiotic prescription or a back-up antibiotic prescription for most children with acute otitis media, advising that the back-up prescription is used if symptoms do not start to improve within 3 days or worsen rapidly or significantly at any time. Immediate antibiotics are reserved for those more likely to benefit, such as any child with otorrhoea or those under 2 years with infection in both ears, as well as those who are systemically very unwell or at high risk of complications. When an antibiotic is needed, first-choice oral treatment is amoxicillin for 5 to 7 days.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Otitis media (acute): antimicrobial prescribing - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng91/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-023",
+    "exams": ["FCPS"],
+    "region": "Head and neck",
+    "system": "Otolaryngology",
+    "topic": "Acute sinusitis - antimicrobial prescribing",
+    "difficulty": "easy",
+    "stem": "A 25-year-old woman has nasal congestion and facial pain for 5 days without improvement but is systemically well, has no high-risk comorbidity and no signs of a more serious illness. Which of the following is the recommended management?",
+    "image": null,
+    "options": {
+      "A": "Immediate intravenous antibiotics and CT sinuses the same day",
+      "B": "Immediate oral co-amoxiclav for 10 days for every adult with acute sinusitis",
+      "C": "Immediate phenoxymethylpenicillin for all patients regardless of severity",
+      "D": "Immediate referral for endoscopic sinus surgery because symptoms have lasted 5 days",
+      "E": "Consider no antibiotic prescription or a back-up antibiotic prescription with self-care advice, reserving immediate antibiotics for people who are systemically very unwell or at high risk of complications"
+    },
+    "answer": "E",
+    "explanation": "NICE NG79 recommends considering no antibiotic prescription or a back-up antibiotic prescription for acute sinusitis in people who are not systemically very unwell and not at high risk of complications, because most improve without antibiotics. Immediate antibiotic treatment is offered to people who are systemically very unwell, have symptoms and signs of a more serious illness or condition, or are at high risk of complications. Where an antibiotic is indicated, first choice is phenoxymethylpenicillin 500 mg four times a day for 5 days, with co-amoxiclav reserved for those who are systemically very unwell or at high risk.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Sinusitis (acute): antimicrobial prescribing - recommendations",
+        "org": "NICE",
+        "year": "2017",
+        "url": "https://www.nice.org.uk/guidance/ng79/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-024",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Otolaryngology",
+    "topic": "Benign paroxysmal positional vertigo",
+    "difficulty": "easy",
+    "stem": "A 55-year-old woman reports brief episodes of spinning provoked by rolling over in bed. The Dix-Hallpike manoeuvre reproduces the vertigo with a characteristic latency and fatiguing nystagmus. Cervical spine is stable. Which of the following is the recommended treatment?",
+    "image": null,
+    "options": {
+      "A": "Betahistine four times daily as first-line treatment",
+      "B": "A canalith repositioning manoeuvre such as the Epley manoeuvre",
+      "C": "Urgent MRI brain before any physical treatment is attempted",
+      "D": "Prolonged bed rest with sedatives for 6 weeks"
+    },
+    "answer": "B",
+    "explanation": "NICE NG127 recommends offering the Hallpike manoeuvre to check for benign paroxysmal positional vertigo when a clinician trained in its use is available, and, if BPPV is diagnosed, offering a canalith repositioning manoeuvre such as the Epley manoeuvre if the person does not have unstable cervical spine disease. If no trained clinician is available, the person should be referred in accordance with local pathways. BPPV is also common after head injury or labyrinthitis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected neurological conditions: recognition and referral - recommendations for adults aged over 16",
+        "org": "NICE",
+        "year": "2019",
+        "url": "https://www.nice.org.uk/guidance/NG127/chapter/recommendations-for-adults-aged-over-16"
+      }
+    ]
+  },
+  {
+    "id": "H3-025",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Otolaryngology",
+    "topic": "Suspected head and neck cancer referral",
+    "difficulty": "moderate",
+    "stem": "A 58-year-old man has had persistent unexplained hoarseness for 6 weeks with no recent upper respiratory infection and no response to simple measures. He has no palatal or vocal fold lesion on basic examination. Which of the following is the recommended action?",
+    "image": null,
+    "options": {
+      "A": "Wait a further 3 months for spontaneous resolution before any referral",
+      "B": "Treat with 3 months of proton pump inhibitor therapy and review",
+      "C": "Consider a suspected cancer pathway referral for laryngeal cancer, because persistent unexplained hoarseness in a person aged 45 or over warrants urgent assessment",
+      "D": "Arrange a routine speech and language therapy appointment without medical review"
+    },
+    "answer": "C",
+    "explanation": "NICE NG12 recommends considering a suspected cancer pathway referral for laryngeal cancer in people aged 45 and over with persistent and unexplained hoarseness, or an unexplained lump in the neck. For oral cancer, consider a suspected cancer pathway referral for unexplained oral ulceration lasting more than 3 weeks or a persistent unexplained lump in the neck, and urgent dental assessment for an unexplained oral lump or erythroplakia or erythroleukoplakia. Delaying referral risks progression before treatment.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected cancer: recognition and referral - recommendations organised by site of cancer",
+        "org": "NICE",
+        "year": "2015",
+        "url": "https://www.nice.org.uk/guidance/ng12/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "H3-026",
+    "exams": ["NEET"],
+    "region": "Head and neck",
+    "system": "Otolaryngology",
+    "topic": "Acute sore throat - antimicrobial prescribing",
+    "difficulty": "moderate",
+    "stem": "A 20-year-old university student has a 2-day sore throat and mild fever. She is systemically well, has no comorbidity and is not at high risk of complications; her FeverPAIN score is 2. Which of the following is the most appropriate prescribing decision?",
+    "image": null,
+    "options": {
+      "A": "Immediate phenoxymethylpenicillin 500 mg four times a day for every low FeverPAIN score",
+      "B": "Immediate amoxicillin because most sore throats are streptococcal",
+      "C": "Immediate clarithromycin as first-line treatment for all patients",
+      "D": "No immediate antibiotic - offer a back-up prescription to be used if symptoms do not improve within 3 to 5 days, with first-choice treatment being phenoxymethylpenicillin 500 mg four times a day (or 1,000 mg twice a day) for 5 to 10 days"
+    },
+    "answer": "D",
+    "explanation": "For acute sore throat, NICE NG84 recommends considering either no antibiotic prescription with advice or a back-up antibiotic prescription when complications are unlikely, with the back-up prescription used if symptoms do not start to improve within 3 to 5 days or worsen rapidly or significantly. Immediate treatment is reserved for those with a FeverPAIN score of 4 or 5 or Centor score of 3 or 4 after considering harms and benefits, and for people who are systemically very unwell or at high risk of complications. The first-choice oral antibiotic is phenoxymethylpenicillin, with clarithromycin as an alternative in penicillin allergy for people who are not pregnant.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Sore throat (acute): antimicrobial prescribing - recommendations",
+        "org": "NICE",
+        "year": "2018",
+        "url": "https://www.nice.org.uk/guidance/ng84/chapter/Recommendations"
+      }
+    ]
+  }
+]

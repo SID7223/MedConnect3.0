@@ -282,3 +282,30 @@ CREATE TABLE IF NOT EXISTS user_settings (
   updated_at TIMESTAMPTZ DEFAULT now(),
   PRIMARY KEY (user_id, key)
 );
+
+-- ============================================================================
+-- 10. Logbook  (api/logbook.js — ensureLogbookTables)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS logbook_entries (
+  id         SERIAL PRIMARY KEY,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind       TEXT NOT NULL DEFAULT 'procedure',   -- procedure | research
+  title      TEXT NOT NULL,
+  detail     TEXT DEFAULT '',
+  status     TEXT DEFAULT '',                     -- Observed|Assisted|Supervised|Independent
+                                                     -- | Author|Co-author|Presenter
+  date       DATE,
+  time       TEXT DEFAULT '',
+  notes      TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_logbook_user_kind ON logbook_entries(user_id, kind, date DESC);
+
+CREATE TABLE IF NOT EXISTS logbook_targets (   -- powers the "Cannulation 12 / 20" row
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  skill   TEXT NOT NULL,
+  target  INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (user_id, skill)
+);
+

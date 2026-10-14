@@ -1,5 +1,5 @@
 // Original study-motivation lines (no copyright / no attribution issues).
-// Port of src/lib/quotes.js — the daily picker just cycles through them.
+// Port of src/lib/quotes.js - the daily picker just cycles through them.
 export interface Quote {
   id: number;
   text: string;

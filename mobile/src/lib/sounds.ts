@@ -1,7 +1,7 @@
 import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import { File, Paths, EncodingType } from 'expo-file-system';
 
-// Synthesized alarm sounds — port of playSound() from src/context/Timer.jsx.
+// Synthesized alarm sounds - port of playSound() from src/context/Timer.jsx.
 // Web used a Web Audio oscillator; on native we render the same tones to a
 // 16-bit PCM WAV and play them through expo-audio.
 
@@ -104,6 +104,6 @@ export async function playSound(key: string): Promise<void> {
     });
     setTimeout(release, (SOUNDS[key]?.dur || 1) * 1000 + 1500);
   } catch {
-    // audio unavailable — timer still works silently
+    // audio unavailable - timer still works silently
   }
 }

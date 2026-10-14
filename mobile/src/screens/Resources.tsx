@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Linking from 'expo-linking';
+import { useFocusEffect } from 'expo-router';
 import Screen from '../components/Screen';
 import { useTheme } from '../context/Theme';
+import { api } from '../lib/api';
+import { analytics } from '../lib/analytics';
 import { SERIF } from '../theme/fonts';
 
-// Curated free medical references — opens links in the browser.
-// To add a resource: append to RESOURCES with { name, url, desc, icon, section }.
+// Curated free medical references - opens links in the browser.
+// ST9: the list is team-editable without an app update via GET /api/resources
+// (remote_config). Bundled FALLBACK below renders when the server predates V8
+// or the device is offline. Resources only link out — never copied in-app.
 interface ResourceItem {
   name: string;
   icon: string;
@@ -19,8 +24,7 @@ interface ResourceGroup {
   items: ResourceItem[];
 }
 
-const RESOURCES: ResourceGroup[] = [
-  {
+const RESOURCES: ResourceGroup[] = [  {
     section: 'Clinical references',
     items: [
       { name: 'Drugs.com', icon: '💊', url: 'https://www.drugs.com/', desc: 'Drug doses, interactions & prescribing info, free and global.' },
@@ -39,8 +43,25 @@ const RESOURCES: ResourceGroup[] = [
 
 export default function ResourcesScreen() {
   const { colors } = useTheme();
+  const [groups, setGroups] = useState<ResourceGroup[]>(RESOURCES);
 
-  const open = async (url: string) => {
+  useFocusEffect(useCallback(() => {
+    api.resourcesGet().then((d: any) => {
+      const list = Array.isArray(d?.resources) ? d.resources : [];
+      if (!list.length) return;
+      const bySection = new Map<string, ResourceItem[]>();
+      for (const r of list) {
+        const section = String(r.section || 'More');
+        const arr = bySection.get(section) || [];
+        arr.push({ name: String(r.name), icon: String(r.icon || '🔗'), url: String(r.url), desc: String(r.desc || '') });
+        bySection.set(section, arr);
+      }
+      setGroups([...bySection.entries()].map(([section, items]) => ({ section, items })));
+    }).catch(() => {});
+  }, []));
+
+  const open = async (url: string, name: string) => {
+    analytics.track('resources_link_opened', { name });
     try {
       await Linking.openURL(url);
     } catch {
@@ -51,13 +72,13 @@ export default function ResourcesScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.tintGreen }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             📚
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Tools</Text>
-          <Text style={styles.h1}>Resources</Text>
-          <Text style={styles.heroSub}>Curated free references to support your revision.</Text>
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Tools</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>Resources</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>Curated free references to support your revision.</Text>
         </View>
 
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
@@ -66,13 +87,13 @@ export default function ResourcesScreen() {
             browser.
           </Text>
 
-          {RESOURCES.map((group) => (
+          {groups.map((group) => (
             <View key={group.section}>
               <Text style={[styles.sectionTitle, { color: colors.forest }]}>{group.section}</Text>
               {group.items.map((r) => (
                 <Pressable
                   key={r.name}
-                  onPress={() => open(r.url)}
+                  onPress={() => open(r.url, r.name)}
                   accessibilityRole="link"
                   accessibilityLabel={r.name}
                   style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}
@@ -83,7 +104,7 @@ export default function ResourcesScreen() {
                   <View style={styles.cardBody}>
                     <View style={styles.cardTitleRow}>
                       <Text style={[styles.cardTitle, { color: colors.ink }]}>{r.name}</Text>
-                      <View style={styles.freeBadge}>
+                      <View style={[styles.freeBadge, { backgroundColor: colors.tintGreen }]}>
                         <Text style={[styles.freeBadgeText, { color: colors.forest }]}>Free</Text>
                       </View>
                     </View>
@@ -115,8 +136,8 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, lineHeight: 30, fontFamily: SERIF, fontSize: 26 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -159,7 +180,6 @@ const styles = StyleSheet.create({
   cardTitle: { fontWeight: '800', fontSize: 14 },
   freeBadge: {
     marginLeft: 6,
-    backgroundColor: '#d9e6dd',
     borderRadius: 999,
     paddingHorizontal: 6,
     paddingVertical: 1,

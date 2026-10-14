@@ -8,6 +8,7 @@ import { useTimerStatus } from '../context/TimerStatus';
 import { useSettings } from '../context/Settings';
 import { playSound } from '../lib/sounds';
 import { SERIF } from '../theme/fonts';
+import Celebration from './Celebration';
 
 const SOUNDS: { [key: string]: { label: string } } = {
   beep: { label: 'Beep' },
@@ -60,6 +61,7 @@ export default function StudyTimer() {
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const { setRunning: publishRunning } = useTimerStatus();
   const { get, set } = useSettings();
 
@@ -89,6 +91,7 @@ export default function StudyTimer() {
           clearInterval(id);
           setRunning(false);
           setDone(true);
+          setShowCelebration(true);
           playSound(sound);
         }
       }, 250);
@@ -190,11 +193,9 @@ export default function StudyTimer() {
           style={{
             fontFamily: SERIF,
             fontSize: fs,
-            fontWeight: '700',
             color: danger ? colors.rust : colors.forest,
             lineHeight: fs + 4,
-            letterSpacing: 1,
-          }}
+            letterSpacing: 1 }}
         >
           {mm}:{ss}
         </Text>
@@ -234,11 +235,11 @@ export default function StudyTimer() {
         >
           <Svg width={icon} height={icon} viewBox="0 0 24 24">
             {!running ? (
-              <Path d="M8 5v14l11-7z" fill="#fff" />
+              <Path d="M8 5v14l11-7z" fill={colors.onForest} />
             ) : (
               <>
-                <Rect x={6} y={5} width={4} height={14} rx={1} fill="#fff" />
-                <Rect x={14} y={5} width={4} height={14} rx={1} fill="#fff" />
+                <Rect x={6} y={5} width={4} height={14} rx={1} fill={colors.onForest} />
+                <Rect x={14} y={5} width={4} height={14} rx={1} fill={colors.onForest} />
               </>
             )}
           </Svg>
@@ -287,13 +288,21 @@ export default function StudyTimer() {
             <Ring frac={frac} size={fsSize} danger={danger}>
               {renderClockFace(true)}
             </Ring>
-            {done && (
-              <View style={styles.doneWrap}>
-                <Text style={{ fontSize: 30 }}>🫀</Text>
-                <Text style={{ color: colors.rust, fontWeight: '700', fontSize: 18 }}>Time&apos;s up!</Text>
-              </View>
+            {showCelebration && (
+              <Celebration
+                variant="compact"
+                stats={[
+                  { label: mode === 'timer' ? 'Focus' : 'Elapsed', value: mode === 'timer' ? `${Math.floor(target / 60)} min` : `${mm}:${ss}` },
+                ]}
+                onPrimary={() => {
+                  setShowCelebration(false);
+                  setDone(false);
+                }}
+                primaryLabel="Done"
+                visible={true}
+              />
             )}
-            {renderControls(true)}
+            {!showCelebration && renderControls(true)}
             <Text style={[styles.fsHint, { color: colors.muted }]}>Tap anywhere to exit full-screen</Text>
           </View>
         </Pressable>
@@ -406,7 +415,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#1f4d3f',
+    shadowColor: '#171310',
     shadowOpacity: 0.3,
     shadowRadius: 7,
     shadowOffset: { width: 0, height: 4 },
@@ -422,10 +431,8 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     fontSize: 22,
     fontFamily: SERIF,
-    fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 0,
-  },
+    marginBottom: 0 },
   btnSm: { borderRadius: 999, paddingHorizontal: 16, paddingVertical: 10, alignItems: 'center' },
   optionsWrap: { marginTop: 16, minHeight: 24, alignSelf: 'stretch', alignItems: 'center' },
   optionsToggle: { fontSize: 12, fontWeight: '700' },

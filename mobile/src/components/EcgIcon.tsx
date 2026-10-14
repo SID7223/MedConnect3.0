@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-// Scrolling ECG trace used for MedConnect message/app notifications.
+// Scrolling ECG trace used for MedPeers message/app notifications.
 // Two identical traces sit side by side and slide left one tile per loop, so the
 // wave reads as one continuous heartbeat.
 function Trace({ width, height, color }: { width: number; height: number; color: string }) {

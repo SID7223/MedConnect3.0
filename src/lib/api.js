@@ -1,4 +1,10 @@
-// API client — talks to Netlify Functions at /api/* (same origin, no IP needed).
+// API client — talks to the MedConnect backend at /api/*.
+//
+// Defaults to same-origin, which is what production uses: `vercel.json` rewrites
+// /api/* through to the Kotlin/Ktor server, so the web app needs no CORS round
+// trip. Set VITE_API_BASE to point a local build straight at a running server.
+const API_BASE = (import.meta.env?.VITE_API_BASE ?? '').replace(/\/+$/, '');
+
 function token() { return localStorage.getItem('token'); }
 
 // Tiny in-flight + short-TTL cache, used only for read-heavy endpoints that
@@ -25,7 +31,7 @@ async function req(path, { method = 'GET', body } = {}) {
   if (t) headers.Authorization = `Bearer ${t}`;
   let res;
   try {
-    res = await fetch(`/api${path}`, {
+    res = await fetch(`${API_BASE}/api${path}`, {
       method, headers, body: body ? JSON.stringify(body) : undefined,
     });
   } catch (e) {

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './api';
 
 // Server-first settings (Neon user_settings table). AsyncStorage is kept only as
-// an offline cache so the app still works without a network — the server is the
+// an offline cache so the app still works without a network - the server is the
 // source of truth and syncs on every change (debounced).
 
 const CACHE_KEY = 'mc_settings_cache';

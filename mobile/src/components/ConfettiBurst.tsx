@@ -4,13 +4,13 @@ import { Animated, StyleSheet, View } from 'react-native';
 const COLORS = ['#a8442a', '#1f4d3f', '#b98a2e', '#2c6a55'];
 const PIECES = 18;
 
-// deterministic pseudo-random (pure — safe to call during render)
+// deterministic pseudo-random (pure - safe to call during render)
 const rand = (seed: number) => {
   const x = Math.sin(seed * 999.7) * 10000;
   return x - Math.floor(x);
 };
 
-// Confetti burst — port of the web .confetti-piece DOM animation (18 pieces
+// Confetti burst - port of the web .confetti-piece DOM animation (18 pieces
 // fall + spin + fade over ~1.1s). Re-mount via a changing `burstKey`.
 export default function ConfettiBurst({ burstKey }: { burstKey: number }) {
   const pieces = useMemo(

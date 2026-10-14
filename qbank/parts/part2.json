@@ -1,0 +1,763 @@
+[
+  {
+    "id": "A2-001",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "MASLD - assessment for advanced liver fibrosis with ELF",
+    "difficulty": "moderate",
+    "stem": "A 48-year-old man with metabolic dysfunction-associated steatotic liver disease (MASLD) and type 2 diabetes has an enhanced liver fibrosis (ELF) score of 9.8. Which statement best matches current NICE guidance?",
+    "image": null,
+    "options": {
+      "A": "Advanced liver fibrosis can be diagnosed from this ELF result alone and he should be referred to hepatology",
+      "B": "He is unlikely to have advanced liver fibrosis, and reassessment for advanced liver fibrosis every 3 years in adults is sufficient",
+      "C": "Routine liver blood tests should now be repeated every 6 months to monitor for fibrosis progression",
+      "D": "The ELF test should be repeated every 2 years, the interval used for children and young people",
+      "E": "Serum ELF testing should not be used in MASLD because transient elastography is mandatory first"
+    },
+    "answer": "B",
+    "explanation": "NICE NG49 recommends using the ELF test in people diagnosed with MASLD to test for advanced liver fibrosis, and defines advanced liver fibrosis as an ELF score of 10.51 or above together with MASLD (recommendation 1.3.4). People with an ELF score below 10.51 are told they are unlikely to have advanced liver fibrosis, and retesting every 3 years for adults (every 2 years for children and young people) is sufficient (recommendations 1.3.6 and 1.3.7). Routine liver blood tests must not be used to assess for advanced liver fibrosis in MASLD (recommendation 1.3.3).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "MASLD: assessment and management - Assessment for advanced liver fibrosis in people with MASLD",
+        "org": "NICE",
+        "year": 2026,
+        "url": "https://www.nice.org.uk/guidance/ng49/chapter/Assessment-for-advanced-liver-fibrosis-in-people-with-MASLD"
+      }
+    ]
+  },
+  {
+    "id": "A2-002",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Acute upper gastrointestinal bleeding - timing of endoscopy",
+    "difficulty": "moderate",
+    "stem": "A 66-year-old man is admitted with haematemesis and melaena and remains haemodynamically unstable (BP 80/50 mmHg, heart rate 130/min) despite initial resuscitation, with ongoing bleeding suspected. An endoscopic image obtained during upper gastrointestinal endoscopy is shown. According to NICE quality standard QS38, when should he receive endoscopy, and what lesion does the image show?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ulcer%20Visible%20Vessel.jpg?width=800",
+      "alt": "Endoscopic photograph of a gastric lesion",
+      "caption": "Endoscopic view obtained at upper gastrointestinal endoscopy",
+      "source": "Wikimedia Commons — Gastric ulcer with visible vessel, endoscopic image (CC BY-SA 3.0, Jeremias)"
+    },
+    "options": {
+      "A": "Within 30 minutes of arrival, before resuscitation has been completed — the image shows a gastric ulcer with a visible vessel in its base",
+      "B": "Within 2 hours of optimal resuscitation — the image shows actively bleeding oesophageal varices",
+      "C": "Within 2 hours of optimal resuscitation — the image shows a gastric ulcer with a visible vessel in its base",
+      "D": "Within 24 hours of admission — the image shows a gastric ulcer with a visible vessel in its base",
+      "E": "Only after the patient has remained stable for 48 hours — the image shows a Dieulafoy lesion"
+    },
+    "answer": "C",
+    "explanation": "QS38 statement 2 states that people admitted with acute upper gastrointestinal bleeding who are haemodynamically unstable are given endoscopy within 2 hours of optimal resuscitation, whereas statement 3 applies the 24-hour window to haemodynamically stable patients. The image shows a gastric ulcer with a visible vessel in its base, not oesophageal varices or a Dieulafoy lesion, so only the option pairing that lesion with the 2-hour timing is correct. Ongoing haemodynamic instability therefore places this patient in the 2-hour group once optimal resuscitation has been achieved.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Acute upper gastrointestinal bleeding in adults - Quality statements",
+        "org": "NICE",
+        "year": 2013,
+        "url": "https://www.nice.org.uk/guidance/qs38/chapter/Quality-statements"
+      }
+    ]
+  },
+  {
+    "id": "A2-003",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Variceal bleeding - secondary prophylaxis",
+    "difficulty": "hard",
+    "stem": "A 54-year-old man with cirrhosis is treated for acute oesophageal variceal bleeding with endoscopic variceal ligation and vasoactive therapy, and recovers. Which secondary prophylaxis regimen should he receive?",
+    "image": null,
+    "options": {
+      "A": "Combination of a non-selective beta-blocker (or carvedilol) and endoscopic variceal ligation as first-line therapy to prevent recurrent bleeding",
+      "B": "A single additional banding session at discharge with no further endoscopy",
+      "C": "Prophylactic antibiotics alone for 6 months",
+      "D": "A non-selective beta-blocker with repeat endoscopy only after 12 months",
+      "E": "TIPS is mandatory for every patient after variceal bleeding"
+    },
+    "answer": "A",
+    "explanation": "Baveno VII recommendation 7.8 states that first-line therapy for the prevention of recurrent variceal haemorrhage is the combination of traditional non-selective beta-blockers or carvedilol and endoscopic variceal ligation (A.1). TIPS is reserved as the treatment of choice for patients who rebleed despite this combination (recommendation 7.9), so it is not mandatory for everyone, and a single banding session or antibiotics alone (B and C) leaves the patient without guideline-directed secondary prophylaxis. Antibiotics are given from admission during the acute bleed (recommendation 6.7; NICE QS38 statement 6), and band ligation is used for acute oesophageal variceal bleeding (QS38 statement 7), but neither replaces combination secondary prophylaxis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Baveno VII - Renewing consensus in portal hypertension",
+        "org": "Journal of Hepatology / EASL Baveno VII Faculty",
+        "year": 2022,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11090185/"
+      },
+      {
+        "title": "Acute upper gastrointestinal bleeding in adults - Quality statements",
+        "org": "NICE",
+        "year": 2013,
+        "url": "https://www.nice.org.uk/guidance/qs38/chapter/Quality-statements"
+      }
+    ]
+  },
+  {
+    "id": "A2-004",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Severe active Crohn's disease - biologic therapy",
+    "difficulty": "moderate",
+    "stem": "A 30-year-old man has severe active Crohn's disease that has not responded to conventional therapy including corticosteroids and immunosuppression. He has no contraindication to biologic therapy. Which treatment does NICE recommend?",
+    "image": null,
+    "options": {
+      "A": "Infliximab may only be used after the patient has undergone intestinal resection",
+      "B": "Biologic therapy is restricted to patients who are intolerant of azathioprine only",
+      "C": "Infliximab and adalimumab, within their licensed indications, are recommended treatment options for adults with severe active Crohn's disease whose disease has not responded to conventional therapy",
+      "D": "Methotrexate must be trialled for 12 months before any biologic is offered",
+      "E": "Budesonide is the preferred step-up therapy at this stage"
+    },
+    "answer": "C",
+    "explanation": "NICE NG129 recommendation 1.2.12 states that infliximab and adalimumab, within their licensed indications, are recommended as treatment options for adults with severe active Crohn's disease whose disease has not responded to conventional therapy (including immunosuppressive and/or corticosteroid treatments), or who are intolerant of or have contraindications to conventional therapy. Infliximab or adalimumab is given as a planned course of treatment until treatment failure, including the need for surgery.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Crohn's disease: management - Recommendations",
+        "org": "NICE",
+        "year": 2019,
+        "url": "https://www.nice.org.uk/guidance/ng129/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "A2-005",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Hepatitis B in pregnancy - prevention of mother-to-child transmission",
+    "difficulty": "moderate",
+    "stem": "A 29-year-old HBsAg-positive woman attends at 28 weeks' gestation. Her HBV DNA is 350,000 IU/mL, she is HBeAg-negative and antiviral-naive. What does AASLD/IDSA recommend to prevent mother-to-child transmission?",
+    "image": null,
+    "options": {
+      "A": "No antiviral therapy, because she is HBeAg-negative",
+      "B": "Start entecavir at gestational week 28",
+      "C": "Initiate tenofovir disoproxil fumarate or tenofovir alafenamide at gestational week 28, with the infant given hepatitis B immune globulin and the first vaccine dose within 12 hours of birth",
+      "D": "Defer antiviral therapy until after delivery and rely on infant vaccination alone",
+      "E": "Start tenofovir at gestational week 16 irrespective of HBV DNA level"
+    },
+    "answer": "C",
+    "explanation": "For pregnant people with HBV DNA greater than 200,000 IU/mL at any time point during pregnancy, regardless of HBeAg status, AASLD recommends initiating tenofovir disoproxil fumarate or tenofovir alafenamide at gestational week 28 (strong recommendation, moderate certainty); tenofovir disoproxil fumarate has the more extensive safety record in pregnancy. Infants born to HBsAg-positive women should receive hepatitis B immune globulin and the first dose of HBV vaccine within 12 hours of birth. Starting at week 16 applies only when infant HBIG use is unavailable.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "AASLD/IDSA Practice Guideline on Treatment of Chronic Hepatitis B",
+        "org": "AASLD/IDSA",
+        "year": 2025,
+        "url": "https://www.idsociety.org/globalassets/idsa/practice-guidelines/hbv/aasld_idsa_practice_guideline_on_treatment_of.1416.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-006",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Hepatitis C - simplified treatment regimen",
+    "difficulty": "easy",
+    "stem": "A treatment-naive adult with chronic hepatitis C genotype 3 infection has no cirrhosis, no prior hepatitis C treatment and no contraindications to therapy. According to the AASLD/IDSA simplified treatment guidance, which regimen and duration are recommended?",
+    "image": null,
+    "options": {
+      "A": "Glecaprevir/pibrentasvir once daily with food for 8 weeks",
+      "B": "Glecaprevir/pibrentasvir for 12 weeks",
+      "C": "Sofosbuvir/velpatasvir for 4 weeks",
+      "D": "Ledipasvir/sofosbuvir for 12 weeks",
+      "E": "Treatment should be deferred until fibrosis progresses to cirrhosis"
+    },
+    "answer": "A",
+    "explanation": "The simplified pathway applies to treatment-naive adults with chronic HCV of any genotype who do not have cirrhosis; genotyping is not required when a pangenotypic regimen is used. Recommended regimens are glecaprevir/pibrentasvir for 8 weeks (taken with food) or sofosbuvir/velpatasvir for 12 weeks. A 12-week glecaprevir/pibrentasvir course (B) is not the recommended duration for this treatment-naive non-cirrhotic patient, and neither sofosbuvir/velpatasvir for 4 weeks (C) nor ledipasvir/sofosbuvir (D) is a recommended regimen.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "AASLD-IDSA HCV Guidance: Initial treatment of adults with HCV infection",
+        "org": "AASLD/IDSA",
+        "year": 2026,
+        "url": "https://www.hcvguidelines.org/wp-content/uploads/2026/05/AASLD-IDSA_HCVGuidance_20260513_protected.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-007",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Primary biliary cholangitis - ursodeoxycholic acid therapy",
+    "difficulty": "moderate",
+    "stem": "A 55-year-old woman is newly diagnosed with primary biliary cholangitis (AMA positive, ALP twice the upper limit of normal, normal bilirubin, compensated liver disease). Which statement is correct?",
+    "image": null,
+    "options": {
+      "A": "Ursodeoxycholic acid at 5-7 mg/kg/day is the recommended first-line dose",
+      "B": "Ursodeoxycholic acid at 13-15 mg/kg/day is first-line, and biochemical response should be evaluated after 12 months of therapy",
+      "C": "Obeticholic acid should be offered as first-line therapy in patients with decompensated cirrhosis (CTP class B or C)",
+      "D": "Serial liver biopsy is required to judge treatment response",
+      "E": "Ursodeoxycholic acid at 23-25 mg/kg/day produces better outcomes than 13-15 mg/kg/day"
+    },
+    "answer": "B",
+    "explanation": "The AASLD practice guidance states that ursodeoxycholic acid at a dose of 13 to 15 mg/kg/day is first-line therapy for PBC, and that studies showing improved survival have all used this dose; a dose comparison showed 13-15 mg/kg/day superior to both 5-7 and 23-25 mg/kg/day in biochemical response. Biochemical response is assessed after 12 months of therapy (used by the GLOBE and UK-PBC scores). The 2021 practice guidance update revises statements 9 and 10: fibrates are discouraged in patients with decompensated liver disease, and obeticholic acid is contraindicated in advanced cirrhosis (current or prior decompensation, such as encephalopathy or coagulopathy, or portal hypertension, such as ascites, varices or persistent thrombocytopenia).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Primary biliary cholangitis: AASLD Practice Guidance",
+        "org": "AASLD",
+        "year": 2018,
+        "url": "https://www.aasld.org/sites/default/files/2022-04/PracticeGuidelines-PBC-November2018_1.pdf"
+      },
+      {
+        "title": "Primary Biliary Cholangitis: 2021 Practice Guidance Update",
+        "org": "AASLD",
+        "year": 2021,
+        "url": "https://www.aasld.org/practice-guidelines/primary-biliary-cholangitis"
+      }
+    ]
+  },
+  {
+    "id": "A2-008",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Colorectal cancer screening - age and grade",
+    "difficulty": "easy",
+    "stem": "A healthy 47-year-old adult with no symptoms and average risk asks about colorectal cancer screening. According to the US Preventive Services Task Force, what is the recommendation and its grade?",
+    "image": null,
+    "options": {
+      "A": "Screening is recommended with grade A, because grade A applies from age 45 onwards",
+      "B": "Screening is not recommended before age 50",
+      "C": "Screening is recommended with grade B for adults aged 45 to 49 years",
+      "D": "Selective screening is offered with grade C for this age group",
+      "E": "Grade B applies to ages 45 to 49 and grade A to ages 50 to 75, so no screening should be offered at 47"
+    },
+    "answer": "C",
+    "explanation": "The 2021 USPSTF recommendation states that clinicians should screen adults aged 45 to 49 years for colorectal cancer (grade B), and screen all adults aged 50 to 75 years (grade A). Adults aged 76 to 85 years should be selectively screened (grade C), considering overall health, prior screening history and patient preferences.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Colorectal Cancer: Screening",
+        "org": "US Preventive Services Task Force",
+        "year": 2021,
+        "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening"
+      }
+    ]
+  },
+  {
+    "id": "A2-009",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Gastroenterology and hepatology",
+    "topic": "Hepatorenal syndrome-AKI - treatment of choice",
+    "difficulty": "hard",
+    "stem": "A 60-year-old man with cirrhosis and tense ascites develops acute kidney injury that meets criteria for hepatorenal syndrome-AKI (HRS-AKI) after diagnostic paracentesis and albumin challenge, with no improvement after diuretic withdrawal and volume expansion. Which is the treatment of choice?",
+    "image": null,
+    "options": {
+      "A": "Terlipressin given alone without albumin",
+      "B": "Midodrine plus octreotide as first-line therapy",
+      "C": "Immediate renal replacement therapy without a trial of medical therapy",
+      "D": "Noradrenaline infusion in preference to terlipressin when terlipressin is available",
+      "E": "Vasoconstrictor drugs in combination with albumin, with terlipressin as the preferred agent"
+    },
+    "answer": "E",
+    "explanation": "The AASLD practice guidance states that the treatment of choice for HRS-AKI is vasoconstrictor drugs in combination with albumin, and that the preferred drug is terlipressin, given either as IV bolus or continuous IV infusion. Where terlipressin is not available, noradrenaline should be given; if neither can be administered, oral midodrine with octreotide is used. Vasoconstrictors are maintained until creatinine returns to baseline, up to 14 days.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnosis, Evaluation, and Management of Ascites, Spontaneous Bacterial Peritonitis and Hepatorenal Syndrome [updated August 2021]",
+        "org": "AASLD",
+        "year": 2021,
+        "url": "https://www.aasld.org/practice-guidelines/diagnosis-evaluation-and-management-ascites-spontaneous-bacterial-peritonitis"
+      }
+    ]
+  },
+  {
+    "id": "A2-010",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Chronic kidney disease - blood pressure target",
+    "difficulty": "moderate",
+    "stem": "A 65-year-old man has CKD stage G3b with albuminuria A2 and treated hypertension, and tolerates his current regimen without postural symptoms. According to the KDIGO 2024 CKD guideline, what systolic blood pressure target is recommended when tolerated?",
+    "image": null,
+    "options": {
+      "A": "Below 120 mm Hg using standardized office blood pressure measurement",
+      "B": "Below 130 mm Hg regardless of the measurement method used",
+      "C": "Below 140 mm Hg",
+      "D": "Below 120 mm Hg measured by home blood pressure monitoring",
+      "E": "A systolic target of 160 mm Hg is acceptable in CKD"
+    },
+    "answer": "A",
+    "explanation": "KDIGO 2024 recommends treating adults with CKD and hypertension to a standardized office systolic blood pressure target below 120 mm Hg, when tolerated (2B). KDIGO advises considering less intensive blood pressure-lowering therapy in people with frailty, high risk of falls and fractures, very limited life expectancy, or symptomatic postural hypotension, so the intensive target is applied only when it is tolerated.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDIGO 2024 Clinical Practice Guideline for the Management of Blood Pressure in Chronic Kidney Disease",
+        "org": "KDIGO",
+        "year": 2024,
+        "url": "https://kdigo.org/wp-content/uploads/2024/03/KDIGO-2024-CKD-Guideline.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-011",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Acute kidney injury - KDIGO staging",
+    "difficulty": "moderate",
+    "stem": "A 67-year-old man develops acute kidney injury after prolonged hypovolaemia. His urine sediment is shown. Serum creatinine is 1.8 times baseline, and urine output has been 0.6 mL/kg/h for the last 8 hours. What is his KDIGO acute kidney injury stage, and what does the urine sediment indicate?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Granular%20Casts%20in%20Urine%20Microscopy.jpg?width=800",
+      "alt": "Light microscopy of urine sediment",
+      "caption": "Urine sediment examined under light microscopy",
+      "source": "Wikimedia Commons — Granular casts in urine sediment, light microscopy (CC BY 4.0, Ajay Kumar Chaurasiya)"
+    },
+    "options": {
+      "A": "He does not have acute kidney injury",
+      "B": "Stage 1; the granular casts shown indicate established intrinsic tubular injury rather than a pre-renal state",
+      "C": "Stage 1; the hyaline casts shown indicate a pre-renal state",
+      "D": "Stage 2, because urine output has been below 0.5 mL/kg/h for 12 hours or more",
+      "E": "Stage 3, because renal replacement therapy must be started immediately"
+    },
+    "answer": "B",
+    "explanation": "KDIGO stage 1 is defined by a serum creatinine increase to 1.5-1.9 times baseline, an increase of at least 0.3 mg/dl (26.5 micromol/l), or urine output below 0.5 ml/kg/h for 6 to 12 hours; this patient meets the creatinine criterion (1.8 times baseline) but not the urine-output criterion, since his output is 0.6 ml/kg/h. Stage 2 requires 2.0-2.9 times baseline or urine output below 0.5 ml/kg/h for 12 hours or more, and stage 3 requires 3.0 times baseline or an increase to at least 4.0 mg/dl, initiation of renal replacement therapy, urine output below 0.3 ml/kg/h for 24 hours or more, or anuria for 12 hours or more. The sediment shown contains granular casts, which indicate established intrinsic (tubular) acute kidney injury rather than the hyaline casts expected in a purely pre-renal state.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDIGO Clinical Practice Guideline for Acute Kidney Injury",
+        "org": "KDIGO",
+        "year": 2012,
+        "url": "https://kdigo.org/wp-content/uploads/2019/01/KDIGO-2012-AKI-Guideline-English.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-012",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "CKD-mineral and bone disorder - phosphate management",
+    "difficulty": "moderate",
+    "stem": "A 58-year-old man on haemodialysis (CKD stage G5D) has a serum phosphate of 1.9 mmol/l (above the normal range) with a normal serum calcium. According to the KDIGO 2017 CKD-MBD guideline, how should this be managed?",
+    "image": null,
+    "options": {
+      "A": "Lower the elevated phosphate level toward the normal range",
+      "B": "No phosphate intervention is needed in dialysis patients",
+      "C": "Start treatment only if the serum calcium is elevated",
+      "D": "Intervene only when a bone biopsy shows adynamic bone disease",
+      "E": "Allow phosphate to rise until PTH exceeds 9 times the upper normal limit"
+    },
+    "answer": "A",
+    "explanation": "KDIGO 2017 recommends that in patients with CKD G3a-G5 serum phosphate should be maintained in the normal range, and in patients with CKD G5D elevated phosphate levels should be lowered toward the normal range (both 2C). The same guideline suggests avoiding hypercalcemia in adults with CKD G3a-G5D, and treatment is not deferred until calcium is elevated or until bone biopsy findings change.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDIGO 2017 Clinical Practice Guideline Update for the Diagnosis, Evaluation, Prevention, and Treatment of Chronic Kidney Disease-Mineral and Bone Disorder (CKD-MBD)",
+        "org": "KDIGO",
+        "year": 2017,
+        "url": "https://kdigo.org/wp-content/uploads/2026/04/KDIGO-2017-CKD-MBD-Guideline.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-013",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Anaemia in CKD - ESA initiation",
+    "difficulty": "moderate",
+    "stem": "A 62-year-old woman receiving maintenance haemodialysis has anaemia with haemoglobin 8.5 g/dl (85 g/l), no active bleeding and no contraindication to erythropoiesis-stimulating agents. According to the KDIGO 2026 anaemia in CKD guideline, when should ESA therapy be initiated?",
+    "image": null,
+    "options": {
+      "A": "Only when haemoglobin falls below 7.0 g/dl",
+      "B": "When haemoglobin is below 12.0 g/dl to prevent cardiovascular events",
+      "C": "At a haemoglobin of 8.0 g/dl or below in all stages of CKD",
+      "D": "Haemoglobin should not guide initiation; wait until a red cell transfusion is required",
+      "E": "When haemoglobin is at or below 9.0-10.0 g/dl (90-100 g/l) in people with CKD G5D receiving haemodialysis or peritoneal dialysis"
+    },
+    "answer": "E",
+    "explanation": "KDIGO 2026 recommendation 3.2.1 (2D) suggests initiating ESA therapy when haemoglobin is at or below 9.0-10.0 g/dl (90-100 g/l) in people with anaemia and CKD G5D receiving haemodialysis or peritoneal dialysis. During maintenance, the guideline recommends targeting haemoglobin below 11.5 g/dl (1D), and it advises against using ESAs and HIF-prolyl hydroxylase inhibitors in combination.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDIGO 2026 Clinical Practice Guideline for the Management of Anemia in Chronic Kidney Disease",
+        "org": "KDIGO",
+        "year": 2026,
+        "url": "https://kdigo.org/wp-content/uploads/2026/04/KDIGO-2026-Anemia-in-CKD-Guideline.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-014",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Membranous nephropathy - anticoagulation for thromboembolism",
+    "difficulty": "hard",
+    "stem": "A 50-year-old man with nephrotic-range proteinuria has biopsy-proven membranous nephropathy, and renal vein thrombosis is demonstrated on imaging. Which management is indicated?",
+    "image": null,
+    "options": {
+      "A": "Antiplatelet therapy alone",
+      "B": "Full anticoagulation",
+      "C": "No anticoagulation, because membranous glomerulonephritis carries a low risk of thromboembolism",
+      "D": "Prophylactic-dose anticoagulation only, without full-dose therapy"
+    },
+    "answer": "B",
+    "explanation": "KDIGO 2021 practice point 1.7.1 states that full anticoagulation is indicated for patients with thromboembolic events occurring in the context of nephrotic syndrome, while prophylactic anticoagulation should be employed when the risk of thromboembolism exceeds the estimated patient-specific risk of an anticoagulation-induced serious bleeding event. The guideline's anticoagulation figure notes that membranous glomerulonephritis carries a particularly high risk of thromboembolic events. This patient has a documented thromboembolic event, so full anticoagulation is required rather than prophylaxis alone.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDIGO 2021 Clinical Practice Guideline for the Management of Glomerular Diseases",
+        "org": "KDIGO",
+        "year": 2021,
+        "url": "https://kdigo.org/wp-content/uploads/2017/02/KDIGO-Glomerular-Diseases-Guideline-2021-English.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-015",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Vascular access for haemodialysis",
+    "difficulty": "moderate",
+    "stem": "A patient is starting incident haemodialysis and the vascular access plan is being decided. According to the KDOQI vascular access guideline, which approach is recommended?",
+    "image": null,
+    "options": {
+      "A": "An arteriovenous access (AVF or AVG) in preference to a central venous catheter in most incident and prevalent haemodialysis patients",
+      "B": "A central venous catheter as the first-choice access because of a lower infection risk",
+      "C": "An arteriovenous fistula only; arteriovenous grafts should never be used",
+      "D": "A tunnelled central venous catheter for the first 6 months in all patients"
+    },
+    "answer": "A",
+    "explanation": "KDOQI statement 2.3 (Conditional Recommendation, Low Quality of Evidence) suggests an arteriovenous access (AVF or AVG) in preference to a central venous catheter in most incident and prevalent haemodialysis patients, because of the lower infection risk associated with AV access use. The choice between AVF and AVG is based on the clinician's best clinical judgment, considering vessel characteristics, patient comorbidities, health circumstances and personal preferences.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "KDOQI Clinical Practice Guideline for Vascular Access",
+        "org": "National Kidney Foundation (KDOQI)",
+        "year": 2019,
+        "url": "https://www.kidney.org/sites/default/files/2026-07/2019-kdoqi-guideline-vascular-access.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-016",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "Severe hyperkalaemia - acute management",
+    "difficulty": "easy",
+    "stem": "A 70-year-old man in hospital has a serum potassium of 6.8 mmol/l with peaked T waves on ECG. According to the UK Kidney Association guideline, what is the appropriate immediate treatment?",
+    "image": null,
+    "options": {
+      "A": "Oral sodium zirconium cyclosilicate with reassessment in 24 hours",
+      "B": "Nebulised salbutamol alone",
+      "C": "Intravenous calcium for myocardial stabilisation, together with urgent potassium-lowering therapy such as a two-stage insulin-glucose regimen",
+      "D": "Immediate haemodialysis in every case, before any medical measures",
+      "E": "Calcium resonium 30 g per rectum as first-line acute therapy"
+    },
+    "answer": "C",
+    "explanation": "The UKKA guideline defines severe hyperkalaemia as potassium of 6.5 mmol/l or above, and uses intravenous calcium salts for patients with ECG changes to stabilise the myocardium. Potassium is then lowered urgently with a two-stage insulin-glucose regimen with post-treatment blood glucose monitoring; sodium zirconium cyclosilicate 10 g three times daily for up to 72 hours may be used in severe hyperkalaemia. Calcium resonium is no longer routinely recommended in the acute setting.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "UKKA Clinical Practice Guideline - Management of Hyperkalaemia in Adults (updated July 2026)",
+        "org": "UK Kidney Association",
+        "year": 2026,
+        "url": "https://www.ukkidney.org/sites/default/files/documents/FINAL%20VERSION%20-%20UKKA%20CLINICAL%20PRACTICE%20GUIDELINE%20-%20MANAGEMENT%20OF%20HYPERKALAEMIA%20IN%20ADULTS%20-%20UPDATED%20JULY%202026_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-017",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Nephrology",
+    "topic": "IgA nephropathy - atrasentan approval",
+    "difficulty": "easy",
+    "stem": "In April 2025 the FDA granted accelerated approval to atrasentan (Vanrafia) for which indication?",
+    "image": null,
+    "options": {
+      "A": "Treatment of C3 glomerulopathy",
+      "B": "Reducing proteinuria in primary IgA nephropathy when UPCR is at least 0.5 g/g",
+      "C": "Proven slowing of kidney function decline in IgA nephropathy",
+      "D": "Reducing proteinuria in adults with primary IgA nephropathy at risk of rapid disease progression, generally defined as UPCR of 1.5 g/g or more",
+      "E": "Chronic kidney disease due to type 2 diabetes with UACR of 30 mg/g or more"
+    },
+    "answer": "D",
+    "explanation": "FDA granted accelerated approval on 2 April 2025 for Vanrafia (atrasentan) to reduce proteinuria in adults with primary immunoglobulin A nephropathy at risk of rapid disease progression, generally a urine protein-to-creatinine ratio of 1.5 g/g or more. Approval was based on proteinuria reduction in the ALIGN trial, and the label states that it has not been established whether Vanrafia slows kidney function decline; the recommended dose is 0.75 mg orally once daily.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "VANRAFIA (atrasentan) tablets, for oral use - Prescribing Information",
+        "org": "FDA",
+        "year": 2025,
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/219208s000lbl.pdf"
+      },
+      {
+        "title": "Drug Trials Snapshot: VANRAFIA",
+        "org": "FDA",
+        "year": 2025,
+        "url": "https://www.fda.gov/drugs/drug-trials-snapshots/drug-trials-snapshot-vanrafia"
+      }
+    ]
+  },
+  {
+    "id": "A2-018",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Urology",
+    "topic": "Ureteric colic - medical expulsive therapy",
+    "difficulty": "moderate",
+    "stem": "A 35-year-old man presents with renal colic; an abdominal radiograph taken during the attack is shown. CT confirms a 6 mm distal ureteral stone with no infection and normal renal function, and he is consented to conservative/medical management. Which statement correctly describes the radiograph and the EAU guideline recommendation?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kidney%20stones%20abdominal%20X-ray.jpg?width=800",
+      "alt": "Abdominal radiograph taken during renal colic",
+      "caption": "Plain abdominal radiograph taken during the episode of renal colic",
+      "source": "Wikimedia Commons — Kidney stones on abdominal X-ray (CC BY 2.0, Bill Rhodes)"
+    },
+    "options": {
+      "A": "The radiograph shows radiopaque calculi, and an alpha-blocker is only recommended for distal ureteral stones greater than 10 mm",
+      "B": "The radiograph shows radiopaque calculi, and an alpha-blocker should be offered as medical expulsive therapy as one of the treatment options for a distal ureteral stone 5 to 10 mm in size",
+      "C": "The radiograph shows bilateral staghorn calculi, and an alpha-blocker should be offered as medical expulsive therapy as one of the treatment options for a distal ureteral stone 5 to 10 mm in size",
+      "D": "The radiograph shows radiolucent uric acid calculi, and immediate ureteroscopy is mandatory for every 6 mm stone"
+    },
+    "answer": "B",
+    "explanation": "The radiograph shows radiopaque (not radiolucent) calculi, and no staghorn calculus is present. The EAU urolithiasis guidelines give a strong-rated recommendation to offer alpha-blockers as medical expulsive therapy as one of the treatment options for distal ureteral stones 5 to 10 mm, with the footnote that alpha-blockers are an off-label treatment, and this patient's 6 mm distal stone falls within that range. Stones greater than 10 mm (A) fall outside the recommended size range for this option, and antibiotics are reserved for infected or high-risk cases rather than used routinely.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "EAU Guidelines on Urolithiasis",
+        "org": "European Association of Urology",
+        "year": 2026,
+        "url": "https://uroweb.org/guidelines/urolithiasis/chapter/guidelines"
+      }
+    ]
+  },
+  {
+    "id": "A2-019",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Urology",
+    "topic": "Visible haematuria - suspected cancer referral",
+    "difficulty": "easy",
+    "stem": "A 68-year-old man reports visible haematuria on two occasions. Urine culture is negative and there is no urinary tract infection. What does NICE NG12 recommend?",
+    "image": null,
+    "options": {
+      "A": "Suspected cancer pathway referral for bladder cancer, because he is aged 45 or over with unexplained visible haematuria without urinary tract infection",
+      "B": "Watchful waiting with repeat urine testing after 6 months",
+      "C": "Referral is only indicated if he is aged 60 or over with non-visible haematuria",
+      "D": "Referral only if a CT urogram shows a filling defect"
+    },
+    "answer": "A",
+    "explanation": "NICE NG12 recommendation 1.6.4 advises a suspected cancer pathway referral for bladder cancer if the person is aged 45 or over and has unexplained visible haematuria without urinary tract infection, or visible haematuria that persists or recurs after successful treatment of a urinary tract infection. The alternative aged-60 criterion applies to unexplained non-visible haematuria together with dysuria or a raised white cell count, not to this patient.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected cancer: recognition and referral - Recommendations organised by site of cancer",
+        "org": "NICE",
+        "year": 2015,
+        "url": "https://www.nice.org.uk/guidance/ng12/chapter/Recommendations-organised-by-site-of-cancer"
+      }
+    ]
+  },
+  {
+    "id": "A2-020",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Urology",
+    "topic": "Lower urinary tract symptoms - 5-alpha reductase inhibitor",
+    "difficulty": "moderate",
+    "stem": "A 68-year-old man has bothersome moderate-to-severe lower urinary tract symptoms unresponsive to conservative measures; his prostate volume is 45 g, PSA 2.1 ng/ml, and he is considered at high risk of progression. According to NICE CG97, which drug treatment should be offered?",
+    "image": null,
+    "options": {
+      "A": "An alpha-blocker alone, as it is the only option for men with LUTS",
+      "B": "An anticholinergic as first-line therapy for voiding symptoms",
+      "C": "A 5-alpha reductase inhibitor, because the prostate is larger than 30 g and PSA is greater than 1.4 ng/ml with high risk of progression",
+      "D": "A beta-3-adrenoceptor agonist as first-line treatment for these voiding symptoms",
+      "E": "No drug treatment until an episode of acute urinary retention occurs"
+    },
+    "answer": "C",
+    "explanation": "CG97 recommendation 1.4.6 is to offer a 5-alpha reductase inhibitor to men with LUTS and a prostate estimated to be larger than 30 g or a PSA level greater than 1.4 ng/ml who are considered at high risk of progression (for example, older men). Recommendation 1.4.7 advises considering a combination of an alpha-blocker and a 5-alpha reductase inhibitor for bothersome moderate to severe LUTS with the same prostate size or PSA thresholds, and drug treatment follows failed or inappropriate conservative management (1.4.1).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Lower urinary tract symptoms in men: management - Recommendations",
+        "org": "NICE",
+        "year": 2010,
+        "url": "https://www.nice.org.uk/guidance/cg97/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "A2-021",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Urology",
+    "topic": "Localized renal cell carcinoma - partial nephrectomy",
+    "difficulty": "hard",
+    "stem": "A 55-year-old man is found to have a 3.2 cm (cT1a) contrast-enhancing renal mass, with a normal contralateral kidney and good performance status; surgery is planned with curative intent. According to the EAU renal cell carcinoma guidelines, what is recommended?",
+    "image": null,
+    "options": {
+      "A": "Radical nephrectomy is preferred for all T1 tumours",
+      "B": "Partial nephrectomy should be offered only if the tumour exceeds 7 cm",
+      "C": "Active surveillance should be chosen irrespective of tumour size",
+      "D": "Offer partial nephrectomy to patients with T1 tumours",
+      "E": "Ipsilateral adrenalectomy should be performed routinely at nephrectomy"
+    },
+    "answer": "D",
+    "explanation": "The EAU renal cell carcinoma guidelines recommend offering surgery to achieve cure in localised RCC (strong), and specifically to offer partial nephrectomy to patients with T1 tumours (strong). Partial nephrectomy is offered to patients with T2 tumours and a solitary kidney or chronic kidney disease only if technically feasible (weak). Ipsilateral adrenalectomy should not be performed when there is no clinical evidence of adrenal invasion.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "EAU Guidelines on Renal Cell Carcinoma",
+        "org": "European Association of Urology",
+        "year": 2026,
+        "url": "https://uroweb.org/guidelines/renal-cell-carcinoma"
+      }
+    ]
+  },
+  {
+    "id": "A2-022",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "General surgery",
+    "topic": "Acute appendicitis - non-operative management",
+    "difficulty": "hard",
+    "stem": "A 28-year-old man has CT-confirmed uncomplicated acute appendicitis without an appendicolith; he is haemodynamically normal and wishes to avoid surgery. According to the WSES 2020 guidelines, what should the surgical team discuss?",
+    "image": null,
+    "options": {
+      "A": "Non-operative management may only be discussed when an appendicolith is present",
+      "B": "Discuss non-operative management with antibiotics as a safe alternative to surgery in selected patients with uncomplicated acute appendicitis and absence of an appendicolith, advising of the possibility of failure and of misdiagnosing complicated appendicitis",
+      "C": "Non-operative management is contraindicated in all adults",
+      "D": "Antibiotics alone are recommended for complicated appendicitis with an appendicolith",
+      "E": "Non-operative management must not be offered once symptoms have lasted more than 24 hours"
+    },
+    "answer": "B",
+    "explanation": "WSES recommendation 2.1.1 (quality of evidence High; strength of recommendation Strong; 1A) states that we recommend discussing non-operative management with antibiotics as a safe alternative to surgery in selected patients with uncomplicated acute appendicitis and absence of appendicolith, advising of the possibility of failure and misdiagnosing complicated appendicitis. The guideline notes that meta-analyses of randomised trials show non-operative management with antibiotics achieves a significantly lower overall complication rate at 5 years and shorter sick leave compared with surgery.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnosis and treatment of acute appendicitis: 2020 update of the WSES Jerusalem guidelines",
+        "org": "World Society of Emergency Surgery",
+        "year": 2020,
+        "url": "https://link.springer.com/content/pdf/10.1186/s13017-020-00306-3.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-023",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "General surgery",
+    "topic": "Inguinal hernia - mesh repair",
+    "difficulty": "easy",
+    "stem": "A 45-year-old man is listed for elective repair of a primary unilateral inguinal hernia. Which statement matches the international groin hernia guidelines?",
+    "image": null,
+    "options": {
+      "A": "A mesh-based repair technique is recommended for the majority of patients undergoing inguinal hernia repair",
+      "B": "Non-mesh tissue repair should be the first choice for every patient",
+      "C": "Mesh repair increases the risk of recurrence without reducing chronic pain",
+      "D": "Shouldice repair is recommended over mesh repair for all fit adults",
+      "E": "Repair should be postponed until the hernia becomes incarcerated"
+    },
+    "answer": "A",
+    "explanation": "The 2023 update of the HerniaSurge international guidelines retained a strong recommendation that a mesh-based repair technique is recommended for the majority of patients undergoing inguinal hernia repair, and states that mesh-based repair reduces the risk of recurrence without increasing the risk for chronic pain. Non-mesh tissue repair is reserved for carefully selected patients after shared decision-making, so it is not the first choice for every patient (B), and repair should not be postponed until incarceration (E).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "International Guidelines for Groin Hernia Management (HerniaSurge) - summary",
+        "org": "HerniaSurge Group / European Hernia Society",
+        "year": 2018,
+        "url": "https://europeanherniasociety.eu/wp-content/uploads/2023/04/Groin_ENG_cov13178_ehs_groin_hernia_management_a5_en_10_lr_1.pdf"
+      },
+      {
+        "title": "Update of the international HerniaSurge guidelines for groin hernia management",
+        "org": "BJS Open, European Hernia Society",
+        "year": 2023,
+        "url": "https://pure.rug.nl/ws/files/900330423/Update_of_the_international_HerniaSurge_guidelines_for_groin_hernia_management.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-024",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "General surgery",
+    "topic": "Acute cholecystitis - TG18 management",
+    "difficulty": "moderate",
+    "stem": "A 52-year-old woman has Grade II (moderate) acute cholecystitis. Her Charlson Comorbidity Index is 4 and ASA-PS is 2, she is fit for surgery, and she is treated in a centre with experienced laparoscopic surgeons. According to TG18, what is the preferred management?",
+    "image": null,
+    "options": {
+      "A": "Percutaneous cholecystostomy as the first-line treatment",
+      "B": "Delayed cholecystectomy after 8 weeks of antibiotics only",
+      "C": "Immediate open cholecystectomy regardless of severity grading",
+      "D": "Antibiotics alone until organ failure develops",
+      "E": "Early laparoscopic cholecystectomy performed by experienced surgeons, because CCI is 5 or below and ASA-PS is 2 or below"
+    },
+    "answer": "E",
+    "explanation": "TG18 recommends early laparoscopic cholecystectomy for Grade II acute cholecystitis when the patient meets the criteria of Charlson Comorbidity Index 5 or below and ASA physical status 2 or below, performed by experienced surgeons; if these criteria are not met, medical treatment and/or gallbladder drainage are given first, with laparoscopic cholecystectomy indicated afterwards. For Grade I disease, early laparoscopic cholecystectomy is the first-line treatment.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Tokyo Guidelines 2018 flowchart for the management of acute cholecystitis",
+        "org": "Journal of Hepato-Biliary-Pancreatic Sciences (Tokyo Guidelines)",
+        "year": 2018,
+        "url": "https://www.pure.ed.ac.uk/ws/files/46635953/Okamoto_et_al_2017_Journal_of_Hepato_Biliary_Pancreatic_Sciences.pdf"
+      }
+    ]
+  },
+  {
+    "id": "A2-025",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "General surgery",
+    "topic": "Surgical site infection - antibiotic prophylaxis indications",
+    "difficulty": "hard",
+    "stem": "According to NICE NG125, antibiotic prophylaxis should be given before all of the following EXCEPT:",
+    "image": null,
+    "options": {
+      "A": "Clean surgery involving the placement of a prosthesis or implant",
+      "B": "Clean-contaminated surgery",
+      "C": "Contaminated surgery",
+      "D": "Clean non-prosthetic uncomplicated surgery"
+    },
+    "answer": "D",
+    "explanation": "NG125 recommendation 1.2.12 states that antibiotic prophylaxis should be given before clean surgery involving the placement of a prosthesis or implant, before clean-contaminated surgery, and before contaminated surgery. Recommendation 1.2.13 states that antibiotic prophylaxis should not be used routinely for clean non-prosthetic uncomplicated surgery, which is therefore the exception. Where prophylaxis is used, a single dose given intravenously when anaesthesia is started is advised (1.2.15).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Surgical site infections: prevention and treatment - Recommendations",
+        "org": "NICE",
+        "year": 2019,
+        "url": "https://www.nice.org.uk/guidance/ng125/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "A2-026",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "General surgery",
+    "topic": "Splenectomy - pre-operative vaccination",
+    "difficulty": "moderate",
+    "stem": "A 40-year-old woman with hereditary spherocytosis is listed for elective splenectomy in 10 days' time. According to the UK immunisation guidance (Green Book, chapter 25), what should be done?",
+    "image": null,
+    "options": {
+      "A": "Postpone surgery and give the vaccines 4 to 6 weeks before splenectomy",
+      "B": "Do not vaccinate before surgery; give the first dose on the day of discharge",
+      "C": "Withhold pneumococcal vaccination because splenectomy removes the indication",
+      "D": "Give the vaccines now, up to two weeks before surgery; splenectomy should never be delayed for vaccination"
+    },
+    "answer": "D",
+    "explanation": "The Green Book states that vaccines should ideally be given 4 to 6 weeks before elective splenectomy, and where this is not possible, up to two weeks before treatment; this patient's surgery is in 10 days, so vaccination should be given now. If vaccination beforehand is not practicable, splenectomy should never be delayed, and immunisation should then be delayed until at least two weeks after the operation because functional antibody responses may be better from that time. People with asplenia are re-immunised with PPV23 or PCV20 every five years.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "The green book: pneumococcal - Chapter 25 (updated 29 July 2026)",
+        "org": "UK Health Security Agency / GOV.UK",
+        "year": 2026,
+        "url": "https://assets.publishing.service.gov.uk/media/6a71e898332792bd88ece4d3/Green_Book_chapter_Pneumococcal_29_7_26.pdf"
+      }
+    ]
+  }
+]

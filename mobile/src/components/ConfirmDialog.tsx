@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { useTheme } from '../context/Theme';
+import { alertPulse, punch, tick } from '../lib/haptics';
 
-// System-wide "Compact Pill" confirmation dialog (Option D) — the mobile
+// System-wide "Compact Pill" confirmation dialog (Option D) - the mobile
 // counterpart of web's useConfirm()/ConfirmDialog.jsx.
 //
 // Usage from anywhere:
@@ -74,6 +75,12 @@ export function ConfirmHost() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!req) return;
+    if (req.danger) alertPulse();
+    else tick();
+  }, [req]);
+
   const danger = req ? req.danger : true;
   const accent = danger ? colors.rust : colors.forest;
 
@@ -115,10 +122,14 @@ export function ConfirmHost() {
               <Text style={[styles.pillText, { color: colors.ink }]}>Cancel</Text>
             </Pressable>
             <Pressable
-              onPress={() => settle(true)}
+              onPress={() => {
+                if (req?.danger) punch();
+                else tick();
+                settle(true);
+              }}
               style={({ pressed }) => [styles.pill, { backgroundColor: accent, opacity: pressed ? 0.85 : 1 }]}
             >
-              <Text style={[styles.pillText, { color: '#fff' }]}>{req?.confirmLabel}</Text>
+              <Text style={[styles.pillText, { color: colors.onForest }]}>{req?.confirmLabel}</Text>
             </Pressable>
           </View>
         </Pressable>
@@ -144,7 +155,7 @@ const styles = StyleSheet.create({
     paddingVertical: 22,
     paddingHorizontal: 20,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#171310',
     shadowOpacity: 0.3,
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 12 },

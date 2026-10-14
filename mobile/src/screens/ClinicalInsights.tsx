@@ -3,11 +3,11 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { router } from 'expo-router';
 import Screen from '../components/Screen';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/Theme';
+import { ThemeColors } from '../theme/tokens';
 import { SERIF } from '../theme/fonts';
 
-// Static high-yield topic data — port of src/pages/ClinicalInsights.jsx EXAMS.
+// Static high-yield topic data - port of src/pages/ClinicalInsights.jsx EXAMS.
 interface Topic {
   name: string;
   detail: string;
@@ -20,7 +20,7 @@ interface Exam {
   name: string;
   subtitle: string;
   icon: string;
-  tint: string;
+  tint: keyof ThemeColors;
   topics: Topic[];
 }
 
@@ -30,7 +30,7 @@ const EXAMS: Exam[] = [
     name: 'MRCP Part 1',
     subtitle: 'Physician · UK / Ireland',
     icon: '🫀',
-    tint: '#e3efe6',
+    tint: 'tintGreen',
     topics: [
       { name: 'Cardiology', detail: 'ECGs, murmurs, HF, HOCM, WPW, pericarditis', fire: true, tag: 'Highest yield' },
       { name: 'Nephrology', detail: 'AKI vs CKD, electrolytes, renal tubular disorders, SIADH' },
@@ -47,7 +47,7 @@ const EXAMS: Exam[] = [
     name: 'PLAB 1 / UKMLA AKT',
     subtitle: 'GMC · United Kingdom',
     icon: '🩺',
-    tint: '#dceff3',
+    tint: 'tintBlue',
     topics: [
       { name: 'Emergency Medicine', detail: 'ABCDE, sepsis 6, anaphylaxis, ACS management', fire: true, tag: 'Highest yield' },
       { name: 'Ethics & Law', detail: 'Consent, capacity, confidentiality, Gillick competence', fire: true, tag: 'Easy marks' },
@@ -63,7 +63,7 @@ const EXAMS: Exam[] = [
     name: 'USMLE Step 1',
     subtitle: 'ECFMG · United States',
     icon: '🔬',
-    tint: '#f6edd6',
+    tint: 'cream',
     topics: [
       { name: 'Pharmacology', detail: 'Mechanisms, MOA, toxicities, antidotes, receptor types', fire: true, tag: 'Highest yield' },
       { name: 'Pathology', detail: 'Cell injury, inflammation, neoplasia, cell signalling pathways' },
@@ -79,7 +79,7 @@ const EXAMS: Exam[] = [
     name: 'FCPS Part 1',
     subtitle: 'CPSP · Pakistan',
     icon: '📚',
-    tint: '#fde0d8',
+    tint: 'tintRust',
     topics: [
       { name: 'Anatomy', detail: 'Applied anatomy, nerve injuries, surface anatomy, embryology', fire: true, tag: 'Highest yield' },
       { name: 'Physiology', detail: 'Renal, CVS and respiratory: especially numerical calculations' },
@@ -94,7 +94,7 @@ const EXAMS: Exam[] = [
     name: 'AMC Part 1',
     subtitle: 'AHPRA · Australia',
     icon: '🦘',
-    tint: '#e7ecdd',
+    tint: 'tintGreen',
     topics: [
       { name: 'Cardiology', detail: 'ACS, arrhythmias, heart failure, hypertension management', fire: true, tag: 'Highest yield' },
       { name: 'Emergency', detail: 'Trauma, toxicology, shock states, ABCDE approach' },
@@ -116,7 +116,7 @@ function ExamCard({ exam }: { exam: Exam }) {
     >
       {/* header row */}
       <View style={styles.examHead}>
-        <View style={[styles.examIcon, { backgroundColor: exam.tint }]}>
+        <View style={[styles.examIcon, { backgroundColor: colors[exam.tint] }]}>
           <Text style={styles.examIconText}>{exam.icon}</Text>
         </View>
         <View style={styles.examHeadBody}>
@@ -167,8 +167,8 @@ function ExamCard({ exam }: { exam: Exam }) {
                 <View style={styles.topicTitleRow}>
                   <Text style={[styles.topicName, { color: colors.ink }]}>{t.name}</Text>
                   {!!t.fire && (
-                    <View style={styles.fireBadge}>
-                      <Text style={styles.fireBadgeText}>🔥 {t.tag}</Text>
+                    <View style={[styles.fireBadge, { backgroundColor: colors.tintGold }]}>
+                      <Text style={[styles.fireBadgeText, { color: colors.gold }]}>🔥 {t.tag}</Text>
                     </View>
                   )}
                 </View>
@@ -186,29 +186,22 @@ function ProTeaser() {
   const { colors } = useTheme();
   return (
     <View style={styles.teaser}>
-      <LinearGradient
-        colors={['rgba(185,138,46,.28)', 'rgba(185,138,46,0)']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={styles.teaserGlow}
-        pointerEvents="none"
-      />
-      <View style={styles.teaserHead}>
+      <View style={[styles.teaserHead, { backgroundColor: colors.forest }]}>
         <Text style={[styles.teaserMark, { color: colors.gold }]} pointerEvents="none">
           ✦
         </Text>
         <Text style={[styles.teaserEyebrow, { color: colors.gold }]}>Unlock more</Text>
-        <Text style={styles.teaserTitle}>Clinical Insights Pro</Text>
-        <Text style={styles.teaserBody}>
+        <Text style={[styles.teaserTitle, { color: colors.onForest }]}>Clinical Insights Pro</Text>
+        <Text style={[styles.teaserBody, { color: colors.onForest }]}>
           Go deeper on every topic: flash summaries, high-yield mnemonics, and SBA-style
           questions across 12+ exams.
         </Text>
       </View>
       <Pressable
         onPress={() => router.push('/pro')}
-        style={({ pressed }) => [styles.teaserBtn, pressed && { opacity: 0.85 }]}
+        style={({ pressed }) => [styles.teaserBtn, { backgroundColor: colors.gold }, pressed && { opacity: 0.85 }]}
       >
-        <Text style={styles.teaserBtnText}>Upgrade to Pro →</Text>
+        <Text style={[styles.teaserBtnText, { color: colors.ink }]}>Upgrade to Pro →</Text>
       </Pressable>
     </View>
   );
@@ -225,8 +218,8 @@ export default function ClinicalInsightsScreen() {
             🧠
           </Text>
           <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Clinical Insights</Text>
-          <Text style={styles.h1}>High-Yield Topics</Text>
-          <Text style={styles.heroSub}>
+          <Text style={[styles.h1, { color: colors.onForest }]}>High-Yield Topics</Text>
+          <Text style={[styles.heroSub, { color: colors.onForest }]}>
             Top tested subjects for your exam: curated, minimal, exam-ready.
           </Text>
         </View>
@@ -254,8 +247,8 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, maxWidth: '82%', color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, maxWidth: '82%' },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -290,7 +283,7 @@ const styles = StyleSheet.create({
   },
   examIconText: { fontSize: 18 },
   examHeadBody: { flex: 1, minWidth: 0 },
-  examName: { fontFamily: SERIF, fontWeight: '900', fontSize: 15 },
+  examName: { fontFamily: SERIF, fontSize: 15 },
   examSub: { fontSize: 11, marginTop: 2 },
   countBadge: { borderRadius: 999, paddingHorizontal: 9, paddingVertical: 4, flexShrink: 0 },
   countBadgeText: { fontSize: 10, fontWeight: '800' },
@@ -317,21 +310,18 @@ const styles = StyleSheet.create({
   topicBody: { flex: 1 },
   topicTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 7, flexWrap: 'wrap' },
   topicName: { fontSize: 13.5, fontWeight: '700' },
-  fireBadge: { backgroundColor: '#fff4d6', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
-  fireBadgeText: { fontSize: 9.5, fontWeight: '800', color: '#9a7a1e' },
+  fireBadge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
+  fireBadgeText: { fontSize: 9.5, fontWeight: '800' },
   topicDetail: { fontSize: 11.5, marginTop: 3, lineHeight: 17 },
   teaser: { borderRadius: 20, overflow: 'hidden', marginTop: 20, marginBottom: 4 },
-  teaserHead: { backgroundColor: '#1f4d3f', padding: 18, paddingBottom: 20, overflow: 'hidden' },
-  teaserGlow: { position: 'absolute', top: 0, left: 0, right: 0, height: 90 },
+  teaserHead: { padding: 18, paddingBottom: 20, overflow: 'hidden' },
   teaserMark: {
     position: 'absolute',
     right: 16,
     bottom: 8,
     fontSize: 42,
     opacity: 0.18,
-    fontFamily: SERIF,
-    fontWeight: '900',
-  },
+    fontFamily: SERIF },
   teaserEyebrow: {
     fontSize: 10,
     fontWeight: '800',
@@ -339,13 +329,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  teaserTitle: { fontFamily: SERIF, fontWeight: '900', fontSize: 17, color: '#fff', marginBottom: 5 },
-  teaserBody: { fontSize: 13, color: '#fff', opacity: 0.88, lineHeight: 21 },
+  teaserTitle: { fontFamily: SERIF, fontSize: 17, marginBottom: 5 },
+  teaserBody: { fontSize: 13, opacity: 0.88, lineHeight: 21 },
   teaserBtn: {
     width: '100%',
     paddingVertical: 14,
     alignItems: 'center',
-    backgroundColor: '#d9a637',
   },
-  teaserBtnText: { fontSize: 14, fontWeight: '800', color: '#1f1404', letterSpacing: 0.2 },
+  teaserBtnText: { fontSize: 14, fontWeight: '800', letterSpacing: 0.2 },
 });

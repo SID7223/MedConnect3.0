@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -11,7 +11,7 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import * as DocumentPicker from 'expo-document-picker';
 import { File } from 'expo-file-system';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import Screen from '../components/Screen';
 import Icon from '../components/Icon';
 import SegmentedPill from '../components/SegmentedPill';
@@ -19,11 +19,13 @@ import { confirmAlert } from '../components/ConfirmDialog';
 import { useAuth } from '../context/Auth';
 import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
+import { tick } from '../lib/haptics';
 import { api } from '../lib/api';
 import { examColor } from '../lib/examColors';
 import { SERIF } from '../theme/fonts';
+import Celebration from '../components/Celebration';
 
-// Personal flashcard decks — make, study (light spaced repetition), manage.
+// Personal flashcard decks - make, study (light spaced repetition), manage.
 // Port of src/pages/Flashcards.jsx. Sharing & export stay Pro-only (ANKI-TODO-LATER).
 
 interface Deck {
@@ -51,8 +53,27 @@ type ViewName = 'list' | 'deck' | 'study';
 export default function FlashcardsScreen() {
   const [view, setView] = useState<ViewName>('list');
   const [activeDeck, setActiveDeck] = useState<Deck | null>(null);
+  const navigation = useNavigation();
+  const viewRef = useRef(view);
+  useEffect(() => {
+    viewRef.current = view;
+  }, [view]);
 
   useBackAction(view !== 'list', () => setView('list'));
+
+  // Safety net: deck/study are in-place views with no route of their own.
+  // If the router initiates a pop (hardware back reaching past our handler,
+  // TopBar without handler, deep-link replace), unwind in place instead of
+  // leaving the sub-view state stranded or dropping the whole screen.
+  useEffect(() => {
+    const sub = navigation.addListener('beforeRemove', (e) => {
+      if (viewRef.current !== 'list') {
+        e.preventDefault();
+        setView('list');
+      }
+    });
+    return sub;
+  }, [navigation]);
 
   return (
     <Screen>
@@ -76,11 +97,33 @@ export default function FlashcardsScreen() {
   );
 }
 
+const hero = StyleSheet.create({
+  hero: { borderRadius: 20, padding: 18, marginBottom: 4 },
+  stats: { flexDirection: 'row', marginTop: 14, gap: 26 },
+  stat: { alignItems: 'flex-start', gap: 2 },
+  num: { color: '#FFFFFF', fontSize: 22, fontWeight: '800' },
+  lbl: { color: 'rgba(255,255,255,0.75)', fontSize: 10, fontWeight: '700', letterSpacing: 1 },
+  fab: {
+    position: 'absolute',
+    right: 18,
+    bottom: 24,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+  },
+  quote: { fontSize: 13, fontStyle: 'italic', textAlign: 'center', marginTop: 18, marginBottom: 8 },
+});
+
 function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d: Deck) => void }) {
   const { colors } = useTheme();
   const { user } = useAuth();
   const [decks, setDecks] = useState<Deck[] | null>(null);
   const [creating, setCreating] = useState(false);
+  // back dismisses the inline new-deck sheet
+  useBackAction(creating, () => setCreating(false));
   const [name, setName] = useState('');
   const [tag, setTag] = useState(user?.exam || '');
   const [tick, setTick] = useState(0);
@@ -109,17 +152,29 @@ function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d:
     if (d.deck) onOpen({ ...d.deck, card_count: 0, due_count: 0 });
   };
 
+  const deckTotal = decks?.length ?? 0;
+  const cardTotal = (decks ?? []).reduce((n, d) => n + (d.card_count || 0), 0);
+  const dueTotal = (decks ?? []).reduce((n, d) => n + (d.due_count || 0), 0);
+
   return (
-    <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <View style={styles.headRow}>
-        <Text style={[styles.h1, { color: colors.ink }]}>Flashcards</Text>
-        <Pressable
-          onPress={() => setCreating(true)}
-          accessibilityLabel="New deck"
-          style={[styles.plusBtn, { backgroundColor: colors.forest }]}
-        >
-          <Text style={styles.plusText}>+</Text>
-        </Pressable>
+    <View style={{ flex: 1 }}>
+    <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={[styles.scroll, { paddingBottom: 110 }]} keyboardShouldPersistTaps="handled">
+      <View style={[hero.hero, { backgroundColor: colors.orangeHot }]}>
+        <Text style={[styles.h1, { color: '#FFFFFF' }]}>Flashcards</Text>
+        <View style={hero.stats}>
+          <View style={hero.stat}>
+            <Text style={hero.num}>{deckTotal}</Text>
+            <Text style={hero.lbl}>DECKS</Text>
+          </View>
+          <View style={hero.stat}>
+            <Text style={hero.num}>{cardTotal}</Text>
+            <Text style={hero.lbl}>CARDS</Text>
+          </View>
+          <View style={hero.stat}>
+            <Text style={hero.num}>{dueTotal}</Text>
+            <Text style={hero.lbl}>DUE</Text>
+          </View>
+        </View>
       </View>
       <Text style={[styles.sub, { color: colors.muted, marginBottom: 16 }]}>
         Make decks and study with spaced repetition.
@@ -155,7 +210,7 @@ function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d:
               onPress={create}
               style={[styles.btn, { backgroundColor: colors.forest, flex: 1 }]}
             >
-              <Text style={[styles.btnText, { color: colors.paper }]}>Create deck</Text>
+              <Text style={[styles.btnText, { color: colors.onForest }]}>Create deck</Text>
             </Pressable>
             <Pressable
               onPress={() => {
@@ -208,7 +263,7 @@ function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d:
                   onPress={() => onStudy(d)}
                   style={[styles.btn, { backgroundColor: colors.forest, marginTop: 12 }]}
                 >
-                  <Text style={[styles.btnText, { color: colors.paper }]}>
+                  <Text style={[styles.btnText, { color: colors.onForest }]}>
                     {`Study ${d.due_count} due`}
                   </Text>
                 </Pressable>
@@ -230,7 +285,20 @@ function DeckList({ onOpen, onStudy }: { onOpen: (d: Deck) => void; onStudy: (d:
             </View>
           );
         })}
+      {(decks ?? []).length > 0 && (
+        <Text style={[hero.quote, { color: colors.subtle }]}>
+          “Spaced repetition is quiet superpower.”
+        </Text>
+      )}
     </ScrollView>
+      <Pressable
+        onPress={() => setCreating(true)}
+        accessibilityLabel="New deck"
+        style={[hero.fab, { backgroundColor: colors.forest }]}
+      >
+        <Text style={[styles.plusText, { color: colors.onForest }]}>+</Text>
+      </Pressable>
+    </View>
   );
 }
 
@@ -264,7 +332,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
     try {
       await api.deckDelete(deck.id);
     } catch {
-      // ignore — deck is gone locally either way
+      // ignore - deck is gone locally either way
     }
     onBack();
   };
@@ -281,21 +349,24 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
   const add = async () => {
     if (!front.trim() || !back.trim() || saving) return;
     setSaving(true);
-    const f = front.trim();
-    const b = back.trim();
-    if (reverse) {
-      const d: { cards?: DeckCard[] } = await api.deckAddBulk(deck.id, [
-        { front: f, back: b },
-        { front: b, back: f },
-      ]);
-      if (d.cards) setCards((prev) => [...(prev || []), ...d.cards!]);
-    } else {
-      const d: { card?: DeckCard } = await api.deckAddCard(deck.id, f, b);
-      if (d.card) setCards((prev) => [...(prev || []), d.card!]);
+    try {
+      const f = front.trim();
+      const b = back.trim();
+      if (reverse) {
+        const d: { cards?: DeckCard[] } = await api.deckAddBulk(deck.id, [
+          { front: f, back: b },
+          { front: b, back: f },
+        ]);
+        if (d.cards) setCards((prev) => [...(prev || []), ...d.cards!]);
+      } else {
+        const d: { card?: DeckCard } = await api.deckAddCard(deck.id, f, b);
+        if (d.card) setCards((prev) => [...(prev || []), d.card!]);
+      }
+      setFront('');
+      setBack('');
+    } finally {
+      setSaving(false);
     }
-    setFront('');
-    setBack('');
-    setSaving(false);
   };
 
   // parse pasted text: each line "front | back" or "front , back" or tab-separated
@@ -432,7 +503,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
               onPress={add}
               style={[styles.btn, { backgroundColor: colors.forest, opacity: saving ? 0.6 : 1 }]}
             >
-              <Text style={[styles.btnText, { color: colors.paper }]}>
+              <Text style={[styles.btnText, { color: colors.onForest }]}>
                 {reverse ? '+ Add cards (2)' : '+ Add card'}
               </Text>
             </Pressable>
@@ -466,7 +537,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
               onPress={importBulk}
               style={[styles.btn, { backgroundColor: colors.forest, opacity: saving ? 0.6 : 1 }]}
             >
-              <Text style={[styles.btnText, { color: colors.paper }]}>
+              <Text style={[styles.btnText, { color: colors.onForest }]}>
                 {saving ? 'Importing…' : 'Import cards'}
               </Text>
             </Pressable>
@@ -483,10 +554,16 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
           </View>
         )}
 
-        {/* reverse toggle — applies to both modes */}
-        <Pressable onPress={() => setReverse(!reverse)} style={styles.reverseRow}>
+        {/* reverse toggle - applies to both modes */}
+        <Pressable
+          onPress={() => {
+            tick();
+            setReverse(!reverse);
+          }}
+          style={styles.reverseRow}
+        >
           <View style={[styles.track, { backgroundColor: reverse ? colors.forest : colors.line }]}>
-            <View style={[styles.knob, { left: reverse ? 18 : 3 }]} />
+            <View style={[styles.knob, { left: reverse ? 18 : 3, backgroundColor: colors.onForest }]} />
           </View>
           <Text style={[styles.reverseLabel, { color: colors.ink }]}>
             Also make reverse cards <Text style={{ fontWeight: '400', color: colors.muted }}>(answer → question too)</Text>
@@ -499,7 +576,7 @@ function DeckDetail({ deck, onBack, onStudy }: { deck: Deck; onBack: () => void;
           onPress={onStudy}
           style={[styles.btn, { backgroundColor: colors.forest2, marginBottom: 16 }]}
         >
-          <Text style={[styles.btnText, { color: colors.paper }]}>Study this deck</Text>
+          <Text style={[styles.btnText, { color: colors.onForest }]}>Study this deck</Text>
         </Pressable>
       )}
 
@@ -539,7 +616,11 @@ function StudyMode({ deck, onDone }: { deck: Deck; onDone: () => void }) {
   const [idx, setIdx] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [done, setDone] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const total = queue ? queue.length : 0;
+  // in-session repeats for 'Again' (max 2 per card): the server schedules
+  // future reviews, but the user expects a missed card to come back now
+  const repeats = useRef<Record<string, number>>({});
 
   useEffect(() => {
     let active = true;
@@ -548,7 +629,7 @@ function StudyMode({ deck, onDone }: { deck: Deck; onDone: () => void }) {
       .then((d: { cards?: DeckCard[] }) => {
         const q = d.cards || [];
         if (q.length === 0) {
-          // nothing due — review all
+          // nothing due - review all
           api
             .deckGet(deck.id)
             .then((dd: { cards?: DeckCard[] }) => {
@@ -577,37 +658,33 @@ function StudyMode({ deck, onDone }: { deck: Deck; onDone: () => void }) {
 
   if (queue.length === 0) {
     return (
-      <View style={styles.studyEmpty}>
-        <Text style={styles.studyEmptyEmoji}>🎉</Text>
-        <Text style={[styles.studyEmptyTitle, { color: colors.ink }]}>Nothing to study here yet</Text>
-        <Text style={[styles.sub, { color: colors.muted, marginBottom: 18, textAlign: 'center' }]}>
-          Add some cards to this deck first.
-        </Text>
-        <Pressable
-          onPress={onDone}
-          style={[styles.btn, styles.studyEmptyBtn, { backgroundColor: colors.forest }]}
-        >
-          <Text style={[styles.btnText, { color: colors.paper }]}>Back to decks</Text>
-        </Pressable>
-      </View>
+      <Celebration
+        variant="mini"
+        stats={[{ label: 'Cards', value: 0 }]}
+        onPrimary={onDone}
+        primaryLabel="Back to decks"
+        visible={true}
+        onDismiss={onDone}
+      />
     );
   }
 
   if (done) {
     return (
-      <View style={styles.studyEmpty}>
-        <Text style={styles.studyDoneEmoji}>✅</Text>
-        <Text style={[styles.studyDoneTitle, { color: colors.ink }]}>Session complete</Text>
-        <Text style={[styles.sub, { color: colors.muted, marginBottom: 20, textAlign: 'center' }]}>
-          {`You reviewed ${total} card${total !== 1 ? 's' : ''}. Nice work.`}
-        </Text>
-        <Pressable
-          onPress={onDone}
-          style={[styles.btn, styles.studyDoneBtn, { backgroundColor: colors.forest }]}
-        >
-          <Text style={[styles.btnText, { color: colors.paper }]}>Back to decks</Text>
-        </Pressable>
-      </View>
+      <Celebration
+        variant="full"
+        stats={[{ label: 'Reviewed', value: total }]}
+        onPrimary={() => {
+          setShowCelebration(false);
+          onDone();
+        }}
+        primaryLabel="Back to decks"
+        visible={showCelebration}
+        onDismiss={() => {
+          setShowCelebration(false);
+          onDone();
+        }}
+      />
     );
   }
 
@@ -617,7 +694,20 @@ function StudyMode({ deck, onDone }: { deck: Deck; onDone: () => void }) {
     // api.ts annotates rating as number, but the server (like web) expects
     // 'again' | 'hard' | 'good' | 'easy'.
     api.deckRateCard(card.id, rating as unknown as number).catch(() => {});
-    if (idx + 1 >= queue.length) setDone(true);
+    let q = queue;
+    if (rating === 'again') {
+      const key = String(card.id);
+      const n = repeats.current[key] || 0;
+      if (n < 2) {
+        repeats.current[key] = n + 1;
+        q = [...queue, card];
+        setQueue(q);
+      }
+    }
+    if (idx + 1 >= q.length) {
+      setDone(true);
+      setShowCelebration(true);
+    }
     else {
       setIdx(idx + 1);
       setShowBack(false);
@@ -674,15 +764,15 @@ function StudyMode({ deck, onDone }: { deck: Deck; onDone: () => void }) {
           <View>
             <Text style={[styles.rateTitle, { color: colors.muted }]}>How well did you know it?</Text>
             <View style={styles.rateRow}>
-              {rateBtn('Again', '<1m', '#e8d3cc', colors.rust, 'again')}
-              {rateBtn('Hard', '2d', '#ece4cf', colors.gold, 'hard')}
-              {rateBtn('Good', '4d', '#d9e6dd', colors.forest, 'good')}
-              {rateBtn('Easy', '9d', colors.forest, '#fff', 'easy')}
+              {rateBtn('Again', '<1m', colors.tintRust, colors.rust, 'again')}
+              {rateBtn('Hard', '2d', colors.tintGold, colors.gold, 'hard')}
+              {rateBtn('Good', '4d', colors.tintGreen, colors.forest, 'good')}
+              {rateBtn('Easy', '9d', colors.forest, colors.onForest, 'easy')}
             </View>
           </View>
         ) : (
           <Pressable onPress={() => setShowBack(true)} style={[styles.btn, { backgroundColor: colors.forest }]}>
-            <Text style={[styles.btnText, { color: colors.paper }]}>Show answer</Text>
+            <Text style={[styles.btnText, { color: colors.onForest }]}>Show answer</Text>
           </Pressable>
         )}
       </View>
@@ -698,9 +788,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 2,
   },
-  h1: { fontFamily: SERIF, fontSize: 24, fontWeight: '700' },
+  h1: { fontFamily: SERIF, fontSize: 24 },
   plusBtn: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
-  plusText: { color: '#fff', fontSize: 24, fontWeight: '300', lineHeight: 27 },
+  plusText: { fontSize: 24, fontWeight: '300', lineHeight: 27 },
   sub: { fontSize: 15, marginTop: 5 },
   spinner: { marginVertical: 24, alignSelf: 'center' },
   empty: { alignItems: 'center', paddingVertical: 36, paddingHorizontal: 16 },
@@ -741,7 +831,7 @@ const styles = StyleSheet.create({
   detailHead: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 },
   backBtn: { padding: 2 },
   backChevron: { fontSize: 24, lineHeight: 28, fontWeight: '600' },
-  detailTitle: { fontFamily: SERIF, fontSize: 19, fontWeight: '700', flex: 1 },
+  detailTitle: { fontFamily: SERIF, fontSize: 19, flex: 1 },
   iconBtn: { padding: 4 },
   textarea: {
     borderWidth: 1.5,
@@ -757,7 +847,7 @@ const styles = StyleSheet.create({
   bulkMsg: { textAlign: 'center', marginTop: 8, fontSize: 12, fontWeight: '600' },
   reverseRow: { flexDirection: 'row', alignItems: 'center', gap: 9, marginTop: 12 },
   track: { width: 38, height: 22, borderRadius: 999, flexShrink: 0 },
-  knob: { position: 'absolute', top: 2.5, width: 17, height: 17, borderRadius: 999, backgroundColor: '#fff' },
+  knob: { position: 'absolute', top: 2.5, width: 17, height: 17, borderRadius: 999 },
   reverseLabel: { fontSize: 12.5, fontWeight: '600', flex: 1 },
   sectionLabel: {
     fontWeight: '800',
@@ -822,7 +912,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     fontWeight: '600',
   },
-  flipFront: { fontFamily: SERIF, fontSize: 19, fontWeight: '700', lineHeight: 27, textAlign: 'center' },
+  flipFront: { fontFamily: SERIF, fontSize: 19, lineHeight: 27, textAlign: 'center' },
   flipWrap: { alignSelf: 'stretch' },
   flipDivider: { borderTopWidth: 1, borderStyle: 'dashed', marginVertical: 20 },
   flipAnswerLabel: { marginBottom: 10, textAlign: 'center' },
@@ -839,7 +929,7 @@ const styles = StyleSheet.create({
   studyEmptyEmoji: { fontSize: 40, marginBottom: 10 },
   studyEmptyTitle: { fontWeight: '700', fontSize: 16, lineHeight: 21, marginBottom: 4 },
   studyDoneEmoji: { fontSize: 44, marginBottom: 12 },
-  studyDoneTitle: { fontFamily: SERIF, fontSize: 20, fontWeight: '700', marginBottom: 4 },
+  studyDoneTitle: { fontFamily: SERIF, fontSize: 20, marginBottom: 4 },
   studyEmptyBtn: { width: 200, alignSelf: 'center' },
   studyDoneBtn: { width: 220, alignSelf: 'center' },
 });

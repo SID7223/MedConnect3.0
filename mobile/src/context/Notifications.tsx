@@ -45,7 +45,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const applyUnread = useCallback((rows: UnreadRow[]) => {
     const ids = new Set(rows.map((r) => String(r.other_id)));
     if (seenRef.current === null) {
-      seenRef.current = ids; // first load — baseline, no notifications
+      seenRef.current = ids; // first load - baseline, no notifications
     } else {
       rows
         .filter((r) => !seenRef.current!.has(String(r.other_id)))
@@ -96,8 +96,10 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
 
   const markAllRead = useCallback(() => {
     applyUnread([]);
-    api.markAllRead().catch(() => {});
-  }, [applyUnread]);
+    // rollback: re-fetch server truth so a failed clear pops badges back
+    // with an explanation instead of silently
+    api.markAllRead().catch(() => refresh());
+  }, [applyUnread, refresh]);
 
   // web reloads notifications every time the bell is opened
   useEffect(() => {
@@ -110,8 +112,8 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
       seenRef.current = new Set(next.map((r) => String(r.other_id)));
       return next;
     });
-    api.markReadOne(otherId).catch(() => {});
-  }, []);
+    api.markReadOne(otherId).catch(() => refresh());
+  }, [refresh]);
 
   const totalCount = (user ? requests.length : 0) + (user ? unread.reduce((a, r) => a + (r.unread || 0), 0) : 0);
 

@@ -5,9 +5,12 @@ import Screen from '../components/Screen';
 import { useTheme } from '../context/Theme';
 import { SERIF } from '../theme/fonts';
 
-// Standard UK / SI reference ranges. Values vary by lab — shown with a disclaimer.
+// Standard UK / SI reference ranges. Values vary by lab - shown with a disclaimer.
+// Conventional equivalents for common analytes (mg/dL etc.); others show SI only.
+// Sources + review date live in LAB_SOURCE below (clinician sign-off pending).
 type LabRow = [string, string, string, string];
 type LabGroup = [string, LabRow[]];
+export type { LabRow, LabGroup };
 
 const DATA: LabGroup[] = [
   ['Haematology', [
@@ -73,11 +76,45 @@ const DATA: LabGroup[] = [
   ]],
 ];
 
-function LabRowView({ row, last }: { row: LabRow; last: boolean }) {
+// shared with the Essentials hub search (mockup "Search lab values, formulas, notes")
+export const LAB_GROUPS: LabGroup[] = DATA;
+
+export const LAB_SOURCE = {
+  source: 'NICE NG + local lab handbook (sample values)',
+  reviewer: 'Pending clinician review',
+  reviewedOn: '—',
+};
+
+const CONVENTIONAL: Record<string, string> = {
+  'Sodium': '135–145 mEq/L',
+  'Potassium': '3.5–5.0 mEq/L',
+  'Chloride': '95–105 mEq/L',
+  'Bicarbonate': '22–28 mEq/L',
+  'Calcium (corrected)': '8.8–10.4 mg/dL',
+  'Magnesium': '1.7–2.4 mg/dL',
+  'Phosphate': '2.5–4.6 mg/dL',
+  'Urea': '7–21 mg/dL (BUN)',
+  'Creatinine': '0.7–1.4 mg/dL',
+  'Fasting glucose': '63–99 mg/dL',
+  'Total cholesterol': '<193 mg/dL',
+  'LDL': '<116 mg/dL',
+  'Triglycerides': '<150 mg/dL',
+  'Haemoglobin (male)': '13.0–17.0 g/dL',
+  'Haemoglobin (female)': '11.5–15.5 g/dL',
+  'Albumin': '3.5–5.0 g/dL',
+};
+
+function LabRowView({ row, last, units }: { row: LabRow; last: boolean; units: 'si' | 'conv' }) {
   const { colors } = useTheme();
   const [nm, ab, val, unit] = row;
+  const display = units === 'conv' && CONVENTIONAL[nm] ? CONVENTIONAL[nm] : `${val}${unit ? ` ${unit}` : ''}`;
+  const convMissing = units === 'conv' && !CONVENTIONAL[nm];
   return (
-    <View
+    <Pressable
+      onPress={() => {
+        import('../lib/essentialsRecent').then((m) => m.pushRecent(nm, 'Lab values')).catch(() => {});
+      }}
+      accessibilityLabel={nm}
       style={[
         styles.labRow,
         last && styles.labRowLast,
@@ -89,16 +126,17 @@ function LabRowView({ row, last }: { row: LabRow; last: boolean }) {
         {ab ? <Text style={[styles.labAb, { color: colors.subtle }]}> ({ab})</Text> : null}
       </Text>
       <Text style={[styles.labVal, { color: colors.forest }]}>
-        {val}
-        {unit ? <Text style={[styles.labU, { color: colors.muted }]}> {unit}</Text> : null}
+        {display}
+        {convMissing ? <Text style={[styles.labU, { color: colors.muted }]}> (SI)</Text> : null}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 
 export default function LabValuesScreen() {
   const { colors } = useTheme();
   const [q, setQ] = useState('');
+  const [units, setUnits] = useState<'si' | 'conv'>('si');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({}); // group -> true if collapsed
   const f = q.toLowerCase().trim();
 
@@ -114,13 +152,13 @@ export default function LabValuesScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.tintRust }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             🧪
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Reference</Text>
-          <Text style={styles.h1}>Lab Values</Text>
-          <Text style={styles.heroSub}>Standard UK/SI reference ranges for clinical use.</Text>
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Reference</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>Lab Values</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>Standard UK/SI reference ranges for clinical use.</Text>
         </View>
 
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
@@ -140,8 +178,28 @@ export default function LabValuesScreen() {
             autoCapitalize="none"
             autoCorrect={false}
           />
+          {/* ST5 SI / conventional toggle — works offline */}
+          <View style={styles.unitRow}>
+            {(['si', 'conv'] as const).map((u) => {
+              const on = units === u;
+              return (
+                <Pressable
+                  key={u}
+                  onPress={() => setUnits(u)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: on }}
+                  style={[styles.unitChip, { borderColor: colors.line, backgroundColor: on ? colors.ink : colors.card }]}
+                >
+                  <Text style={[styles.unitText, { color: on ? colors.paper : colors.ink }]}>
+                    {u === 'si' ? 'SI units' : 'Conventional'}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
           <Text style={[styles.disclaimer, { color: colors.subtle }]}>
             Reference ranges vary by lab and population. Always use your local reference range.
+            {` Source: ${LAB_SOURCE.source} · Reviewed: ${LAB_SOURCE.reviewedOn} (${LAB_SOURCE.reviewer}).`}
           </Text>
 
           {groups.length === 0 && (
@@ -181,7 +239,7 @@ export default function LabValuesScreen() {
                 {!isCollapsed && (
                   <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}>
                     {rows.map((r, i) => (
-                      <LabRowView key={i} row={r} last={i === rows.length - 1} />
+                      <LabRowView key={i} row={r} last={i === rows.length - 1} units={units} />
                     ))}
                   </View>
                 )}
@@ -211,8 +269,8 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 7,
   },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, lineHeight: 30, fontFamily: SERIF, fontSize: 26 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -257,6 +315,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: { borderWidth: 1.5, borderRadius: 16, overflow: 'hidden' },
+  unitRow: { flexDirection: 'row', gap: 8, marginBottom: 4 },
+  unitChip: { flex: 1, borderWidth: 1.5, borderRadius: 999, paddingVertical: 10, alignItems: 'center' },
+  unitText: { fontSize: 13, fontWeight: '700' },
   labRow: {
     flexDirection: 'row',
     alignItems: 'baseline',

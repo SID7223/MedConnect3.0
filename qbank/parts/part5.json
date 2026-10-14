@@ -1,0 +1,739 @@
+[
+  {
+    "id": "I5-001",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "HIV pre-exposure prophylaxis (PrEP)",
+    "difficulty": "moderate",
+    "stem": "A 24-year-old woman has a sexual partner living with HIV who has a detectable viral load. She does not use condoms consistently and wants to start pre-exposure prophylaxis (PrEP). Which of the following statements about PrEP is correct?",
+    "image": null,
+    "options": {
+      "A": "PrEP can be started without an HIV test because she has no symptoms of HIV infection",
+      "B": "When taken daily, oral PrEP takes about 21 days to reach maximum protection against HIV for receptive vaginal sex and injection drug use",
+      "C": "The on-demand 2-1-1 regimen (2 pills before sex, then one pill 24 and 48 hours after) is approved by the FDA and routinely recommended by CDC",
+      "D": "PrEP has known interactions with combined hormonal contraception, so an additional contraceptive method is always required",
+      "E": "Once PrEP is started, routine follow-up HIV testing is unnecessary because PrEP also treats undiagnosed infection"
+    },
+    "answer": "B",
+    "explanation": "CDC states that daily oral PrEP reaches maximum protection at about 7 days of use for receptive anal sex and about 21 days for receptive vaginal sex and injection drug use. An HIV test must be performed before starting PrEP to confirm the person does not have HIV, and routine follow-up HIV testing is required while on PrEP. There are no known interactions between PrEP and hormone-based birth control methods. The 2-1-1 on-demand schedule has evidence only for gay and bisexual men having anal sex, is not FDA approved and is not recommended by CDC.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Preventing HIV with PrEP",
+        "org": "CDC",
+        "year": "2026",
+        "url": "https://www.cdc.gov/hiv/prevention/prEP.html"
+      }
+    ]
+  },
+  {
+    "id": "I5-002",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Latent tuberculosis infection in contacts",
+    "difficulty": "easy",
+    "stem": "A 28-year-old woman is identified as a close household contact of a smear-positive case of pulmonary tuberculosis. She is asymptomatic, her chest radiograph shows no active disease and assessment rules out active TB. She is under 35 years old with normal liver function and no HIV infection. According to NICE guidance, which regimen should be offered to treat her latent tuberculosis infection?",
+    "image": null,
+    "options": {
+      "A": "Two months of rifampicin, isoniazid, pyrazinamide and ethambutol followed by one month of isoniazid and rifampicin",
+      "B": "Six months of rifampicin alone",
+      "C": "Three months of isoniazid (with pyridoxine) plus rifampicin, or six months of isoniazid (with pyridoxine)",
+      "D": "Nine months of isoniazid alone as the only acceptable regimen for all age groups",
+      "E": "No drug treatment; repeat an interferon-gamma release assay annually instead"
+    },
+    "answer": "C",
+    "explanation": "For people aged under 65 years with latent TB who are close contacts of infectious pulmonary or laryngeal TB, NICE NG33 offers a choice of 3 months of isoniazid with pyridoxine plus rifampicin, or 6 months of isoniazid with pyridoxine. In people younger than 35 years the 3-month dual regimen is preferred when hepatotoxicity is a concern after assessing liver function and risk factors, and the 6-month isoniazid regimen is used when rifamycin interactions are a concern (for example with HIV treatment). Active TB must always be excluded before treating latent infection.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Tuberculosis: recommendations",
+        "org": "NICE",
+        "year": "2024",
+        "url": "https://www.nice.org.uk/guidance/ng33/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-003",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Suspected bacterial meningitis - antibiotics before transfer",
+    "difficulty": "moderate",
+    "stem": "A 32-year-old man is strongly suspected to have bacterial meningitis at a district hospital (fever, headache, neck stiffness and confusion). He must be transferred to a tertiary centre, but a clinically significant delay in transfer is likely because no ambulance is immediately available. According to NICE NG240, what should be done before transfer?",
+    "image": null,
+    "options": {
+      "A": "Arrange emergency transfer and give intravenous or intramuscular ceftriaxone or benzylpenicillin outside hospital because transfer will be significantly delayed",
+      "B": "Delay transfer until a lumbar puncture has been performed at the district hospital",
+      "C": "Give oral amoxicillin and re-assess after 24 hours before deciding on transfer",
+      "D": "Withhold all antibiotics until the patient arrives at the tertiary centre"
+    },
+    "answer": "A",
+    "explanation": "NICE NG240 recommends transferring people with suspected bacterial meningitis to hospital as an emergency and not delaying transfer merely to give antibiotics. However, if there is likely to be a clinically significant delay in transfer, intravenous or intramuscular ceftriaxone or benzylpenicillin should be given outside hospital; the same applies as soon as possible for strongly suspected meningococcal disease unless this would delay transfer. Antibiotics must not be given outside hospital only if there is severe allergy to both ceftriaxone and benzylpenicillin.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Meningitis (bacterial) and meningococcal disease: recognition, diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2024",
+        "url": "https://www.nice.org.uk/guidance/ng240/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-004",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Severe Plasmodium falciparum malaria - parenteral artesunate",
+    "difficulty": "moderate",
+    "stem": "A 28-year-old man returns from Nigeria with high fever, jaundice, vomiting and impaired consciousness. Thick and thin blood films confirm Plasmodium falciparum malaria with high parasitaemia; the blood smear is shown. He is unable to take oral medication. Which of the following is the most appropriate treatment?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Plasmodium_falciparum_01.png?width=800",
+      "alt": "Microscopic blood smear showing crescent-shaped Plasmodium falciparum gametocytes",
+      "caption": "Blood smear demonstrating Plasmodium falciparum gametocytes",
+      "source": "Wikimedia Commons - File:Plasmodium falciparum 01.png (Public domain, CDC/PHIL)"
+    },
+    "options": {
+      "A": "Oral artemether-lumefantrine alone, since all uncomplicated and severe malaria can be managed orally once vomiting stops",
+      "B": "Intravenous quinine as first-line treatment, with artesunate reserved only if quinine is contraindicated",
+      "C": "Intravenous or intramuscular artesunate for at least 24 hours and until he can tolerate oral medication, then complete a 3-day course of an artemisinin-based combination therapy (ACT)",
+      "D": "A single intramuscular dose of artesunate followed immediately by chloroquine to clear the infection",
+      "E": "Stop parenteral treatment as soon as parasitaemia falls below 1% and give a single dose of primaquine as the definitive cure"
+    },
+    "answer": "C",
+    "explanation": "WHO recommends treating severe malaria in adults and children (including pregnant women) with intravenous or intramuscular artesunate for at least 24 hours and until the patient can tolerate oral medication; treatment is then completed with 3 days of an ACT. Children under 20 kg should receive a higher dose (3 mg/kg per dose rather than 2.4 mg/kg). If artesunate is unavailable, artemether is preferred over quinine. Chloroquine is ineffective for falciparum malaria in most endemic areas, and primaquine is used for transmission blocking or radical cure of P. vivax/ovale, not to complete severe malaria therapy.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "WHO guidelines for malaria",
+        "org": "WHO",
+        "year": "2026",
+        "url": "https://www.who.int/publications/i/item/guidelines-for-malaria"
+      }
+    ]
+  },
+  {
+    "id": "I5-005",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Measles post-exposure prophylaxis",
+    "difficulty": "easy",
+    "stem": "A healthy, unvaccinated 2-year-old girl is brought to the clinic 32 hours after close contact with a child who has confirmed measles. She has no immunodeficiency and has not yet developed symptoms. Which of the following is the most appropriate post-exposure prophylaxis?",
+    "image": null,
+    "options": {
+      "A": "MMR vaccine now, because it can be given within 72 hours of initial exposure (immunoglobulin would be reserved for those unable to receive MMR)",
+      "B": "Intramuscular immunoglobulin only, because MMR vaccine is not effective as post-exposure prophylaxis",
+      "C": "No prophylaxis is possible because the 72-hour window has already passed",
+      "D": "MMR vaccine together with immunoglobulin at the same visit to maximise protection",
+      "E": "Oral aciclovir prophylaxis for 7 days"
+    },
+    "answer": "A",
+    "explanation": "CDC advises offering post-exposure prophylaxis to susceptible contacts: MMR vaccine if administered within 72 hours of initial measles exposure, or immunoglobulin if administered within 6 days (0.5 mL/kg intramuscularly for IMIG). MMR and immunoglobulin must not be given simultaneously because this invalidates the vaccine. For a healthy, immunocompetent child seen at 32 hours, MMR within the 72-hour window is the appropriate choice; immunoglobulin is used for people who cannot receive vaccine (for example severe immunodeficiency or infants for whom vaccine is not licensed).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Measles vaccine recommendations for healthcare professionals",
+        "org": "CDC",
+        "year": "2026",
+        "url": "https://www.cdc.gov/measles/hcp/vaccine-considerations/index.html"
+      }
+    ]
+  },
+  {
+    "id": "I5-006",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Infective endocarditis - antibiotic prophylaxis for dental procedures",
+    "difficulty": "moderate",
+    "stem": "A 66-year-old man with a mechanical mitral valve prosthesis is scheduled for scaling and root canal treatment. He has no signs of infection. According to the 2023 ESC endocarditis guidelines, which of the following is the most appropriate approach to infective endocarditis prophylaxis?",
+    "image": null,
+    "options": {
+      "A": "No antibiotic prophylaxis, because endocarditis prophylaxis is not recommended for any cardiac patient undergoing dental procedures",
+      "B": "Amoxicillin 2 g orally as a single dose 30-60 minutes before the dental procedure",
+      "C": "Clindamycin 600 mg orally four times daily for 7 days, because clindamycin has the best safety profile for prophylaxis",
+      "D": "Amoxicillin 2 g three times daily for 7 days to cover oral flora",
+      "E": "Prophylaxis only if the patient develops a fever after the procedure, with a blood culture taken first"
+    },
+    "answer": "B",
+    "explanation": "The 2023 ESC guidelines recommend antibiotic prophylaxis in patients at high risk of infective endocarditis (including those with previous IE and prosthetic valves) undergoing at-risk dental procedures that involve manipulation of the gingival or periapical region, such as extractions, periodontal surgery, implant surgery and scaling/root canal procedures. The standard adult regimen is amoxicillin 2 g orally as a single dose 30-60 minutes before the procedure. Clindamycin is not recommended for prophylaxis because of its risk of adverse events, mainly Clostridioides difficile infection. No prophylaxis is recommended for patients at intermediate or unknown risk.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2023 ESC Guidelines for the management of infective endocarditis",
+        "org": "European Society of Cardiology",
+        "year": "2023",
+        "url": "https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines/Endocarditis-Guidelines"
+      }
+    ]
+  },
+  {
+    "id": "I5-007",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "Antimicrobial resistance - WHO bacterial priority pathogens list",
+    "difficulty": "easy",
+    "stem": "An infectious diseases team is prioritising research and development of new antimicrobials using the WHO Bacterial Priority Pathogens List (BPPL) 2024. Which of the following pathogens is classified in the critical priority group?",
+    "image": null,
+    "options": {
+      "A": "Acinetobacter baumannii, carbapenem-resistant",
+      "B": "Staphylococcus aureus, methicillin-resistant",
+      "C": "Pseudomonas aeruginosa, carbapenem-resistant",
+      "D": "Enterococcus faecium, vancomycin-resistant",
+      "E": "Neisseria gonorrhoeae, third-generation cephalosporin- and/or fluoroquinolone-resistant"
+    },
+    "answer": "A",
+    "explanation": "The WHO BPPL 2024 groups pathogens into critical, high and medium priorities across 15 families. The critical priority group comprises carbapenem-resistant Acinetobacter baumannii, third-generation cephalosporin-resistant Enterobacterales, carbapenem-resistant Enterobacterales, and rifampicin-resistant Mycobacterium tuberculosis. Methicillin-resistant S. aureus, carbapenem-resistant P. aeruginosa, vancomycin-resistant E. faecium and multidrug-resistant N. gonorrhoeae are all in the high priority group.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "WHO bacterial priority pathogens list, 2024",
+        "org": "WHO",
+        "year": "2024",
+        "url": "https://www.who.int/publications/i/item/9789240093461"
+      }
+    ]
+  },
+  {
+    "id": "I5-008",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Infectious diseases",
+    "topic": "HIV post-exposure prophylaxis - timing window",
+    "difficulty": "hard",
+    "stem": "An emergency department nurse sustains a percutaneous needlestick injury from a patient with known HIV infection. By the time she presents for assessment, 80 hours have elapsed since the exposure. She has no symptoms. Which of the following is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Start a 28-day course of HIV post-exposure prophylaxis immediately, since occupational exposure has no time limit",
+      "B": "Start post-exposure prophylaxis now but shorten the course to 7 days because the exposure is old",
+      "C": "Start pre-exposure prophylaxis instead, which remains effective at any time after exposure",
+      "D": "Delay post-exposure prophylaxis until the source patient's CD4 count is available",
+      "E": "Do not start post-exposure prophylaxis because it must be started within 72 hours of exposure; take a baseline HIV test and arrange follow-up testing"
+    },
+    "answer": "E",
+    "explanation": "CDC states that PEP must be started within 72 hours (3 days) after a possible HIV exposure, that the sooner PEP is started the better, and that a prescribed PEP course is taken daily for 28 days. At 80 hours the exposure is outside the 72-hour window, so PEP should not be started; instead a baseline HIV test with appropriate follow-up testing and counselling is indicated. PrEP is for ongoing risk before exposure, not for treatment after an exposure.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Preventing HIV with PEP",
+        "org": "CDC",
+        "year": "2024",
+        "url": "https://www.cdc.gov/hiv/prevention/pep.html"
+      }
+    ]
+  },
+  {
+    "id": "I5-009",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Neonatal jaundice - phototherapy thresholds",
+    "difficulty": "moderate",
+    "stem": "A 36-hour-old term infant (39 weeks' gestation) is shown. He is clinically well, is being exclusively breastfed, and his total serum bilirubin is 30 micromol/L below the age-specific phototherapy threshold on the NICE threshold table. Which of the following is the most appropriate next step?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Jaundice_in_newborn.jpg?width=800",
+      "alt": "Newborn infant with visible jaundice of the skin",
+      "caption": "Term newborn with clinically apparent jaundice",
+      "source": "Wikimedia Commons - File:Jaundice in newborn.jpg (Public domain, CDC)"
+    },
+    "options": {
+      "A": "Start phototherapy immediately because visible jaundice always requires treatment in the first 48 hours",
+      "B": "Repeat the bilirubin measurement within 18 hours because he has a risk factor (intended exclusive breastfeeding) and the level is within 50 micromol/L of the threshold",
+      "C": "Repeat the bilirubin measurement within 24 hours, since this interval applies to all well babies",
+      "D": "No repeat measurement is needed because the level is below the phototherapy threshold"
+    },
+    "answer": "B",
+    "explanation": "NICE CG98 advises that in clinically well babies aged 38 weeks or more and over 24 hours old whose bilirubin is below but within 50 micromol/L of the phototherapy threshold, measurement is repeated within 18 hours if there are risk factors (a sibling who needed phototherapy for jaundice, or a mother who intends to exclusively breastfeed) and within 24 hours if there are no risk factors. Phototherapy must not be started when bilirubin does not exceed the threshold. If the level is more than 50 micromol/L below the threshold, routine repeat measurement is not needed.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Neonatal jaundice: recommendations",
+        "org": "NICE",
+        "year": "2023",
+        "url": "https://www.nice.org.uk/guidance/cg98/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-010",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Bronchiolitis - oxygen saturation thresholds",
+    "difficulty": "moderate",
+    "stem": "During a bronchiolitis ward round, two infants are assessed. A 3-week-old and a 4-month-old both have clinically diagnosed bronchiolitis and a persistent oxygen saturation of 91% while breathing air. Neither has an underlying health condition. According to NICE NG9, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "The 4-month-old should start oxygen because the treatment threshold is 92% for all infants under 1 year",
+      "B": "Neither infant needs oxygen, and both can be managed at home with safety-netting advice",
+      "C": "Both infants should start oxygen because both saturations are below 92%",
+      "D": "The 3-week-old should start oxygen (treatment threshold is persistently below 92% for babies under 6 weeks), whereas the 4-month-old should not (threshold is persistently below 90% from 6 weeks onwards), although he warrants admission assessment",
+      "E": "The 4-month-old should start oxygen while the 3-week-old should not, because the threshold rises with age"
+    },
+    "answer": "D",
+    "explanation": "NICE NG9 recommendation 1.4.4 (2021) says to give oxygen supplementation if oxygen saturation is persistently less than 90% in children aged 6 weeks and over, or persistently less than 92% in babies under 6 weeks or children of any age with underlying health conditions. Thus the 3-week-old at 91% requires oxygen while the 4-month-old does not on saturation alone (though persistent saturation below 92% in air is a criterion for referral/admission, and bronchiolitis care includes feeding and hydration support). Bronchiolitis should not be treated with salbutamol, antibiotics, corticosteroids or routine chest radiography.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Bronchiolitis: recommendations",
+        "org": "NICE",
+        "year": "2021",
+        "url": "https://www.nice.org.uk/guidance/ng9/chapter/1-Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-011",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Fever under 5s - traffic light risk stratification",
+    "difficulty": "moderate",
+    "stem": "A 14-month-old child is assessed in the emergency department with fever. Which one of the following features places the child in the high-risk (red) group of the NICE NG143 traffic light system for risk of serious illness?",
+    "image": null,
+    "options": {
+      "A": "Pallor of the skin, lips or tongue reported by the parent",
+      "B": "Waking only with prolonged stimulation",
+      "C": "A weak, high-pitched or continuous cry",
+      "D": "Nasal flaring with a respiratory rate of 42 breaths per minute",
+      "E": "Reduced feeding with normal activity, colour and interaction"
+    },
+    "answer": "C",
+    "explanation": "NICE NG143 recognises a weak, high-pitched or continuous cry as a high-risk (red) feature, along with pale/mottled/ashen/blue skin, no response to social cues, not waking or not staying awake when roused, grunting, respiratory rate above 60 per minute, moderate or severe chest indrawing, reduced skin turgor and a bulging fontanelle. Pallor reported by a carer, waking only with prolonged stimulation, and tachypnoea/nasal flaring at this age (amber threshold is above 40 breaths per minute for children over 12 months) are intermediate (amber) risk features. Management is directed by the risk category, with low risk managed in the community with safety-netting advice.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Fever in under 5s: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2021",
+        "url": "https://www.nice.org.uk/guidance/ng143/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-012",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Immunisation - catch-up schedules",
+    "difficulty": "moderate",
+    "stem": "A 4-year-old presents for catch-up immunisation. He received only 3 of 5 DTaP doses (the last dose was 2 years ago) and a single dose of MMR at 15 months. His mother asks whether the long interval means everything must be started again. According to the CDC/ACIP child and adolescent catch-up schedule, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "Continue the existing series and give catch-up doses at the earliest opportunity using the minimum intervals in Table 2, because a vaccine series does not need to be restarted regardless of the time elapsed between doses",
+      "B": "Restart the DTaP series from dose 1 because more than 12 months have elapsed since the previous dose",
+      "C": "Treat the MMR dose at 15 months as invalid and restart MMR as a new two-dose primary series",
+      "D": "Withhold all catch-up doses until the routine adolescent visit at 11-12 years",
+      "E": "Give each vaccine only after observing a 1-month interval between different vaccine products"
+    },
+    "answer": "A",
+    "explanation": "CDC's catch-up immunisation schedule states that a vaccine series does not need to be restarted, regardless of the time elapsed between doses, and that for those who fall behind or start late, catch-up vaccination should be provided at the earliest opportunity using the minimum intervals in Table 2 (for example 4 weeks between DTaP doses and 4 weeks between MMR doses). Remaining doses are simply completed according to the catch-up schedule; asymptomatic children do not need serology, and there is no requirement to restart a partially completed series.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Catch-up immunization schedule for children and adolescents",
+        "org": "CDC",
+        "year": "2025",
+        "url": "https://www.cdc.gov/vaccines/hcp/imz-schedules/child-adolescent-catch-up.html"
+      }
+    ]
+  },
+  {
+    "id": "I5-013",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Childhood absence epilepsy - first-line treatment",
+    "difficulty": "moderate",
+    "stem": "A 7-year-old girl has had frequent typical absence seizures for 4 months with a normal neurological examination and a 3 Hz generalised spike-and-wave EEG. There are no other seizure types. Which of the following is the first-line treatment according to NICE NG217?",
+    "image": null,
+    "options": {
+      "A": "Carbamazepine, because broad-spectrum antiseizure medication is preferred for all childhood epilepsies",
+      "B": "Lamotrigine as first-line monotherapy for isolated absence seizures",
+      "C": "Sodium valproate as first-line monotherapy for isolated absence seizures",
+      "D": "Ethosuximide as first-line treatment",
+      "E": "Levetiracetam as first-line monotherapy for isolated absence seizures"
+    },
+    "answer": "D",
+    "explanation": "NICE NG217 recommendation 5.3.1 advises offering ethosuximide as first-line treatment for absence seizures (including childhood absence epilepsy). If first-line treatment fails, lamotrigine, levetiracetam or sodium valproate are offered as second-line monotherapy or add-on treatment (with MHRA safety measures for valproate). Carbamazepine, phenytoin, oxcarbazepine and other listed drugs can exacerbate absence seizures. Sodium valproate is considered first-line only when absence seizures occur together with other seizure types or there is a risk of these.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Epilepsies in children, young people and adults - treating epileptic seizures",
+        "org": "NICE",
+        "year": "2026",
+        "url": "https://www.nice.org.uk/guidance/ng217/chapter/5-Treating-epileptic-seizures-in-children-young-people-and-adults"
+      }
+    ]
+  },
+  {
+    "id": "I5-014",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Maternal RSV vaccination programme",
+    "difficulty": "easy",
+    "stem": "A woman attends her antenatal clinic at 27 weeks of gestation and asks when she will be offered the RSV vaccine. According to the UK (GOV.UK/UKHSA) RSV vaccination programme for pregnant women, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "She should be offered the vaccine from 12 weeks of gestation, in her first pregnancy only",
+      "B": "She should be offered a single dose at 36 weeks of gestation, once in a lifetime",
+      "C": "A single dose should be offered from 28 weeks of gestation in every pregnancy, ideally in week 28 or soon after",
+      "D": "She should be offered the vaccine at any time in the third trimester, but only if she has not previously received it in another pregnancy"
+    },
+    "answer": "C",
+    "explanation": "Since 1 September 2024, the UK programme offers a single dose of RSV vaccine (Abrysvo) to every pregnant woman from week 28 of each pregnancy, ideally in week 28 or soon after so that high antibody levels can be transferred across the placenta, including if the baby is born prematurely. Vaccination is offered year-round, not only in the first pregnancy, and can be given up to delivery if missed; the whooping cough vaccine is given earlier, around 20 weeks, and influenza vaccine at any stage.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "RSV vaccination of pregnant women for infant protection: information for healthcare practitioners",
+        "org": "GOV.UK (UKHSA)",
+        "year": "2026",
+        "url": "https://www.gov.uk/government/publications/respiratory-syncytial-virus-rsv-programme-information-for-healthcare-professionals/rsv-vaccination-of-pregnant-women-for-infant-protection-information-for-healthcare-practitioners"
+      }
+    ]
+  },
+  {
+    "id": "I5-015",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Paediatrics",
+    "topic": "Suspected sepsis in under 16s - high-risk management",
+    "difficulty": "hard",
+    "stem": "A 10-year-old boy presents with fever, mottling and tachycardia. He meets one or more high-risk criteria for sepsis, and venous lactate is 4.4 mmol/L. Antibiotics have not yet been given. Which of the following is the most appropriate management according to NICE NG254?",
+    "image": null,
+    "options": {
+      "A": "Give a broad-spectrum antimicrobial within 3 hours after a second senior review, unless the lactate normalises",
+      "B": "Obtain blood cultures and CRP only, and start antibiotics if CRP rises above 100 mg/L at 24 hours",
+      "C": "Give intravenous antibiotics immediately, but withhold fluids unless the systolic blood pressure is low",
+      "D": "Give an intravenous fluid bolus without delay (within 1 hour), give a broad-spectrum antimicrobial within 1 hour of identifying the high-risk criteria, and refer to a critical care specialist or team",
+      "E": "Start inotropes immediately without a fluid bolus or antibiotics because the lactate is over 4 mmol/L"
+    },
+    "answer": "D",
+    "explanation": "NICE NG254 advises that for people under 16 meeting high-risk criteria for sepsis, a broad-spectrum antimicrobial is given without delay within 1 hour (if not already given), alongside urgent senior assessment and venous blood tests including blood gas, lactate and blood culture. For children under 12 with high-risk criteria and lactate over 4 mmol/L, an intravenous fluid bolus is given without delay within 1 hour and a critical care specialist or team is referred to review management, including central venous access and initiation of inotropes or vasopressors if needed. For community-acquired sepsis in under-16s (excluding neonates), ceftriaxone is the recommended empirical choice.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected sepsis in under 16s: recognition, diagnosis and early management - managing suspected sepsis",
+        "org": "NICE",
+        "year": "2025",
+        "url": "https://www.nice.org.uk/guidance/ng254/chapter/managing-suspected-sepsis"
+      }
+    ]
+  },
+  {
+    "id": "I5-016",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Severe pre-eclampsia - acute treatment",
+    "difficulty": "hard",
+    "stem": "A 32-year-old woman at 34 weeks of gestation has severe pre-eclampsia: BP 178/112 mmHg, severe headache, visual scotomata and epigastric pain. She is in a critical care setting and has just had an eclamptic fit. Which of the following is the most appropriate treatment?",
+    "image": null,
+    "options": {
+      "A": "Give intravenous magnesium sulfate 6 g as a bolus followed by 2 g/hour for 24 hours, and treat the blood pressure with oral methyldopa titrated over 48 hours",
+      "B": "Treat the severe hypertension immediately with labetalol (oral or intravenous), oral nifedipine or intravenous hydralazine, and give magnesium sulfate 4 g intravenously over 5-15 minutes followed by an infusion of 1 g/hour for 24 hours",
+      "C": "Give dexamethasone to treat the features of HELLP syndrome and delay antihypertensive treatment until after delivery",
+      "D": "Perform vigorous intravenous volume expansion before giving any antihypertensive drug",
+      "E": "Withhold treatment of severe hypertension until the blood pressure exceeds 160/110 mmHg on two consecutive readings over 4 hours"
+    },
+    "answer": "B",
+    "explanation": "NICE NG133 states that women with severe hypertension in critical care during pregnancy or after birth are treated immediately with labetalol (oral or intravenous), oral nifedipine, or intravenous hydralazine, with response monitored to confirm the fall in blood pressure. Magnesium sulfate for eclampsia uses the Collaborative Eclampsia Trial regimen: 4 g IV over 5-15 minutes then 1 g/hour for 24 hours (continued 24 hours after the last fit), with a further 2-4 g for recurrent fits. Dexamethasone or betamethasone must not be used to treat HELLP syndrome, and volume expansion is not used in severe pre-eclampsia unless hydralazine is the antenatal antihypertensive (limited to 500 mL crystalloid with the first IV dose).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Hypertension in pregnancy: recommendations",
+        "org": "NICE",
+        "year": "2023",
+        "url": "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-017",
+    "exams": ["USMLE"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Postpartum haemorrhage prevention - uterotonics",
+    "difficulty": "moderate",
+    "stem": "A birthing centre in a low-resource setting has an unreliable electricity supply, and the oxytocin cold chain cannot be consistently maintained. The WHO consolidated PPH guidelines (2025) are being used to write the local protocol for prevention of postpartum haemorrhage. Which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "Oxytocin 10 IU intramuscularly should still be used as the first choice regardless of cold-chain status",
+      "B": "Ergometrine is the recommended uterotonic of choice for all births when oxytocin cannot be refrigerated",
+      "C": "Misoprostol 800 micrograms rectally is the preferred alternative to oxytocin in all settings",
+      "D": "No uterotonic is needed; active management of the third stage should rely on fundal massage alone",
+      "E": "Heat-stable carbetocin 100 micrograms intramuscularly or intravenously is the recommended choice when the oxytocin cold chain cannot be consistently maintained, with misoprostol 400 or 600 micrograms orally as an alternative if heat-stable carbetocin is unavailable"
+    },
+    "answer": "E",
+    "explanation": "WHO's 2025 consolidated PPH guidelines recommend a quality-assured uterotonic for prevention of PPH in the third stage of labour for all births, using only oxytocin, carbetocin or misoprostol: oxytocin 10 IU IM/IV is the agent of choice when options are available (IV route preferred over IM when IV access exists, given slowly over 1-2 minutes); heat-stable carbetocin 100 micrograms IM/IV is recommended where the oxytocin cold chain cannot be consistently maintained; if it is unavailable, misoprostol 400 or 600 micrograms orally can be used, including by community health workers where skilled personnel and injectable uterotonics are not available.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Consolidated guidelines for the prevention, diagnosis and treatment of postpartum haemorrhage",
+        "org": "WHO",
+        "year": "2025",
+        "url": "https://www.who.int/publications/i/item/9789240115637"
+      }
+    ]
+  },
+  {
+    "id": "I5-018",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Gestational diabetes - management at diagnosis",
+    "difficulty": "hard",
+    "stem": "A 29-year-old woman is diagnosed with gestational diabetes at 24 weeks of gestation. Her fasting plasma glucose at diagnosis is 7.4 mmol/L. She has no other complications of pregnancy. According to NICE NG3, which of the following is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Give diet and exercise advice for 1-2 weeks first, then start metformin if glucose targets are still not met",
+      "B": "Start metformin monotherapy and review glucose control after 4 weeks",
+      "C": "Offer immediate treatment with insulin (with or without metformin) together with diet and exercise changes",
+      "D": "Arrange immediate caesarean section because of the risk of macrosomia",
+      "E": "No pharmacological treatment; repeat the oral glucose tolerance test at 32 weeks"
+    },
+    "answer": "C",
+    "explanation": "NICE NG3 recommends offering immediate treatment with insulin, with or without metformin and diet and exercise changes, to women with gestational diabetes whose fasting plasma glucose is 7.0 mmol/L or above at diagnosis. For fasting levels of 6.0-6.9 mmol/L with complications such as macrosomia or hydramnios, immediate insulin with or without metformin is considered; otherwise diet and exercise are trialled for 1-2 weeks with metformin added if targets are not met. Glucose targets are fasting below 5.3 mmol/L, 1 hour post-meal below 7.8 mmol/L or 2 hours below 6.4 mmol/L, and insulin is offered if targets cannot be met or are unacceptable to the woman.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diabetes in pregnancy: recommendations",
+        "org": "NICE",
+        "year": "2020",
+        "url": "https://www.nice.org.uk/guidance/ng3/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-019",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Cervical screening programme",
+    "difficulty": "easy",
+    "stem": "A 26-year-old woman asks about the routine cervical screening programme in the UK. According to the UK National Screening Committee recommendation, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "Screen with cervical cytology every 3 years from age 21 to 65",
+      "B": "Screen with human papillomavirus (HPV) testing every 3 years from age 30 to 60",
+      "C": "Offer an annual cervical smear test from age 25 onwards",
+      "D": "Offer screening with HPV primary testing every 5 years from age 25 to 64"
+    },
+    "answer": "D",
+    "explanation": "The UK NSC recommends that cervical screening is offered to women aged 25 to 64 every 5 years using testing for high-risk human papillomavirus as the primary test, so that HPV infection and cervical abnormalities are detected early; screening starts at age 25, not 21. Risk-stratified recall (for example 12-month surveillance for those who are HPV positive with negative cytology) applies to test results rather than changing the routine 5-yearly invitation interval, and the programme is under ongoing review, including evaluation of self-sampling.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "UK NSC screening recommendation for cervical cancer",
+        "org": "UK National Screening Committee",
+        "year": "2025",
+        "url": "https://view-health-screening-recommendations.service.gov.uk/cervical-cancer/"
+      }
+    ]
+  },
+  {
+    "id": "I5-020",
+    "exams": ["FCPS"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Tubal ectopic pregnancy - definitive management",
+    "difficulty": "hard",
+    "stem": "A 33-year-old woman is stable and pain-free. Transvaginal ultrasound confirms an unruptured tubal ectopic pregnancy with an adnexal mass of 40 mm, no visible heartbeat and no intrauterine pregnancy. Serum hCG is 1,700 IU/L. She wishes to preserve fertility. According to NICE NG126, which of the following is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Offer systemic methotrexate as the definitive treatment, since she is clinically stable and pain-free",
+      "B": "Offer expectant management with hCG repeats on days 2, 4 and 7, because hCG is below 2,000 IU/L",
+      "C": "Review again in 2 weeks with a repeat ultrasound and no treatment in the interim",
+      "D": "Perform emergency laparotomy with hysterectomy to prevent rupture",
+      "E": "Offer surgical management (for example laparoscopic salpingectomy or salpingostomy), because methotrexate and expectant management criteria are not met"
+    },
+    "answer": "E",
+    "explanation": "NICE NG126 offers systemic methotrexate only for unruptured tubal ectopics with an adnexal mass smaller than 35 mm, no visible heartbeat, serum hCG below 1,500 IU/L, no significant pain, no intrauterine pregnancy and the ability to return for follow-up. Expectant management is offered when hCG is 1,000 IU/L or less (and considered between 1,000 and 1,500 IU/L) with a mass under 35 mm and no heartbeat. With a 40 mm mass and hCG of 1,700 IU/L neither medical nor expectant criteria are met, so surgical management is indicated; salpingectomy or salpingostomy is chosen laparoscopically according to clinical findings, tubal status and patient preference, with fertility considerations discussed.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Ectopic pregnancy and miscarriage: management of tubal ectopic pregnancy",
+        "org": "NICE",
+        "year": "2026",
+        "url": "https://www.nice.org.uk/guidance/ng126/chapter/Management-of-tubal-ectopic-pregnancy"
+      }
+    ]
+  },
+  {
+    "id": "I5-021",
+    "exams": ["MRCP"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Contraception safety - UKMEC 2025",
+    "difficulty": "moderate",
+    "stem": "A woman is 4 weeks postpartum and had a deep vein thrombosis during this pregnancy (so she has postpartum status plus another venous thromboembolism risk factor). She requests depot medroxyprogesterone acetate (DMPA) for contraception. According to UKMEC 2025, which of the following is correct?",
+    "image": null,
+    "options": {
+      "A": "DMPA is UKMEC category 1, so there is no restriction on use",
+      "B": "DMPA is UKMEC category 2, and the advantages generally outweigh the disadvantages",
+      "C": "DMPA is UKMEC category 4 and is absolutely contraindicated",
+      "D": "DMPA is UKMEC category 3 (generally not recommended) for postpartum women with other VTE risk factors, and a more suitable method should be offered",
+      "E": "UKMEC 2025 retains category 2 for this situation, so DMPA can be started without further assessment"
+    },
+    "answer": "D",
+    "explanation": "In UKMEC 2025 the category for DMPA in women who are postpartum with other risk factors for VTE was raised from 2 to 3, meaning it is generally not recommended and another method is preferred. UKMEC 2025 introduced new conditions (multiple sclerosis, chronic kidney disease, sickle cell trait and multiple VTE risk factors), changed several DMPA categories where VTE risk is increased (for example BMI over 35 changed from 1 to 2, and known thrombogenic mutations and positive antiphospholipid antibodies from 2 to 3), and updated guidance on hypertension, HIV and anxiety/mood disorders.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "UK Medical Eligibility Criteria for Contraceptive Use (UKMEC) 2025",
+        "org": "College of Sexual and Reproductive Healthcare (CoSRH/FSRH)",
+        "year": "2025",
+        "url": "https://www.cosrh.org/Common/Uploaded%20files/documents/UKMEC_2025.pdf"
+      }
+    ]
+  },
+  {
+    "id": "I5-022",
+    "exams": ["NEET"],
+    "region": "Abdomen and pelvis",
+    "system": "Obstetrics and gynaecology",
+    "topic": "Pre-eclampsia prevention with aspirin",
+    "difficulty": "moderate",
+    "stem": "A pregnant woman asks whether she should take low-dose aspirin to prevent pre-eclampsia. According to NICE NG133, which of the following women should be advised to take aspirin 75-150 mg daily from 12 weeks until the birth of the baby?",
+    "image": null,
+    "options": {
+      "A": "A 28-year-old primigravida with a BMI of 24 kg/m2 and no other risk factors",
+      "B": "A 35-year-old woman with chronic hypertension",
+      "C": "A 30-year-old woman whose only risk factor is nulliparity",
+      "D": "A 26-year-old woman with migraine but no other risk factors"
+    },
+    "answer": "B",
+    "explanation": "NICE NG133 advises aspirin 75-150 mg daily from 12 weeks until birth for women at high risk of pre-eclampsia: hypertensive disease in a previous pregnancy, chronic kidney disease, autoimmune disease such as systemic lupus erythematosus or antiphospholipid syndrome, type 1 or type 2 diabetes, or chronic hypertension. It is also advised for women with more than one moderate risk factor (nulliparity, age 40 or older, pregnancy interval over 10 years, BMI 35 kg/m2 or more at first visit, family history of pre-eclampsia, or multi-fetal pregnancy). A single moderate risk factor alone does not qualify.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Hypertension in pregnancy: recommendations",
+        "org": "NICE",
+        "year": "2023",
+        "url": "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-023",
+    "exams": ["MRCP"],
+    "region": "Limbs and skin",
+    "system": "Dermatology",
+    "topic": "Cutaneous melanoma - staging and excision margins",
+    "difficulty": "hard",
+    "stem": "An excision biopsy of a pigmented lesion on the back shows melanoma with a Breslow thickness of 1.4 mm, no ulceration, a mitotic rate of 1/mm2 and no lymphovascular invasion. Clinical examination of the nodes is normal and the biopsy was taken with a 2 mm margin. According to NICE NG14, which of the following is the most appropriate next management?",
+    "image": null,
+    "options": {
+      "A": "No sentinel lymph node biopsy is needed because the thickness is under 2 mm, and complete excision with a 0.5 cm margin",
+      "B": "Consider sentinel lymph node biopsy (thickness greater than 1.0 mm) and complete the excision with a 1 cm clinical margin",
+      "C": "Offer sentinel lymph node biopsy only if ulceration is present, and excise with a 2 cm margin",
+      "D": "Neither sentinel lymph node biopsy nor wider excision is required because this is stage IA disease",
+      "E": "Stage with whole-body and brain CT before any further surgery because nodal staging is mandatory"
+    },
+    "answer": "B",
+    "explanation": "NICE NG14 says not to offer imaging or sentinel lymph node biopsy (SLNB) to people with stage IA melanoma, to consider SLNB when Breslow thickness is 0.8-1.0 mm with at least one adverse feature (ulceration, lymphovascular invasion or mitotic index of 2 or more), and to consider SLNB when thickness is greater than 1.0 mm - so this 1.4 mm melanoma is a candidate for SLNB. Excision margins are 0.5 cm for stage 0, 1 cm for stage I melanoma and 2 cm for stage II, measured around the histological biopsy scar; a 1.4 mm non-ulcerated melanoma is stage I, so a 1 cm margin applies. Whole-body and brain CT is reserved for stage IIB and higher.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Melanoma: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2022",
+        "url": "https://www.nice.org.uk/guidance/NG14/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-024",
+    "exams": ["NEET"],
+    "region": "Limbs and skin",
+    "system": "Dermatology",
+    "topic": "Psoriasis - stepwise treatment",
+    "difficulty": "easy",
+    "stem": "A 24-year-old man has localised plaque psoriasis affecting the elbows and knees (less than 10% body surface area) with a PASI score of 4. Which of the following is the first-line treatment according to NICE CG153?",
+    "image": null,
+    "options": {
+      "A": "Topical treatment (emollients plus a topical corticosteroid or vitamin D analogue)",
+      "B": "Methotrexate as monotherapy",
+      "C": "Narrowband ultraviolet B phototherapy",
+      "D": "Ciclosporin as monotherapy"
+    },
+    "answer": "A",
+    "explanation": "NICE CG153 recommends offering topical treatment as first-line treatment for all people with psoriasis. Second- or third-line options (phototherapy, conventional systemic treatments or targeted immunomodulatory treatments) are offered at the same time only when topical treatment alone is unlikely to control the disease adequately, such as extensive disease (over 10% body surface area or at least moderate on the PASI), or where the impact on quality of life is severe. Methotrexate, phototherapy and ciclosporin are therefore escalations, not initial therapy, for localised plaque psoriasis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Psoriasis: assessment and management - recommendations",
+        "org": "NICE",
+        "year": "2017",
+        "url": "https://www.nice.org.uk/guidance/cg153/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-025",
+    "exams": ["USMLE"],
+    "region": "Limbs and skin",
+    "system": "Dermatology",
+    "topic": "Atopic eczema - baseline management",
+    "difficulty": "moderate",
+    "stem": "A 4-year-old girl is brought to clinic with an itchy eruption affecting the elbow flexures, as shown. She has had intermittent flares since infancy. Which of the following statements about her baseline management is correct according to NICE CG57?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Atopy2010.JPG?width=800",
+      "alt": "Atopic dermatitis affecting the flexural crease of the elbow",
+      "caption": "Flexural atopic dermatitis of the elbow crease in a child",
+      "source": "Wikimedia Commons - File:Atopy2010.JPG (CC BY-SA 3.0)"
+    },
+    "options": {
+      "A": "Emollients should be applied only during flares and stopped once the skin clears",
+      "B": "Emollient bath additives should be offered as a first-line addition to standard care",
+      "C": "Topical tacrolimus should be used as first-line treatment for mild eczema of any severity",
+      "D": "Sedating antihistamines should be used routinely to control itch and help sleep",
+      "E": "Emollients are the basis of management and should always be used even when the eczema is clear, and emollient bath additives should not be offered"
+    },
+    "answer": "E",
+    "explanation": "NICE CG57 uses a stepped approach in which emollients are the basis of management and should always be used, even when the eczema is clear, with treatment stepped up or down by adding mild, moderate or potent topical corticosteroids (and other options) according to severity. Recommendation 1.5.1.11 states that emollient bath additives should not be offered, because the BATHE trial showed they are not clinically or cost effective (they do not make eczema worse and can be bought over the counter if families wish). Topical calcineurin inhibitors are not first-line treatments, and sedating antihistamines are not recommended routinely for itch.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Atopic eczema in under 12s: diagnosis and management - recommendations",
+        "org": "NICE",
+        "year": "2025",
+        "url": "https://www.nice.org.uk/guidance/cg57/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "I5-026",
+    "exams": ["FCPS"],
+    "region": "Limbs and skin",
+    "system": "Dermatology",
+    "topic": "Acne vulgaris - first-line treatment",
+    "difficulty": "moderate",
+    "stem": "A 17-year-old boy has moderate-to-severe acne with comedones, inflammatory papules and pustules on the face and upper back. He has already tried simple moisturisers. According to NICE NG198, which of the following is an appropriate first-line treatment option?",
+    "image": null,
+    "options": {
+      "A": "Oral isotretinoin as monotherapy, since all moderate-to-severe acne requires retinoid therapy first",
+      "B": "A topical antibiotic used alone for 6 months to reduce inflammation",
+      "C": "A 12-week course of a fixed combination of topical adapalene with benzoyl peroxide together with oral lymecycline or doxycycline",
+      "D": "Combined oral contraceptive pill as first-line therapy in a male patient",
+      "E": "Benzoyl peroxide alone continued indefinitely without review"
+    },
+    "answer": "C",
+    "explanation": "NICE NG198 offers a 12-week course of one of the listed first-line options according to severity. For moderate-to-severe acne these include a fixed combination of topical adapalene with benzoyl peroxide together with either oral lymecycline or oral doxycycline, or topical azelaic acid with an oral antibiotic. Fixed combinations for any severity include adapalene with benzoyl peroxide and tretinoin with clindamycin, while benzoyl peroxide with clindamycin is for mild-to-moderate acne. Antibiotic monotherapy (topical or oral) should not be used alone and courses are reviewed; isotretinoin is reserved for severe acne or where other treatments have failed.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Acne vulgaris: management - recommendations",
+        "org": "NICE",
+        "year": "2026",
+        "url": "https://www.nice.org.uk/guidance/ng198/chapter/recommendations"
+      }
+    ]
+  }
+]

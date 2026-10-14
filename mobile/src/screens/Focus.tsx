@@ -4,11 +4,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import Screen from '../components/Screen';
 import SegmentedPill from '../components/SegmentedPill';
+import ContextualPrompt from '../components/ContextualPrompt';
 import StudyTimer from '../components/StudyTimer';
 import TileGame from '../components/TileGame';
 import { FocusLockOverlay } from '../components/FocusLockOverlay';
 import { FocusLockMethod, useFocusLock } from '../context/FocusLock';
+import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
+import { usePrompts } from '../lib/prompts';
+import { TIMES } from '../lib/profile-data';
 import { SERIF } from '../theme/fonts';
 
 // anatomical minimal lungs that inflate on inhale, deflate on exhale (box-breathing)
@@ -94,8 +99,8 @@ function Breathe() {
   const grow = on && (phase === 0 || phase === 1); // big through inhale + hold
   const tintGreen =
     mode === 'dark'
-      ? { backgroundColor: '#16241c', borderColor: '#234034' }
-      : { backgroundColor: '#eaf1ec', borderColor: '#cfe0d4' };
+      ? { backgroundColor: colors.tintGreen, borderColor: colors.line }
+      : { backgroundColor: colors.tintGreen, borderColor: colors.line };
 
   return (
     <>
@@ -179,8 +184,13 @@ const PRESETS: [number, number][] = [
 
 function DeepFocus() {
   const { colors } = useTheme();
+  const { user } = useAuth();
   const { startLock } = useFocusLock();
+  const { dismiss, open: promptOpen, answer } = usePrompts();
   const [open, setOpen] = useState(false);
+  // back collapses the inline Deep Focus setup panel
+  useBackAction(open, () => setOpen(false));
+  const [studyPrompt, setStudyPrompt] = useState(false);
   const [hrs, setHrs] = useState(1);
   const [mins, setMins] = useState(0);
   const [method, setMethod] = useState<FocusLockMethod>('hold');
@@ -203,11 +213,20 @@ function DeepFocus() {
   const effectiveM = custom ? parseInt(customM, 10) || 0 : mins;
   const canStart = effectiveH > 0 || effectiveM > 0;
 
-  const start = () => {
+  const fire = () => {
     const total = effectiveH * 3600 + effectiveM * 60;
     if (total <= 0) return;
     startLock(total, method);
     setOpen(false);
+  };
+
+  const start = () => {
+    // §6D - study-time prompt on the first Focus session start
+    if (!user?.study_time && promptOpen('study_time')) {
+      setStudyPrompt(true);
+      return;
+    }
+    fire();
   };
 
   const methods: [FocusLockMethod, string, string, string][] = [
@@ -234,7 +253,7 @@ function DeepFocus() {
               { backgroundColor: open ? colors.forest : colors.paper2 },
             ]}
           >
-            <Text style={{ fontSize: 12, fontWeight: '700', color: open ? '#fff' : colors.forest }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: open ? colors.onForest : colors.forest }}>
               {open ? 'Cancel' : 'Set session →'}
             </Text>
           </Pressable>
@@ -346,13 +365,34 @@ function DeepFocus() {
                 { backgroundColor: canStart ? colors.forest : colors.line },
               ]}
             >
-              <Text style={{ fontSize: 14, fontWeight: '800', color: canStart ? '#fff' : colors.muted }}>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: canStart ? colors.onForest : colors.muted }}>
                 Start deep focus →
               </Text>
             </Pressable>
           </View>
         )}
       </View>
+
+      {/* §6D - study-time pre-session sheet */}
+      <ContextualPrompt
+        variant="modal"
+        visible={studyPrompt}
+        eyebrow="BEFORE YOU START"
+        title="When do you usually study?"
+        sub="We nudge your partner at hours you're both awake."
+        options={TIMES}
+        value={(user?.study_time as string) || undefined}
+        onSelect={async (v) => {
+          setStudyPrompt(false);
+          await answer('study_time', { studyTime: v });
+          fire();
+        }}
+        onDismiss={() => {
+          setStudyPrompt(false);
+          dismiss('study_time');
+          fire();
+        }}
+      />
     </>
   );
 }
@@ -387,12 +427,12 @@ export default function FocusScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.tintRust }]}>
           <Text style={styles.heroEmoji}>🎯</Text>
-          <Text style={styles.heroTitle}>Focus ☕</Text>
-          <Text style={styles.heroSub}>
+          <Text style={[styles.heroTitle, { color: colors.ink }]}>Focus ☕</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>
             Set a block, tap the box for full-screen, and guard it like an{' '}
-            <Text style={{ color: colors.gold, fontWeight: '700' }}>exam hall</Text>.
+            <Text style={{ color: colors.forest, fontWeight: '700' }}>exam hall</Text>.
           </Text>
         </View>
         <View style={[styles.body, { backgroundColor: colors.paper }]}>
@@ -417,8 +457,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  heroTitle: { fontFamily: SERIF, fontSize: 26, fontWeight: '900', color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 21, color: '#fff' },
+  heroTitle: { letterSpacing: -0.4, lineHeight: 30, fontFamily: SERIF, fontSize: 26 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, lineHeight: 21 },
   body: {
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,

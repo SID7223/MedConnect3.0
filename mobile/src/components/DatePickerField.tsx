@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from '../context/Theme';
+import { dismissKeyboardSoon } from '../lib/keyboard';
 
 // Date field that opens the native picker dialog (port of web <input type="date">).
 // value: 'YYYY-MM-DD' or '' when unset.
@@ -31,7 +32,12 @@ export default function DatePickerField({
   return (
     <View>
       <Pressable
-        onPress={() => setShow(true)}
+        onPress={() => {
+          // native dialog takes window focus - hide the keyboard first so
+          // Android's input restart doesn't pop it back up (see OptionPicker)
+          dismissKeyboardSoon();
+          setShow(true);
+        }}
         style={[
           styles.field,
           { backgroundColor: colors.paper, borderColor: colors.line },

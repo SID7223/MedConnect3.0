@@ -30,7 +30,7 @@ type Active =
 
 const one = (v?: string | string[]): string | undefined => (Array.isArray(v) ? v[0] : v);
 
-// Chat hub — web renders /chat with ?with= / ?group= params; on mobile the same
+// Chat hub - web renders /chat with ?with= / ?group= params; on mobile the same
 // params drive which conversation is open, so in-screen taps just setParams.
 export default function ChatScreen() {
   const { user } = useAuth();
@@ -98,6 +98,7 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
   const [groups, setGroups] = useState<GroupRow[]>([]);
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading');
   const [creating, setCreating] = useState(false);
+  useBackAction(creating, () => setCreating(false));
   const [gname, setGname] = useState('');
   const [friends, setFriends] = useState<Person[]>([]);
   const [picked, setPicked] = useState<(string | number)[]>([]);
@@ -134,7 +135,7 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
     api
       .deleteChat(c.other_id)
       .then(() => setConvos((v) => v.filter((x) => x.other_id !== c.other_id)))
-      .catch(() => {});
+      .catch(() => Alert.alert('Could not delete', 'Check your connection and try again.'));
   };
 
   const openCreate = async () => {
@@ -174,6 +175,29 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
     );
   }
 
+  // error only masquerades as empty when we have nothing to show - stale
+  // conversations stay visible and refresh on the next focus
+  if (status === 'error' && convos.length === 0) {
+    return (
+      <Screen>
+        <View style={styles.loading}>
+          <Text style={{ color: colors.ink, fontSize: 16, fontWeight: '700' }}>No internet</Text>
+          <Text style={{ color: colors.muted, fontSize: 14, marginTop: 6, marginBottom: 14 }}>
+            Couldn&apos;t load conversations.
+          </Text>
+          <Pressable
+            onPress={() => {
+              setStatus('loading');
+              loadAll();
+            }}
+          >
+            <Text style={{ color: colors.forest, fontSize: 15, fontWeight: '700' }}>Try again</Text>
+          </Pressable>
+        </View>
+      </Screen>
+    );
+  }
+
   const TABS: [key: 'direct' | 'groups', label: string][] = [
     ['direct', 'Direct'],
     ['groups', 'Groups'],
@@ -184,13 +208,13 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
       <View style={styles.wrap}>
         <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
           {/* hero */}
-          <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+          <View style={[styles.hero, { backgroundColor: colors.tintGreen }]}>
             <Text style={styles.heroEmoji} pointerEvents="none">
               💬
             </Text>
-            <Text style={styles.h1}>Messages</Text>
-            <Text style={styles.heroSub}>
-              Your study <Text style={{ color: colors.gold, fontWeight: '700' }}>conversations</Text> and groups.
+            <Text style={[styles.h1, { color: colors.ink }]}>Messages</Text>
+            <Text style={[styles.heroSub, { color: colors.ink }]}>
+              Your study <Text style={{ color: colors.forest, fontWeight: '700' }}>conversations</Text> and groups.
             </Text>
           </View>
 
@@ -300,7 +324,7 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
                           },
                         ]}
                       >
-                        <View style={styles.groupAvatar}>
+                        <View style={[styles.groupAvatar, { backgroundColor: colors.forest }]}>
                           <Text style={{ fontSize: 18 }}>👥</Text>
                         </View>
                         <View style={styles.grow}>
@@ -325,9 +349,9 @@ function ConversationList({ me, onOpenDirect, onOpenGroup }: ListProps) {
           <Pressable
             onPress={openCreate}
             accessibilityLabel="Create study group"
-            style={[styles.fab, { backgroundColor: colors.forest, shadowColor: '#1f4d3f' }]}
+            style={[styles.fab, { backgroundColor: colors.forest, shadowColor: '#171310' }]}
           >
-            <IcoAddUser color="#fff" />
+            <IcoAddUser color={colors.onForest} />
           </Pressable>
         )}
 
@@ -399,8 +423,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, color: '#fff', lineHeight: 36 },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 5 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -427,7 +451,6 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 12,
-    backgroundColor: '#1f4d3f',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,

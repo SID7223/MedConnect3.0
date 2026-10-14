@@ -1,4 +1,4 @@
-// A lightweight display-name filter — port of src/lib/profanity.js.
+// A lightweight display-name filter - port of src/lib/profanity.js.
 // Normalizes the input (lowercase, strip non-letters) before checking.
 
 const BLOCKED_WORDS = [

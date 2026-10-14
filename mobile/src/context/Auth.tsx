@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const t = await AsyncStorage.getItem('token');
         if (!t) return;
 
-        // Show cached user instantly — works offline and removes loading flash
+        // Show cached user instantly - works offline and removes loading flash
         const cached = await AsyncStorage.getItem('mc_user');
         let hasCached = false;
         if (cached) {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(JSON.parse(cached));
             hasCached = true;
           } catch {
-            // corrupt cache — ignore
+            // corrupt cache - ignore
           }
         }
         // Ready to render from cache right away; refresh from the server below.

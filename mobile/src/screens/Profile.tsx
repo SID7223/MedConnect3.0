@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Linking,
   Modal,
@@ -19,10 +20,15 @@ import * as Clipboard from 'expo-clipboard';
 import Svg, { Path } from 'react-native-svg';
 import { router } from 'expo-router';
 import Screen from '../components/Screen';
+import Wordmark from '../components/Wordmark';
 import { confirmAlert } from '../components/ConfirmDialog';
 import DatePickerField from '../components/DatePickerField';
 import { useAuth } from '../context/Auth';
+import { useBackAction } from '../context/Back';
 import { useTheme } from '../context/Theme';
+import { tick } from '../lib/haptics';
+import { dismissKeyboardSoon } from '../lib/keyboard';
+import { packBio, unpackBio } from '../lib/bio';
 import { api } from '../lib/api';
 import { containsBlockedWord } from '../lib/profanity';
 import { getPushPermission, requestPushPermission, sendTestNotification } from '../lib/push';
@@ -34,9 +40,9 @@ const AVATARS = ['🩺','💉','🧬','🦴','🫀','🧠','👨‍⚕️','👩
   '🐱','🦊','🦉','🐼','🐨','🦁','🐸','🦋','🐧','🐢','🦄','🐙',
   '🌟','🔥','🌙','🍀','⚡','🎯','📚','☕'];
 const COUNTRIES = ['Pakistan','United Kingdom','United States','Saudi Arabia / Gulf','Australia','India','Other'];
-const EXAMS = ['MRCP — Part 1','MRCP — Part 2 (Written)','MRCP — PACES','MRCS — Part A','MRCS — Part B (OSCE)','PLAB 1 / UKMLA AKT','PLAB 2 / UKMLA CPSA','USMLE — Step 1','USMLE — Step 2 CK','FCPS — Part 1','FCPS — Part 2','AMC — Part 1','SMLE','NEET-PG','INI-CET','Other'];
+const EXAMS = ['MRCP - Part 1','MRCP - Part 2 (Written)','MRCP - PACES','MRCS - Part A','MRCS - Part B (OSCE)','PLAB 1 / UKMLA AKT','PLAB 2 / UKMLA CPSA','USMLE - Step 1','USMLE - Step 2 CK','FCPS - Part 1','FCPS - Part 2','AMC - Part 1','SMLE','NEET-PG','INI-CET','Other'];
 const PROFESSIONS = ['Medical', 'Dental'];
-const DENTAL_EXAMS = ['INBDE','ORE — Part 1','ORE — Part 2','FCPS Dental','MDS','NEET-MDS','SDLE','ADC Exam','Other'];
+const DENTAL_EXAMS = ['INBDE','ORE - Part 1','ORE - Part 2','FCPS Dental','MDS','NEET-MDS','SDLE','ADC Exam','Other'];
 const TIMEZONES = ['GMT-8 (US Pacific)','GMT-5 (US Eastern)','GMT+0 (UK)','GMT+1 (Europe)','GMT+3 (Gulf / Saudi)','GMT+5 (Pakistan)','GMT+5:30 (India)','GMT+8 (Singapore/China)','GMT+10 (Australia East)'];
 const QBANKS = ['PassMedicine','Pastest','BMJ OnExamination','Plabable','UWorld','AMBOSS','MRCPUK Question Bank','Marrow','PrepLadder','DAMS','Cerebellum','eGurukul','Other'];
 const STUDY_WHEN = ['🌄 Early bird', '☀️ Daytime', '🌆 Evening', '🦉 Night owl'];
@@ -63,29 +69,16 @@ const TILE_KEYS: [string, string][] = [
   ['hide_streak', 'Show study streak'],
 ];
 
-interface Bio {
-  p: string;
-  r: string;
-  legacy: string;
-}
-
-// tags are packed into the existing `bio` column as JSON {p, r}
-function unpackBio(bio: string): Bio {
-  if (!bio) return { p: '', r: '', legacy: '' };
-  try {
-    const o = JSON.parse(bio);
-    if (o && (typeof o.p === 'string' || typeof o.r === 'string')) {
-      return { p: o.p || '', r: o.r || '', legacy: '' };
-    }
-  } catch {
-    // not JSON — treat the whole value as the legacy free-text bio
-  }
-  return { p: '', r: '', legacy: bio };
-}
-function packBio(p: string, r: string) {
-  return JSON.stringify({ p: p || '', r: r || '' });
-}
 const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
+const initials = (name: string) =>
+  name.trim().split(/\s+/).slice(0, 2).map((w) => (w ? w[0].toUpperCase() : '')).join('') || '?';
+
+interface BlockedUser {
+  id: number;
+  name: string;
+  avatar?: string;
+  exam?: string;
+}
 
 interface PickerOption {
   label: string;
@@ -109,6 +102,13 @@ function OptionPicker({
   onClose: () => void;
 }) {
   const { colors } = useTheme();
+  // opening the picker dialog takes window focus away from the screen - hide the
+  // keyboard first so Android's input restart doesn't pop it up over the dialog
+  useEffect(() => {
+    if (!visible) return;
+    const cancel = dismissKeyboardSoon();
+    return cancel;
+  }, [visible]);
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={s.pickerBackdrop} onPress={onClose}>
@@ -152,18 +152,21 @@ function Toggle({ on, onToggle, label }: { on: boolean; onToggle: () => void; la
   const { colors } = useTheme();
   return (
     <Pressable
-      onPress={onToggle}
+      onPress={() => {
+        tick();
+        onToggle();
+      }}
       accessibilityRole="switch"
       accessibilityState={{ checked: on }}
       accessibilityLabel={label}
       style={[s.track, { backgroundColor: on ? colors.forest : colors.subtle }]}
     >
-      <View style={[s.knob, { left: on ? 20.5 : 3 }]} />
+      <View style={[s.knob, { left: on ? 20.5 : 3, backgroundColor: colors.onForest }]} />
     </Pressable>
   );
 }
 
-// Push notifications opt-in toggle (port of web NotifToggle — local notifications)
+// Push notifications opt-in toggle (port of web NotifToggle - local notifications)
 function NotifToggle() {
   const { colors } = useTheme();
   const [on, setOn] = useState(false);
@@ -229,7 +232,7 @@ function NotifToggle() {
   );
 }
 
-// chips that can be DESELECTED — tap a selected chip to clear it
+// chips that can be DESELECTED - tap a selected chip to clear it
 function Chips({
   label,
   options,
@@ -272,7 +275,7 @@ function Chips({
   );
 }
 
-// multi-select tags — tap to toggle several on/off (stored as a comma list)
+// multi-select tags - tap to toggle several on/off (stored as a comma list)
 function MultiChips({
   label,
   hint,
@@ -325,7 +328,7 @@ function InfoRow({ k, v }: { k: string; v: string }) {
   return (
     <View style={[s.infoRow, { borderBottomColor: colors.line }]}>
       <Text style={[s.infoKey, { color: colors.muted }]}>{k}</Text>
-      <Text style={[s.infoVal, { color: colors.ink }]}>{v || '—'}</Text>
+      <Text style={[s.infoVal, { color: colors.ink }]}>{v || '-'}</Text>
     </View>
   );
 }
@@ -366,6 +369,8 @@ export default function ProfileScreen() {
   const shareLink = `https://med-connect3-0.vercel.app/add/${user?.id}`;
 
   const [editing, setEditing] = useState(false);
+  // back exits the inline edit form (same as Cancel)
+  useBackAction(editing, () => setEditing(false));
   const [name, setName] = useState(() => str(user?.name));
   const [avatar, setAvatar] = useState(() => str(user?.avatar) || '🩺');
   const [country, setCountry] = useState(() => str(user?.country) || COUNTRIES[0]);
@@ -392,6 +397,25 @@ export default function ProfileScreen() {
   const [rightNow, setRightNow] = useState(() => unpackBio(str(user?.bio)).r);
   const [busy, setBusy] = useState(false);
   const [picker, setPicker] = useState<null | 'exam' | 'timezone' | 'regCouncil'>(null);
+  const [blocked, setBlocked] = useState<BlockedUser[]>([]);
+  const [blockedLoaded, setBlockedLoaded] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    api
+      .blockedUsers()
+      .then((d) => {
+        if (!alive) return;
+        setBlocked(Array.isArray(d?.blocked) ? d.blocked : []);
+        setBlockedLoaded(true);
+      })
+      .catch(() => {
+        if (alive) setBlockedLoaded(true);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const toggleTile = (key: string) => {
     const next = { ...tilePrefs, [key]: tilePrefs[key] === '1' ? '' : '1' };
@@ -401,13 +425,13 @@ export default function ProfileScreen() {
   const shareProfile = async () => {
     try {
       await Share.share({
-        title: 'Add me on MedConnect',
-        message: `Hi, it's ${str(user?.name)}. Add me as a study partner on MedConnect ${shareLink}`,
+        title: 'Add me on MedPeers',
+        message: `Hi, it's ${str(user?.name)}. Add me as a study partner on MedPeers ${shareLink}`,
         url: shareLink,
       });
       return;
     } catch {
-      // user dismissed the share sheet — fall back to clipboard (web parity)
+      // user dismissed the share sheet - fall back to clipboard (web parity)
     }
     try {
       await Clipboard.setStringAsync(shareLink);
@@ -431,6 +455,7 @@ export default function ProfileScreen() {
         profession: profession.toLowerCase(),
       });
       setUser(updated);
+      Keyboard.dismiss();
       setEditing(false);
     } catch (e: any) {
       Alert.alert('Save failed: ' + (e?.message || ''));
@@ -470,9 +495,24 @@ export default function ProfileScreen() {
     }
   };
 
+  const askUnblock = async (b: BlockedUser) => {
+    const ok = await confirmAlert(`Unblock ${str(b.name)}?`, {
+      note: 'They can find you in Discover and send you requests again.',
+      confirmLabel: 'Unblock',
+      danger: false,
+    });
+    if (!ok) return;
+    try {
+      await api.unblockUser(b.id);
+      setBlocked((prev) => prev.filter((x) => x.id !== b.id));
+    } catch (e: any) {
+      Alert.alert('Could not unblock: ' + (e?.message || ''));
+    }
+  };
+
   const openFeatureRequest = () => {
     Linking.openURL(
-      'mailto:medconnectsupport.io@gmail.com?subject=MedConnect%20feature%20request',
+      'mailto:medconnectsupport.io@gmail.com?subject=MedPeers%20feature%20request',
     ).catch(() => {
       /* ignore failed mailto open, like the web window.location try/catch */
     });
@@ -642,7 +682,10 @@ export default function ProfileScreen() {
             </Pressable>
             <Pressable
               style={[s.btn, s.btnGhost, { borderColor: colors.line, marginTop: 10 }]}
-              onPress={() => setEditing(false)}
+              onPress={() => {
+                Keyboard.dismiss();
+                setEditing(false);
+              }}
             >
               <Text style={[s.btnText, { color: colors.forest }]}>Cancel</Text>
             </Pressable>
@@ -712,7 +755,7 @@ export default function ProfileScreen() {
 
         <View style={[s.card, { backgroundColor: colors.card, borderColor: colors.line, marginTop: 16 }]}>
           <InfoRow k="Exam" v={str(user?.exam)} />
-          <InfoRow k="Exam date" v={examDateView ? examDateView.slice(0, 10) : '—'} />
+          <InfoRow k="Exam date" v={examDateView ? examDateView.slice(0, 10) : '-'} />
           <InfoRow k="Timezone" v={str(user?.timezone)} />
           <InfoRow k="Question bank" v={str(user?.question_bank)} />
           {!!str(user?.study_time) && <InfoRow k="Studies" v={str(user?.study_time)} />}
@@ -727,7 +770,7 @@ export default function ProfileScreen() {
             v={
               str(user?.reg_council)
                 ? `${str(user?.reg_council)} ${str(user?.reg_number)} (self-reported)`
-                : '—'
+                : '-'
             }
           />
         </View>
@@ -758,7 +801,7 @@ export default function ProfileScreen() {
           <Modal visible transparent animationType="fade" onRequestClose={() => setShareOpen(false)}>
             <Pressable style={s.modalBackdrop} onPress={() => setShareOpen(false)}>
               <Pressable style={[s.shareCard, { backgroundColor: colors.card }]} onPress={() => {}}>
-                <Text style={[s.shareTitle, { color: colors.ink }]}>Add me on MedConnect</Text>
+                <Text style={[s.shareTitle, { color: colors.ink }]}>Add me on MedPeers</Text>
                 <Text style={[s.shareSub, { color: colors.muted }]}>
                   Scan to send {str(user?.name)} a connection request.
                 </Text>
@@ -841,6 +884,47 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
 
+        <Text style={[s.label, { color: colors.forest, marginTop: 18 }]}>Blocked people</Text>
+        <View style={[s.sectionCard, { backgroundColor: colors.card, borderColor: colors.line }]}>
+          {!blockedLoaded ? (
+            <View style={s.sectionHead}>
+              <Text style={[s.sectionHeadText, { color: colors.subtle }]}>Loading…</Text>
+            </View>
+          ) : blocked.length === 0 ? (
+            <View style={s.sectionHead}>
+              <Text style={[s.sectionHeadText, { color: colors.muted }]}>No one is blocked</Text>
+            </View>
+          ) : (
+            blocked.map((b, i) => (
+              <View
+                key={b.id}
+                style={[s.sectionRow, { borderTopWidth: i === 0 ? 0 : 1, borderTopColor: colors.line }]}
+              >
+                <View style={[s.blockAvatar, { backgroundColor: colors.paper2 }]}>
+                  <Text style={s.blockAvatarText}>{str(b.avatar) || initials(str(b.name))}</Text>
+                </View>
+                <View style={s.blockInfo}>
+                  <Text style={[s.sectionHeadText, { color: colors.ink }]} numberOfLines={1}>
+                    {str(b.name)}
+                  </Text>
+                  {!!str(b.exam) && (
+                    <Text style={[s.sectionSub, { color: colors.subtle }]} numberOfLines={1}>
+                      {str(b.exam)}
+                    </Text>
+                  )}
+                </View>
+                <Pressable
+                  onPress={() => askUnblock(b)}
+                  style={[s.blockBtn, { borderColor: colors.forest }]}
+                  hitSlop={6}
+                >
+                  <Text style={[s.blockBtnText, { color: colors.forest }]}>Unblock</Text>
+                </Pressable>
+              </View>
+            ))
+          )}
+        </View>
+
         <Pressable
           style={[s.btn, s.btnGhost, { borderColor: colors.rust, marginTop: 16 }]}
           onPress={confirmLogout}
@@ -862,7 +946,10 @@ export default function ProfileScreen() {
           <Text style={[s.deleteLink, { color: colors.subtle }]}>Delete my account</Text>
         </Pressable>
 
-        <Text style={[s.version, { color: colors.muted }]}>MedConnect v{APP_VERSION}</Text>
+        <View style={s.version}>
+          <Wordmark size={11} peersSize={12} color={colors.muted} />
+          <Text style={[s.versionText, { color: colors.muted }]}>v{APP_VERSION}</Text>
+        </View>
       </ScrollView>
     </Screen>
   );
@@ -873,7 +960,7 @@ const s = StyleSheet.create({
   scroll: { padding: 14, paddingTop: 10, paddingHorizontal: 18, paddingBottom: 32 },
   editScroll: { padding: 14, paddingHorizontal: 18, paddingBottom: 40 },
 
-  h1: { fontFamily: SERIF, fontWeight: '700', letterSpacing: -0.5, textAlign: 'center' },
+  h1: { fontFamily: SERIF, letterSpacing: -0.5, textAlign: 'center' },
   sub: { fontSize: 15, marginTop: 5 },
   label: {
     fontSize: 13,
@@ -912,8 +999,7 @@ const s = StyleSheet.create({
     lineHeight: 22,
     maxWidth: 340,
     marginTop: 8,
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
 
   card: { borderWidth: 1.5, borderRadius: 16, padding: 18, marginBottom: 16 },
   infoRow: {
@@ -991,6 +1077,24 @@ const s = StyleSheet.create({
   sectionRow: { flexDirection: 'row', alignItems: 'center', padding: 14, borderTopWidth: 1 },
   sectionHeadText: { fontSize: 14, fontWeight: '600', flex: 1 },
   sectionSub: { fontSize: 11.5, fontWeight: '400', marginTop: 1 },
+  blockAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  blockAvatarText: { fontSize: 18, lineHeight: 22 },
+  blockInfo: { flex: 1, minWidth: 0, marginRight: 10 },
+  blockBtn: {
+    borderWidth: 1.5,
+    borderRadius: 999,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    flexShrink: 0,
+  },
+  blockBtnText: { fontSize: 13, fontWeight: '700' },
   track: { width: 42, height: 24, borderRadius: 999, flexShrink: 0 },
   knob: {
     position: 'absolute',
@@ -998,8 +1102,7 @@ const s = StyleSheet.create({
     width: 19,
     height: 19,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
+    shadowColor: '#171310',
     shadowOpacity: 0.2,
     shadowRadius: 1.5,
     shadowOffset: { width: 0, height: 1 },
@@ -1010,7 +1113,14 @@ const s = StyleSheet.create({
   link: { fontSize: 15, fontWeight: '600' },
   linkDot: { marginHorizontal: 8, fontSize: 15 },
   deleteLink: { fontSize: 13, textAlign: 'center', fontWeight: '600' },
-  version: { textAlign: 'center', marginTop: 20, fontSize: 11, opacity: 0.7 },
+  version: {
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  versionText: { fontSize: 11, opacity: 0.7 },
 
   modalBackdrop: {
     flex: 1,
@@ -1033,7 +1143,7 @@ const s = StyleSheet.create({
     padding: 20,
   },
   pickerCard: { width: '100%', maxWidth: 420, borderRadius: 22, padding: 18 },
-  pickerTitle: { fontFamily: SERIF, fontWeight: '900', fontSize: 18, marginBottom: 10 },
+  pickerTitle: { fontFamily: SERIF, fontSize: 18, marginBottom: 10 },
   pickerList: { maxHeight: 400 },
   pickerRow: {
     flexDirection: 'row',

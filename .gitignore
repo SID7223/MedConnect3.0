@@ -8,7 +8,44 @@ coverage/
 !.env.example
 
 .vercel
-.env*
-
 *.apk
 *.aab
+
+# Kotlin backend build output
+server/build/
+server/.gradle/
+
+# scratch / demo files at repo root
+*-demo*.html
+*-demo*.bak.html
+*-demo*.backup.html
+*-preview.html
+temp.html
+splash-screen*.html
+deletion-dialog-options.html
+logbook-home.html
+offline-preview.html
+quote-color-preview.html
+medpeers-logo-preview.html
+
+# session / working notes (not project docs)
+MEGA-PROMPT.md
+MOBILE-API-AUDIT.md
+MedPeers_Research_Report.pdf
+session-ses_ed81.md
+.plan.md
+TROUBLESHOOTING.txt
+README.txt
+
+# stray artifacts
+System.IO.StreamWriter
+META-INF/
+.testdata/
+%temp%/
+postgres-windows-x86_64.txz
+
+# unrelated: KMP/Compose Multiplatform experiment (the app is mobile/ + server/)
+app/
+
+# mobile scratch
+mobile/segmented-pill-replica.html

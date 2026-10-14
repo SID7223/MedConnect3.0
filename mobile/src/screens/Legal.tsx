@@ -10,20 +10,22 @@ export default function LegalScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.paper2 }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
             ⚖️
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Legal</Text>
-          <Text style={styles.h1}>Privacy &amp; Terms</Text>
-          <Text style={styles.heroSub}>How we handle your data and what you agree to.</Text>
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Legal</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>Privacy &amp; Terms</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>
+            How we handle your data and what you agree to.
+          </Text>
         </View>
 
         <View style={[styles.sheet, { backgroundColor: colors.paper }]}>
           <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.line }]}>
             <Text style={[styles.h2, { color: colors.ink }]}>Privacy</Text>
             <Text style={[styles.p, { color: colors.ink }]}>
-              MedConnect collects the information you provide, your name, email, exam, country, timezone,
+              MedPeers collects the information you provide, your name, email, exam, country, timezone,
               study preferences, optional registration details, and the messages you send. We use this only
               to match you with study partners and run the service. We do not sell your data or use it for
               advertising. Your password is stored securely (hashed). You can edit or remove your
@@ -33,9 +35,9 @@ export default function LegalScreen() {
 
             <Text style={[styles.h2, styles.h2Spacing, { color: colors.ink }]}>Terms of Use</Text>
             <Text style={[styles.p, { color: colors.ink }]}>
-              MedConnect is a peer study-networking tool for medical professionals and exam candidates. It
+              MedPeers is a peer study-networking tool for medical professionals and exam candidates. It
               does not verify medical credentials, registration details are self-reported, and you should
-              use your own judgement before sharing personal information with other users. MedConnect is
+              use your own judgement before sharing personal information with other users. MedPeers is
               not a source of medical advice, and any study material or discussion is for educational
               support only. Be respectful; harassment, impersonation, or misuse may result in removal. The
               service is provided &quot;as is&quot; without guarantees of availability.
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { fontFamily: SERIF, fontSize: 26, lineHeight: 36 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,

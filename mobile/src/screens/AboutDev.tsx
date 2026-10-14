@@ -11,7 +11,7 @@ interface EggPrompt {
 }
 
 const EGG_PROMPTS: EggPrompt[] = [
-  { t: "Are you sure you want to see what I'm hiding? 👀", c: 'muted' },
+  { t: "Are you sure you want to see what we're hiding? 👀", c: 'muted' },
   { t: "There's no turning back. Lock in? 🔒", c: 'gold' },
   { t: 'Ready? 😏', c: 'rust' },
 ];
@@ -63,14 +63,14 @@ export default function AboutDevScreen() {
   return (
     <Screen>
       <ScrollView bounces={false} overScrollMode="never" contentContainerStyle={styles.scroll}>
-        <View style={[styles.hero, { backgroundColor: colors.sectionHero }]}>
+        <View style={[styles.hero, { backgroundColor: colors.paper2 }]}>
           <Text style={styles.heroEmoji} pointerEvents="none">
-            👨‍💻
+            🏢
           </Text>
-          <Text style={[styles.eyebrow, { color: colors.gold }]}>✦ Behind the app</Text>
-          <Text style={styles.h1}>About the Developer</Text>
-          <Text style={styles.heroSub}>
-            The story behind MedConnect: one doctor&apos;s side project.
+          <Text style={[styles.eyebrow, { color: colors.muted }]}>✦ Behind the app</Text>
+          <Text style={[styles.h1, { color: colors.ink }]}>About CDS</Text>
+          <Text style={[styles.heroSub, { color: colors.ink }]}>
+            The company behind MedPeers.
           </Text>
         </View>
 
@@ -121,7 +121,7 @@ export default function AboutDevScreen() {
                       ],
                     }}
                   >
-                    👨‍⚕️
+                    🏢
                   </Animated.Text>
                 </Pressable>
                 <Text style={styles.sparkle} pointerEvents="none">
@@ -130,20 +130,19 @@ export default function AboutDevScreen() {
               </View>
             </View>
 
-            <Text style={[styles.name, { color: colors.ink }]}>Dr. Ali Altaf</Text>
-            <Text style={[styles.role, { color: colors.muted }]}>MBBS · Founder &amp; Developer</Text>
-            <Text style={[styles.motto, { color: colors.rust }]}>Doctor. Dreamer. Builder.</Text>
+            <Text style={[styles.name, { color: colors.ink }]}>CDS</Text>
+            <Text style={[styles.role, { color: colors.muted }]}>Software Company · Builders of MedPeers</Text>
+            <Text style={[styles.motto, { color: colors.rust }]}>Design. Build. Support.</Text>
 
             {!!prompt && (
               <Text style={[styles.prompt, { color: promptColor }]}>{prompt.t}</Text>
             )}
 
             <Text style={[styles.bio, { color: colors.ink }]}>
-              Built by a doctor who understands the challenges of exam preparation for doctors and
-              dentists alike. MedConnect was created to make studying less isolated and more
-              collaborative.
+              Built by CDS, a software company crafting exam-prep tools for doctors and dentists
+              alike. MedPeers was created to make studying less isolated and more collaborative.
             </Text>
-            <Text style={[styles.madeIn, { color: colors.muted }]}>Made with care in Lahore, Pakistan. 🌿</Text>
+            <Text style={[styles.madeIn, { color: colors.muted }]}>Designed and built with care by CDS. 🌿</Text>
 
             <View style={[styles.stats, { backgroundColor: colors.paper2 }]}>
               <View style={styles.statCell}>
@@ -159,7 +158,7 @@ export default function AboutDevScreen() {
               <View style={styles.statCell}>
                 <Text style={styles.statEmoji}>🩺</Text>
                 <Text style={[styles.statText, { color: colors.muted }]}>
-                  for doctors &amp; dentists,{'\n'}by a doctor
+                  for doctors &amp; dentists,{'\n'}by CDS
                 </Text>
               </View>
             </View>
@@ -168,17 +167,17 @@ export default function AboutDevScreen() {
       </ScrollView>
 
       <Modal visible={reveal} animationType="fade" onRequestClose={closeReveal}>
-        <View style={styles.vault}>
-          <Text style={styles.vaultTitle}>
-            GO{'\n'}STUDY<Text style={{ color: '#5fae93' }}>.</Text>
+        <View style={[styles.vault, { backgroundColor: colors.forest }]}>
+          <Text style={[styles.vaultTitle, { color: colors.onForest }]}>
+            GO{'\n'}STUDY<Text style={{ color: colors.mint }}>.</Text>
           </Text>
-          <Text style={styles.vaultSub}>
+          <Text style={[styles.vaultSub, { color: colors.mint }]}>
             Don&apos;t waste time here 😆{'\n'}Your exam won&apos;t pass itself.
           </Text>
-          <Pressable style={styles.vaultBtn} onPress={closeReveal}>
-            <Text style={styles.vaultBtnText}>← Back to the grind</Text>
+          <Pressable style={[styles.vaultBtn, { backgroundColor: colors.forest2 }]} onPress={closeReveal}>
+            <Text style={[styles.vaultBtnText, { color: colors.onForest }]}>← Back to the grind</Text>
           </Pressable>
-          <Text style={styles.vaultFoot}>you really tapped 3 times for this 💀</Text>
+          <Text style={[styles.vaultFoot, { color: colors.mint }]}>you really tapped 3 times for this 💀</Text>
         </View>
       </Modal>
     </Screen>
@@ -196,8 +195,8 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -8, bottom: -16, fontSize: 90, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { fontFamily: SERIF, fontWeight: '900', fontSize: 26, lineHeight: 36, color: '#fff' },
-  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21, color: '#fff' },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 26, lineHeight: 30 },
+  heroSub: { fontSize: 12.5, opacity: 0.85, marginTop: 6, lineHeight: 21 },
   sheet: {
     marginTop: -20,
     borderTopLeftRadius: 26,
@@ -231,14 +230,14 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#1f4d3f',
+    shadowColor: '#171310',
     shadowOpacity: 0.18,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
   },
   sparkle: { position: 'absolute', top: -4, right: -6, fontSize: 22 },
-  name: { fontFamily: SERIF, fontSize: 17, fontWeight: '800' },
+  name: { fontFamily: SERIF, fontSize: 17 },
   role: { fontSize: 11.5, fontWeight: '600', marginTop: 2, letterSpacing: 0.3 },
   motto: { fontSize: 12, fontWeight: '700', marginTop: 6, letterSpacing: 0.5 },
   prompt: { fontSize: 13.5, fontWeight: '700', marginTop: 12, lineHeight: 19, textAlign: 'center' },
@@ -258,7 +257,6 @@ const styles = StyleSheet.create({
   statDivider: { width: 1, alignSelf: 'stretch', marginVertical: 10 },
   vault: {
     flex: 1,
-    backgroundColor: '#0d0d0d',
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
@@ -267,15 +265,11 @@ const styles = StyleSheet.create({
   vaultTitle: {
     fontFamily: SERIF,
     fontSize: 46,
-    fontWeight: '900',
     lineHeight: 48,
     letterSpacing: -1,
-    color: '#fff',
-    textAlign: 'center',
-  },
+    textAlign: 'center' },
   vaultSub: {
     fontSize: 14,
-    color: '#9a9384',
     marginTop: 16,
     lineHeight: 22,
     maxWidth: 280,
@@ -283,11 +277,10 @@ const styles = StyleSheet.create({
   },
   vaultBtn: {
     marginTop: 34,
-    backgroundColor: '#1f4d3f',
     borderRadius: 999,
     paddingVertical: 14,
     paddingHorizontal: 28,
   },
-  vaultBtnText: { color: '#fff', fontSize: 14, fontWeight: '800' },
-  vaultFoot: { position: 'absolute', bottom: 24, fontSize: 10.5, color: '#5a5a5a', paddingHorizontal: 30 },
+  vaultBtnText: { fontSize: 14, fontWeight: '800' },
+  vaultFoot: { position: 'absolute', bottom: 24, fontSize: 10.5, paddingHorizontal: 30 },
 });

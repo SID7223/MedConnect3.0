@@ -8,10 +8,19 @@ import { useDrawer } from '../context/Drawer';
 import { useTheme } from '../context/Theme';
 import { useNotifications } from '../context/Notifications';
 import Icon from './Icon';
+import Wordmark from './Wordmark';
+import { border } from '../theme/tokens';
 
-const TAB_ROOTS = ['/', '/partners', '/osce', '/chat', '/focus'];
+// Tab roots - shared with Back.tsx so the hardware-back exit gate and the
+// TopBar burger/back swap agree on what "root" means. Keep in sync with
+// TAB_META in app/(main)/(tabs)/_layout.tsx.
+export const TAB_ROOTS = ['/', '/partners', '/osce', '/chat', '/focus'];
 
-// Green top app bar — burger on root tabs, back on pushed screens (matches web TopBar).
+// Top app bar - burger on root tabs, back on pushed screens.
+//
+// Home: transparent, icons sit straight on the page. Everywhere else: card
+// fill with a 1.5px hairline under it, ink-coloured content. The avatar always
+// carries the mint ring.
 export default function TopBar() {
   const { colors } = useTheme();
   const { user } = useAuth();
@@ -25,7 +34,10 @@ export default function TopBar() {
   const showBack = !TAB_ROOTS.includes(pathname) || !!backHandler;
   const goBack = () => {
     if (backHandler) backHandler();
-    else navigation.goBack();
+    else if (navigation.canGoBack()) navigation.goBack();
+    // Deep-link / fresh-stack entry has nothing to pop — a dead back button
+    // is worse than a redirect, so land on Home instead.
+    else router.replace('/');
   };
   const onProfile = pathname === '/profile';
 
@@ -37,52 +49,83 @@ export default function TopBar() {
     .map((x) => x[0]?.toUpperCase())
     .join('');
 
+  const isHome = pathname === '/';
+
   return (
-    <View style={[styles.bar, { paddingTop: insets.top + 12, backgroundColor: colors.topbarBg }]}>
-      <View style={styles.side}>
+    <View
+      style={[
+        styles.bar,
+        {
+          paddingTop: insets.top + 10,
+          paddingBottom: isHome ? 2 : 12,
+          backgroundColor: isHome ? 'transparent' : colors.card,
+          borderBottomWidth: isHome ? 0 : border.hair,
+          borderBottomColor: colors.line,
+        },
+      ]}
+    >
+      <View style={[styles.side, isHome && styles.sideHome]}>
         {showBack ? (
-          <Pressable style={styles.iconBtn} onPress={goBack} accessibilityLabel="Back">
-            <Icon name="back" size={24} color="#fff" />
+          <Pressable
+            style={[styles.iconBtn]}
+            onPress={goBack}
+            accessibilityLabel="Back"
+          >
+            <Icon name="back" size={24} color={colors.ink} />
+          </Pressable>
+) : isHome ? (
+          <Pressable
+            style={[styles.menuBtn]}
+            onPress={() => setDrawerOpen(true)}
+            accessibilityLabel="Menu"
+          >
+            <Icon name="menu" size={24} color={colors.ink} strokeWidth={2.2} />
+            <Wordmark size={23} color={colors.ink} />
           </Pressable>
         ) : (
-          <Pressable style={styles.iconBtn} onPress={() => setDrawerOpen(true)} accessibilityLabel="Menu">
-            <View style={styles.burger}>
-              <View style={styles.burgerLine} />
-              <View style={styles.burgerLine} />
-              <View style={styles.burgerLine} />
-            </View>
+          <Pressable
+            style={[styles.iconBtn]}
+            onPress={() => setDrawerOpen(true)}
+            accessibilityLabel="Menu"
+          >
+            <Icon name="menu" size={24} color={colors.ink} strokeWidth={2.2} />
           </Pressable>
         )}
       </View>
 
-      <Text style={styles.title} numberOfLines={1}>
-        MedConnect
-      </Text>
+      {isHome ? null : <View style={styles.spacer} />}
 
       <View style={[styles.side, styles.sideRight]}>
         {user && !onProfile && (
           <Pressable
-            style={[styles.iconBtn, { opacity: totalCount > 0 ? 1 : 0.65 }]}
+            style={[styles.bellBtn]}
             accessibilityLabel="Notifications"
             onPress={() => setBellOpen(true)}
           >
             <View>
-              <Icon name="bell" size={20} color="#fff" strokeWidth={1.8} />
+              <Icon name="bell" size={20} color={colors.ink} strokeWidth={1.8} />
               {totalCount > 0 && (
-                <View style={[styles.badge, { borderColor: colors.topbarBg }]}>
-                  <Text style={styles.badgeText}>{totalCount > 9 ? '9+' : totalCount}</Text>
-                </View>
+                      <View style={[styles.badge, { backgroundColor: colors.orange, borderColor: colors.card }]}>
+                        <Text style={[styles.badgeText, { color: colors.onForest }]}>
+                          {totalCount > 9 ? '9+' : totalCount}
+                        </Text>
+                      </View>
               )}
             </View>
           </Pressable>
         )}
         {!onProfile && (
           <Pressable
-            style={styles.avatar}
+            style={[
+              styles.avatar,
+              { backgroundColor: colors.tintGreen, borderColor: colors.mint },
+            ]}
             accessibility-label="Profile"
             onPress={() => router.push('/profile')}
           >
-            <Text style={styles.avatarText}>{user?.avatar || initials}</Text>
+            <Text style={[styles.avatarText, { color: colors.inkSoft }]}>
+              {user?.avatar || initials}
+            </Text>
           </Pressable>
         )}
       </View>
@@ -99,30 +142,56 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     minHeight: 60,
   },
-  side: { width: 76, flexShrink: 0, flexDirection: 'row', alignItems: 'center' },
+  side: { width: 82, flexShrink: 0, flexDirection: 'row', alignItems: 'center' },
+  // Home leads with the wordmark, so the left slot absorbs the spare width
+  sideHome: { flexGrow: 1, width: undefined },
   sideRight: { justifyContent: 'flex-end', gap: 8 },
-  iconBtn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
-  burger: { width: 22, gap: 4 },
-  burgerLine: { height: 2.2, width: 22, backgroundColor: '#fff', borderRadius: 2 },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '900',
-    letterSpacing: -0.4,
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,.16)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,.3)',
+  iconBtn: {
+    width: 38,
+    height: 38,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 19,
+    backgroundColor: 'transparent',
   },
-  avatarText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+  // Home's left slot pairs the burger with the wordmark in a single Menu
+  // target - the wordmark alone opened the drawer before, undiscoverably -
+  // and sizes to its content instead of boxing at 38x38 (which wrapped and
+  // clipped "MedPeers").
+  menuBtn: {
+    minHeight: 38,
+    paddingHorizontal: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  bellBtn: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 18,
+    backgroundColor: 'transparent',
+  },
+  spacer: {
+    // non-home headers carry no center content (the wordmark lives on Home
+    // only) - this keeps the bell/avatar pinned right.
+    flex: 1,
+  },
+  avatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#171310',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  avatarText: { fontWeight: '800', fontSize: 13 },
   badge: {
     position: 'absolute',
     top: -3,
@@ -130,11 +199,10 @@ const styles = StyleSheet.create({
     minWidth: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#a8442a',
     borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 2,
   },
-  badgeText: { color: '#fff', fontSize: 9, fontWeight: '800' },
+  badgeText: { fontSize: 9, fontWeight: '800' },
 });

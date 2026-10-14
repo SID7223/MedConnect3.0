@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { useTheme } from '../context/Theme';
 
-// Shared pieces for the chat screens — port of src/components/ChatBits.jsx.
+// Shared pieces for the chat screens - port of src/components/ChatBits.jsx.
 
 interface IcoProps {
   color?: string;
@@ -113,12 +113,12 @@ export const Stamp = ({ ts, light }: { ts?: string; light?: boolean }) => {
   const t = fmtTime(ts);
   if (!t) return null;
   return (
-    <Text style={{ fontSize: 9.5, opacity: 0.65, textAlign: 'right', marginTop: 3, color: light ? '#e7f3ee' : colors.muted }}>
+    <Text style={{ fontSize: 9.5, opacity: 0.65, textAlign: 'right', marginTop: 3, color: light ? colors.onForest : colors.muted }}>
       {t}
     </Text>
   );
 };
 
-// Promise-based confirmation — re-exported from ConfirmDialog (the system-wide
+// Promise-based confirmation - re-exported from ConfirmDialog (the system-wide
 // "Compact Pill" dialog) so existing imports from ChatBits keep working.
 export { confirmAlert } from './ConfirmDialog';

@@ -1,0 +1,757 @@
+[
+  {
+    "id": "M4-001",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Diabetic Ketoacidosis",
+    "difficulty": "moderate",
+    "stem": "A 19-year-old woman with type 1 diabetes presents with vomiting, abdominal pain, Kussmaul breathing, glucose 24 mmol/L, venous pH 7.12 and ketonaemia. After initial 0.9% sodium chloride resuscitation she is started on a fixed-rate intravenous insulin infusion. Which insulin infusion rate is recommended as the starting dose in adults with diabetic ketoacidosis?",
+    "image": null,
+    "options": {
+      "A": "0.05 units/kg/h, which is the standard starting rate for all adults with DKA",
+      "B": "0.075 units/kg/h, titrated upward only if the ketone level does not fall",
+      "C": "0.1 units/kg/h, with an optional 0.1 units/kg bolus if obtaining venous access is delayed",
+      "D": "0.2 units/kg/h, doubled from the historical dose to shorten time to resolution"
+    },
+    "answer": "C",
+    "explanation": "The 2024 consensus report on hyperglycemic crises recommends a fixed-rate intravenous insulin infusion started at 0.1 units/kg/h, with an initial bolus of 0.1 units/kg only if obtaining venous access will be delayed. Once blood glucose falls below 250 mg/dL (13.9 mmol/L), 5-10% dextrose is added to the 0.9% saline and the infusion is reduced to 0.05 units/kg/h. Isotonic saline is the recommended initial resuscitation fluid in most guidelines.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Hyperglycemic Crises in Adults With Diabetes: A Consensus Report",
+        "org": "PubMed Central",
+        "year": 2024,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11272983/"
+      },
+      {
+        "title": "6. Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises: Standards of Care in Diabetes-2026",
+        "org": "PubMed Central",
+        "year": 2025,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12690178/"
+      }
+    ]
+  },
+  {
+    "id": "M4-002",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Chronic Kidney Disease in Diabetes",
+    "difficulty": "hard",
+    "stem": "A 68-year-old man with type 2 diabetes has UACR 300 mg/g, eGFR 45 mL/min/1.73 m2, and blood pressure controlled on maximally tolerated lisinopril. He is also on metformin and semaglutide. According to the ADA Standards of Care in Diabetes-2026, which additional strategy can be considered to reduce kidney and cardiovascular risk?",
+    "image": null,
+    "options": {
+      "A": "Add a GLP-1 receptor agonist alone, because albuminuria only falls when glucose lowering is intensified",
+      "B": "Simultaneously initiate an SGLT2 inhibitor and the nonsteroidal MRA finerenone, because his UACR is at least 100 mg/g with eGFR 30-90 on a renin-angiotensin system inhibitor",
+      "C": "Stop lisinopril and switch to an angiotensin receptor blocker plus a direct renin inhibitor for dual blockade",
+      "D": "Add the steroidal mineralocorticoid receptor antagonist spironolactone on top of lisinopril as first choice",
+      "E": "Defer kidney-directed therapy and intensify only diuretic treatment until eGFR falls below 30"
+    },
+    "answer": "B",
+    "explanation": "ADA 2026 Recommendation 11.9 states that simultaneous initiation of an SGLT2 inhibitor and finerenone can be considered in adults with type 2 diabetes and UACR of at least 100 mg/g with eGFR 30-90 who are on a renin-angiotensin system inhibitor, based on evidence of safety and beneficial effects on albuminuria. Both SGLT2 inhibitors and finerenone mediate most of their benefit through reduction of albuminuria, and RAS blockade should already be at maximally tolerated dose. Dual renin-angiotensin system blockade is not recommended.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "11. Chronic Kidney Disease and Risk Management: Standards of Care in Diabetes-2026",
+        "org": "PubMed Central",
+        "year": 2025,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12690176/"
+      }
+    ]
+  },
+  {
+    "id": "M4-003",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Thyroid Nodules",
+    "difficulty": "moderate",
+    "stem": "A 46-year-old woman is found to have a dominant predominantly cystic thyroid nodule that is difficult to palpate. Which of the following statements about fine-needle aspiration of thyroid nodules is correct?",
+    "image": null,
+    "options": {
+      "A": "Palpation-guided FNA is preferred in all cases because it avoids radiation exposure from ultrasound",
+      "B": "FNA should be deferred until scintigraphy confirms a cold nodule, since hot nodules never require sampling",
+      "C": "Cytology results should be reported as simply benign or malignant without any structured classification system",
+      "D": "Ultrasound-guided FNA is preferred when the likelihood of a nondiagnostic sample is high, for example nodules with more than 25%-50% cystic component or nodules that are difficult to palpate",
+      "E": "FNA is contraindicated in nodules that are posteriorly located within the thyroid lobe"
+    },
+    "answer": "D",
+    "explanation": "The ATA 2015 guideline states that FNA is the procedure of choice when clinically indicated, and that ultrasound-guided FNA is preferred when there is a higher likelihood of a nondiagnostic result (more than 25%-50% cystic component) or sampling error such as difficult-to-palpate or posterior nodules. It also recommends reporting cytology using the Bethesda System for Reporting Thyroid Cytopathology. Scintigraphy is reserved for low-TSH nodules and does not replace FNA of nonfunctioning nodules that meet size criteria.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2015 American Thyroid Association Management Guidelines for Adult Patients with Thyroid Nodules and Differentiated Thyroid Cancer: The American Thyroid Association Guidelines Task Force on Thyroid Nodules and Differentiated Thyroid Cancer",
+        "org": "PubMed Central",
+        "year": 2016,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4739132/"
+      }
+    ]
+  },
+  {
+    "id": "M4-004",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Thyroid Cancer",
+    "difficulty": "moderate",
+    "stem": "The image shows a thyroid fine-needle aspiration smear from a 39-year-old woman with a 1.8 cm solid hyperechoic nodule. The smear shows papillary structures with true fibrovascular cores, nuclear grooves, pale chromatin and intranuclear cytoplasmic inclusions. Which diagnosis best fits these cytological features?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Papillary_Carcinoma_of_the_Thyroid.jpg?width=800",
+      "alt": "Thyroid FNA smear showing papillary structures with nuclear grooves and intranuclear cytoplasmic inclusions",
+      "caption": "Thyroid fine-needle aspiration showing the nuclear features of papillary thyroid carcinoma",
+      "source": "Wikimedia Commons – File:Papillary Carcinoma of the Thyroid.jpg (Ed Uthman, MD, CC BY-SA 2.0)"
+    },
+    "options": {
+      "A": "Medullary thyroid carcinoma",
+      "B": "Follicular thyroid carcinoma",
+      "C": "Papillary thyroid carcinoma",
+      "D": "Anaplastic (undifferentiated) thyroid carcinoma",
+      "E": "Primary thyroid lymphoma"
+    },
+    "answer": "C",
+    "explanation": "Nuclear grooves, intranuclear cytoplasmic inclusions, pale chromatin, nuclear overlapping and psammoma bodies are the dependable cytomorphological features used to diagnose papillary thyroid carcinoma on cytology. Follicular carcinoma requires demonstration of capsular or vascular invasion on histology, medullary carcinoma arises from parafollicular C cells, and anaplastic carcinoma shows marked pleomorphism rather than these nuclear features.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Value of Combined Cytomorphological Parameters in Improving Diagnostic Accuracy of Papillary Thyroid Carcinoma on Cytology - The Five Dependable Features",
+        "org": "PubMed Central",
+        "year": 2022,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8923321/"
+      }
+    ]
+  },
+  {
+    "id": "M4-005",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Cushing Syndrome",
+    "difficulty": "easy",
+    "stem": "A 42-year-old woman with new-onset hypertension, central obesity, proximal myopathy and violaceous striae is being investigated for Cushing syndrome. Which of the following is recommended as an initial screening test?",
+    "image": null,
+    "options": {
+      "A": "Random serum cortisol measured at any time of day",
+      "B": "Late-night salivary cortisol (two measurements)",
+      "C": "Plasma ACTH concentration",
+      "D": "Insulin tolerance test"
+    },
+    "answer": "B",
+    "explanation": "The Endocrine Society guideline recommends one of four high-accuracy initial tests: two urine free cortisol measurements, two late-night salivary cortisol measurements, a 1 mg overnight dexamethasone suppression test, or a longer low-dose dexamethasone suppression test. Random serum cortisol, random plasma ACTH and the insulin tolerance test are recommended against for initial testing. The insulin tolerance test is reserved for assessing the hypothalamic-pituitary-adrenal axis, not for screening.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnosis of Cushing's Syndrome Guideline Resources",
+        "org": "Endocrine Society",
+        "year": 2008,
+        "url": "https://www.endocrine.org/clinical-practice-guidelines/diagnosis-of-cushing-syndrome"
+      }
+    ]
+  },
+  {
+    "id": "M4-006",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Hypothyroidism",
+    "difficulty": "moderate",
+    "stem": "A 58-year-old man with newly diagnosed primary hypothyroidism weighs 70 kg. He is under 65 years of age and has no history of cardiovascular disease. According to NICE guidance, which starting levothyroxine regimen should be considered?",
+    "image": null,
+    "options": {
+      "A": "1.6 micrograms/kg body weight per day, rounded to the nearest 25 micrograms",
+      "B": "25-50 micrograms per day with gradual titration, because all adults start low",
+      "C": "Liothyronine alone, because it is more effective than levothyroxine",
+      "D": "Natural thyroid extract in preference to levothyroxine",
+      "E": "A dose titrated to suppress TSH to below the reference range"
+    },
+    "answer": "A",
+    "explanation": "NICE NG145 recommends considering levothyroxine at 1.6 micrograms/kg/day rounded to the nearest 25 micrograms for adults under 65 with primary hypothyroidism and no cardiovascular disease history. The lower starting dose of 25-50 micrograms with titration is reserved for adults aged 65 and over and those with cardiovascular disease. Liothyronine is not offered routinely, natural thyroid extract is not recommended, and TSH should be kept within the reference range rather than suppressed.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Thyroid disease: assessment and management - Recommendations",
+        "org": "NICE",
+        "year": 2019,
+        "url": "https://www.nice.org.uk/guidance/ng145/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-007",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Primary Hyperparathyroidism",
+    "difficulty": "hard",
+    "stem": "A 62-year-old man is incidentally found to have asymptomatic primary hyperparathyroidism with serum calcium 0.9 mg/dL (0.22 mmol/L) above the upper limit of normal and eGFR 78 mL/min. Dual-energy X-ray absorptiometry shows a T-score of -2.8 at the femoral neck and vertebral fracture assessment reveals a previously undiagnosed L2 fracture. Which of the following best guides the decision on surgery?",
+    "image": null,
+    "options": {
+      "A": "Surgery is not indicated because the calcium elevation is less than 1.6 mg/dL above the upper limit of normal",
+      "B": "Surgery is only indicated once eGFR falls below 30 mL/min, regardless of skeletal findings",
+      "C": "His vertebral fracture is irrelevant because only fragility fractures of the hip count toward surgical eligibility",
+      "D": "Observation with annual calcium measurement is appropriate until the T-score falls to -3.5",
+      "E": "Parathyroidectomy should be offered, because a T-score of -2.5 or worse at any measured site or a vertebral fracture identified on imaging are both surgical criteria"
+    },
+    "answer": "E",
+    "explanation": "The Fourth International Workshop guidelines for asymptomatic primary hyperparathyroidism include skeletal involvement as part of the criteria for surgery: a T-score of -2.5 or below at lumbar spine, total hip, femoral neck or distal one-third radius, or a vertebral fragility fracture identified on x-ray, CT, MRI or vertebral fracture assessment. Other criteria include serum calcium more than 1.0 mg/dL above the upper limit of normal, 24-hour urine calcium above 400 mg/day, and reduced eGFR. This patient meets surgical criteria on two counts, so observation is inappropriate.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Guidelines for the Management of Asymptomatic Primary Hyperparathyroidism: Summary Statement from the Fourth International Workshop",
+        "org": "PubMed Central",
+        "year": 2014,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5393490/"
+      }
+    ]
+  },
+  {
+    "id": "M4-008",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Endocrinology and diabetes",
+    "topic": "Adrenal Insufficiency",
+    "difficulty": "moderate",
+    "stem": "A 44-year-old woman with autoimmune primary adrenal insufficiency and positive 21-hydroxylase antibodies asks about her long-term replacement regimen. Which of the following best describes the recommended adult replacement regimen?",
+    "image": null,
+    "options": {
+      "A": "Hydrocortisone 20-30 mg given once each morning, with no mineralocorticoid replacement",
+      "B": "Dexamethasone 0.75 mg daily plus fludrocortisone 0.1 mg daily, because dexamethasone has the longest half-life",
+      "C": "Prednisolone 5 mg daily alone once the morning cortisol is within the reference range",
+      "D": "Fludrocortisone (median 0.1 mg) once daily plus hydrocortisone 15-25 mg per day (or cortisone acetate 20-35 mg per day) given in two to three daily doses, with stress-dose education, a steroid card and parenteral emergency cover",
+      "E": "Replacement can be stopped permanently once the patient feels well, with annual reassessment"
+    },
+    "answer": "D",
+    "explanation": "The Endocrine Society clinical practice guideline for primary adrenal insufficiency recommends once-daily fludrocortisone (median 0.1 mg) and hydrocortisone 15-25 mg/day or cortisone acetate 20-35 mg/day in two to three daily doses for adults. Patients must be educated about stress dosing and given a steroid card and a glucocorticoid preparation for parenteral emergency administration. Replacement is lifelong, and single daily dosing or dexamethasone-based regimens are not recommended.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Diagnosis and Treatment of Primary Adrenal Insufficiency: An Endocrine Society Clinical Practice Guideline",
+        "org": "PubMed Central",
+        "year": 2015,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4880116/"
+      }
+    ]
+  },
+  {
+    "id": "M4-009",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Sickle Cell Disease",
+    "difficulty": "hard",
+    "stem": "A 9-year-old child with homozygous sickle cell disease (HbSS) attends routine follow-up in a low- to middle-income setting; the peripheral blood smear is shown. There has been no prior stroke or transient ischaemic attack. According to the American Society of Hematology 2020 guidelines for cerebrovascular disease in sickle cell disease, which strategy is recommended for primary stroke prevention?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sickle_Cell_Blood_Smear.JPG?width=800",
+      "alt": "Giemsa-stained peripheral blood smear showing sickle-shaped red cells and target cells",
+      "caption": "Peripheral blood smear demonstrating sickle erythrocytes in homozygous sickle cell disease",
+      "source": "Wikimedia Commons – File:Sickle Cell Blood Smear.JPG (Keith Chambers, CC BY-SA 3.0)"
+    },
+    "options": {
+      "A": "Transcranial Doppler ultrasound screening, with hydroxyurea used for primary stroke prevention in children with HbSS or HbS beta-zero thalassaemia",
+      "B": "Routine prophylactic chronic transfusion for every child with HbSS irrespective of Doppler velocities",
+      "C": "Screening only after the first clinical stroke has occurred, because silent infarcts are not actionable",
+      "D": "Carotid endarterectomy based on carotid intima-media thickness measurement",
+      "E": "Primary intracranial haemorrhage prophylaxis with low-dose aspirin in all children"
+    },
+    "answer": "A",
+    "explanation": "One of the three immediately practice-changing recommendations of the ASH 2020 cerebrovascular guideline is the use of transcranial Doppler ultrasound screening and hydroxyurea for primary stroke prevention in children with HbSS and HbS beta-zero thalassaemia living in low- to middle-income settings. The guideline also supports MRI of the brain without sedation to detect silent cerebral infarcts and surveillance for neurodevelopmental problems. Screening only after stroke occurs cannot provide primary prevention.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "American Society of Hematology 2020 guidelines for sickle cell disease: prevention, diagnosis, and treatment of cerebrovascular disease in children and adults",
+        "org": "PubMed Central",
+        "year": 2020,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7189278/"
+      }
+    ]
+  },
+  {
+    "id": "M4-010",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Immune Thrombocytopenia",
+    "difficulty": "moderate",
+    "stem": "A 52-year-old woman with newly diagnosed primary immune thrombocytopenia was started on corticosteroids but after 6 weeks her platelet count remains 18 x 10(9)/L with minor mucosal bleeding. She has had no splenectomy. According to the American Society of Hematology guideline update for ITP, which option is recommended next?",
+    "image": null,
+    "options": {
+      "A": "Continue high-dose corticosteroids indefinitely until the count normalises",
+      "B": "Rituximab as the only second-line option, because splenectomy is no longer recommended by ASH",
+      "C": "Splenectomy, which is often appropriate when platelet counts remain below 30 x 10(9)/L after 4 to 6 weeks of medical treatment",
+      "D": "Observation alone, because treatment is indicated only when the count falls below 10 x 10(9)/L",
+      "E": "Immediate high-dose intravenous immunoglobulin followed by chronic transfusion support"
+    },
+    "answer": "C",
+    "explanation": "The ASH ITP guideline update advises that splenectomy is often appropriate if platelet counts remain below 30,000 after 4 to 6 weeks of medical treatment, and gives a grade 1B recommendation for splenectomy in adults who fail corticosteroid therapy. Rituximab may be considered for patients who have failed at least one other therapy or who are not splenectomy candidates, and thrombopoietin receptor agonists for those who have failed one line of therapy. Observation alone is inappropriate with ongoing bleeding.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Evidence-based management of immune thrombocytopenia: ASH guideline update",
+        "org": "PubMed Central",
+        "year": 2018,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6245979/"
+      }
+    ]
+  },
+  {
+    "id": "M4-011",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Red Blood Cell Transfusion",
+    "difficulty": "moderate",
+    "stem": "A haemodynamically stable 71-year-old man with anaemia of chronic disease has a haemoglobin concentration of 68 g/L and no major haemorrhage, acute coronary syndrome or regular transfusion requirement. According to NICE guidance on blood transfusion, which transfusion strategy is appropriate?",
+    "image": null,
+    "options": {
+      "A": "Use a restrictive threshold, transfusing at a haemoglobin below 70 g/L and targeting 70-90 g/L after transfusion",
+      "B": "Transfuse at any haemoglobin below 100 g/L to reduce hospital stay",
+      "C": "Transfuse at 80 g/L for every patient regardless of cardiovascular status",
+      "D": "Wait until haemoglobin falls below 50 g/L before transfusing"
+    },
+    "answer": "A",
+    "explanation": "NICE NG24 recommends restrictive red blood cell transfusion thresholds for people who do not have major haemorrhage, acute coronary syndrome or a need for regular transfusion for chronic anaemia, using a threshold of 70 g/L with a post-transfusion target of 70-90 g/L. A higher threshold of 80 g/L with a target of 80-100 g/L applies specifically to people with acute coronary syndrome. Single-unit transfusions should be considered in stable patients.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Blood transfusion - Red blood cell transfusion",
+        "org": "NICE",
+        "year": 2015,
+        "url": "https://www.nice.org.uk/guidance/ng24/chapter/Red-blood-cell-transfusion"
+      }
+    ]
+  },
+  {
+    "id": "M4-012",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Platelet Transfusion",
+    "difficulty": "moderate",
+    "stem": "A 60-year-old man with acute myeloid leukaemia has a platelet count of 30 x 10(9)/L and is scheduled for insertion of a central venous catheter. He has no active bleeding. According to NICE guidance, which platelet transfusion strategy should be considered?",
+    "image": null,
+    "options": {
+      "A": "No platelet transfusion, because prophylaxis is only given during active haemorrhage",
+      "B": "A prophylactic platelet transfusion to raise the platelet count above 50 x 10(9)/L before the procedure",
+      "C": "A prophylactic transfusion only if the count is below 20 x 10(9)/L at any time",
+      "D": "A transfusion to raise the count above 100 x 10(9)/L for every invasive procedure",
+      "E": "Routine transfusion to a target of 150 x 10(9)/L to prevent delayed bleeding"
+    },
+    "answer": "B",
+    "explanation": "NICE NG24 recommends considering prophylactic platelet transfusions to raise the platelet count above 50 x 10(9)/L in people having invasive procedures or surgery, with a higher threshold of 50-75 x 10(9)/L for those at high risk of bleeding. Counts of 10-20 x 10(9)/L are the usual threshold for prophylaxis against spontaneous bleeding in haematological malignancy, not for procedures. Higher targets are not routinely required.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Blood transfusion - Platelet transfusion",
+        "org": "NICE",
+        "year": 2015,
+        "url": "https://www.nice.org.uk/guidance/ng24/chapter/Platelet-transfusion"
+      }
+    ]
+  },
+  {
+    "id": "M4-013",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Sickle Cell Disease",
+    "difficulty": "easy",
+    "stem": "A 26-year-old man with sickle cell disease presents on day one of an acute painful episode in the lower back. His pain is severe and he has received no analgesia before arrival. Which of the following analgesic strategies is recommended?",
+    "image": null,
+    "options": {
+      "A": "Oral ibuprofen alone and discharge home with a follow-up in one week",
+      "B": "Non-steroidal anti-inflammatory drugs alone until the pain score falls below 3",
+      "C": "Intravenous paracetamol only, avoiding opioids unless the episode persists beyond 48 hours",
+      "D": "A bolus dose of a strong opioid by a suitable route in line with local protocols, plus regular paracetamol and non-steroidal anti-inflammatory drugs unless contraindicated",
+      "E": "Codeine-only analgesia because strong opioids are reserved for renal colic"
+    },
+    "answer": "D",
+    "explanation": "NICE CG134 (sickle cell disease: managing acute painful episodes in hospital) advises a bolus dose of a strong opioid by a suitable route for all patients presenting with severe pain, along with regular paracetamol and NSAIDs in addition to the opioid unless contraindicated. A weak opioid may be considered as an alternative to a strong opioid only for moderate pain in patients who have not taken analgesia before presentation. NSAIDs should be avoided in the third trimester of pregnancy.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Sickle cell disease: managing acute painful episodes in hospital - Recommendations",
+        "org": "NICE",
+        "year": 2012,
+        "url": "https://www.nice.org.uk/guidance/cg143/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-014",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Haematology",
+    "topic": "Iron Deficiency Anaemia",
+    "difficulty": "moderate",
+    "stem": "A 45-year-old woman is found to have iron deficiency anaemia with no obvious cause on history or examination. She is being investigated for possible colorectal malignancy in the community. Which test should be offered to guide the urgency of her referral?",
+    "image": null,
+    "options": {
+      "A": "Guaiac-based faecal occult blood testing on three consecutive samples",
+      "B": "Serum ferritin alone, repeated after four weeks of oral iron",
+      "C": "Direct straight-to-test colonoscopy without any faecal assessment",
+      "D": "A quantitative faecal immunochemical test (FIT)"
+    },
+    "answer": "D",
+    "explanation": "NICE NG12 recommends offering a quantitative faecal immunochemical test using HM-JACKarc or OC-Sensor to guide referral for suspected colorectal cancer in adults presenting with iron-deficiency anaemia, among other lower gastrointestinal presentations. FIT is used alongside clinical assessment to decide on urgent two-week-wait referral rather than to rule out cancer. Guaiac-based faecal occult blood testing is no longer used for this pathway.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Suspected cancer: recognition and referral - recommendations organised by site of cancer",
+        "org": "NICE",
+        "year": 2015,
+        "url": "https://www.nice.org.uk/guidance/ng12/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-015",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Oncology",
+    "topic": "Immune-Related Adverse Events",
+    "difficulty": "hard",
+    "stem": "A 63-year-old man with non-small cell lung cancer on nivolumab develops grade 3 immune-mediated colitis with more than seven stools per day over baseline and incontinence. Which of the following is the recommended general management approach?",
+    "image": null,
+    "options": {
+      "A": "Continue nivolumab unchanged and start loperamide with dietary modification",
+      "B": "Hold nivolumab and start prednisone 0.5-1 mg/kg/day, tapering over four weeks",
+      "C": "Permanently discontinue nivolumab immediately regardless of symptom resolution",
+      "D": "Hold nivolumab and give high-dose corticosteroids tapered over one week only",
+      "E": "Hold nivolumab and initiate high-dose corticosteroids (prednisone or methylprednisolone 1-2 mg/kg/day) tapered over at least four to six weeks, offering infliximab if there is no improvement after 48 to 72 hours"
+    },
+    "answer": "E",
+    "explanation": "The ASCO guideline for immune-related adverse events recommends holding checkpoint inhibitors for grade 3 toxicities and initiating high-dose corticosteroids at prednisone or methylprednisolone 1-2 mg/kg/day, tapered over at least four to six weeks. If symptoms do not improve with 48 to 72 hours of high-dose corticosteroid, infliximab may be offered for some toxicities. Permanent discontinuation is the general rule for grade 4 toxicity, except for endocrinopathies controlled by hormone replacement.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Management of Immune-Related Adverse Events in Patients Treated With Immune Checkpoint Inhibitor Therapy: American Society of Clinical Oncology Clinical Practice Guideline",
+        "org": "PubMed Central",
+        "year": 2018,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6481621/"
+      }
+    ]
+  },
+  {
+    "id": "M4-016",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Oncology",
+    "topic": "Colorectal Cancer Screening",
+    "difficulty": "easy",
+    "stem": "A 61-year-old man asks about bowel cancer screening in the UK. He is registered with a general practitioner and has no symptoms. Which of the following correctly describes the current programme?",
+    "image": null,
+    "options": {
+      "A": "He will automatically be sent a faecal immunochemical test (FIT) kit every 2 years from age 50 to 74, with screening continuing after 75 on request",
+      "B": "Screening is offered every 3 years to everyone aged 40 to 74 using a guaiac faecal occult blood test",
+      "C": "Screening consists of flexi-sigmoidoscopy once at age 55 followed by no further testing",
+      "D": "Screening is offered annually to all adults from age 18 using a stool DNA test",
+      "E": "Screening starts only at age 80, because younger adults have negligible risk"
+    },
+    "answer": "A",
+    "explanation": "NHS bowel cancer screening uses a faecal immunochemical test sent automatically every 2 years to people aged 50 to 74 who are registered with a GP, and people aged 75 and over can request the test by calling the bowel cancer screening helpline. The programme no longer uses guaiac-based faecal occult blood testing, and there is no annual or whole-population DNA screening programme in the UK.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Bowel cancer screening",
+        "org": "NHS",
+        "year": 2026,
+        "url": "https://www.nhs.uk/tests-and-treatments/bowel-cancer-screening/"
+      }
+    ]
+  },
+  {
+    "id": "M4-017",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Oncology",
+    "topic": "Breast Cancer",
+    "difficulty": "moderate",
+    "stem": "A 66-year-old postmenopausal woman has completed primary surgery and systemic therapy for node-positive invasive breast cancer and has no known bone metastases. She has no contraindication to bisphosphonate therapy. According to NICE guidance, which of the following is recommended?",
+    "image": null,
+    "options": {
+      "A": "No adjuvant bone-directed therapy, because bisphosphonates are only licensed for metastatic disease",
+      "B": "Bisphosphonates only if a follow-up scan shows new bone lesions",
+      "C": "Offer bisphosphonates (zoledronic acid or sodium clodronate) as adjuvant therapy",
+      "D": "Offer bisphosphonates routinely to all premenopausal women with node-negative disease",
+      "E": "Delay bone-directed therapy until the patient develops a fragility fracture"
+    },
+    "answer": "C",
+    "explanation": "NICE NG101 recommends offering bisphosphonates (zoledronic acid or sodium clodronate) as adjuvant therapy to postmenopausal women with node-positive invasive breast cancer, and considering them for postmenopausal women with node-negative disease at high risk of recurrence. The intent is adjuvant treatment in the absence of metastatic disease, so waiting for bone lesions or a fracture is incorrect. NICE notes that this use was off-label as at March 2025.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Early and locally advanced breast cancer: diagnosis and management - Recommendations",
+        "org": "NICE",
+        "year": 2018,
+        "url": "https://www.nice.org.uk/guidance/ng101/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-018",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Oncology",
+    "topic": "End of Life Care",
+    "difficulty": "easy",
+    "stem": "A palliative care team is reviewing how adults who are likely to be approaching the end of their life are identified in the community. Which of the following tools does NICE recommend that services use to support this identification?",
+    "image": null,
+    "options": {
+      "A": "CHA2DS2-VASc scoring",
+      "B": "The Gold Standards Framework, the Amber Care Bundle or the Supportive and Palliative Care Indicators Tool (SPICT)",
+      "C": "CURB-65 scoring",
+      "D": "The Glasgow Coma Scale"
+    },
+    "answer": "B",
+    "explanation": "NICE NG142 recommends that people managing and delivering services develop systems to identify adults likely to be approaching the end of their life, for example using tools such as the Gold Standards Framework, the Amber Care Bundle or SPICT. This enables practitioners to start advance care planning discussions early and support preferences for place of care and death. The other scores are used for stroke risk, pneumonia severity and consciousness assessment respectively.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "End of life care for adults: service delivery - Recommendations",
+        "org": "NICE",
+        "year": 2019,
+        "url": "https://www.nice.org.uk/guidance/ng142/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-019",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Rheumatology",
+    "topic": "Rheumatoid Arthritis",
+    "difficulty": "hard",
+    "stem": "A 47-year-old woman with active rheumatoid arthritis is seropositive for anti-CCP antibodies and the hand radiograph shown demonstrates periarticular erosions. She is starting conventional synthetic DMARD therapy. Which treatment target should be used?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/RheumatoideArthritisAP.jpg?width=800",
+      "alt": "Anteroposterior hand radiograph showing marginal erosions and joint space narrowing of rheumatoid arthritis",
+      "caption": "Hand radiograph demonstrating erosive rheumatoid arthritis",
+      "source": "Wikimedia Commons – File:RheumatoideArthritisAP.jpg (CC BY 3.0)"
+    },
+    "options": {
+      "A": "Low disease activity is an acceptable final target for everyone with rheumatoid arthritis",
+      "B": "Remission should be targeted in people at increased risk of radiological progression, such as those with anti-CCP antibodies or erosions on X-ray",
+      "C": "Symptom control alone, because DMARDs should not be escalated once pain improves",
+      "D": "Normalisation of the erythrocyte sedimentation rate without using a composite disease activity score",
+      "E": "A fixed 6-month course of treatment followed by withdrawal of all DMARDs"
+    },
+    "answer": "B",
+    "explanation": "NICE NG100 advises treating active rheumatoid arthritis with the aim of achieving remission, or low disease activity if remission cannot be achieved. For people with an increased risk of radiological progression, defined as the presence of anti-CCP antibodies or erosions on X-ray at baseline, the target should be remission rather than low disease activity. Disease activity using a composite score such as DAS28 should be measured monthly in specialist care until the target is reached.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Rheumatoid arthritis in adults: management - Recommendations",
+        "org": "NICE",
+        "year": 2018,
+        "url": "https://www.nice.org.uk/guidance/ng100/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-020",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Rheumatology",
+    "topic": "Systemic Lupus Erythematosus",
+    "difficulty": "moderate",
+    "stem": "A 29-year-old woman is being assessed against the 2019 EULAR/ACR classification criteria for systemic lupus erythematosus. Which of the following statements about these criteria is correct?",
+    "image": null,
+    "options": {
+      "A": "A positive antinuclear antibody is not required before applying the criteria",
+      "B": "Patients are classified when they accumulate 10 or more weighted points across clinical and immunological domains",
+      "C": "Only clinical domains contribute points; serological findings are ignored",
+      "D": "Antinuclear antibody is the entry criterion and patients are classified only when they reach at least 10 points",
+      "E": "The criteria were designed to guide treatment decisions rather than classification"
+    },
+    "answer": "D",
+    "explanation": "The 2019 EULAR/ACR criteria use antinuclear antibody as an entry criterion, after which seven clinical domains and three immunological domains contribute weighted scores, and patients accumulating at least 10 points are classified as having SLE. In the validation cohort the new criteria achieved a sensitivity of 96.1% and specificity of 93.4%, outperforming ACR 1997 and SLICC 2012 criteria on sensitivity. They are classification criteria, not treatment guidelines.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2019 EULAR/ACR Classification Criteria for Systemic Lupus Erythematosus",
+        "org": "PubMed Central",
+        "year": 2019,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6827566/"
+      }
+    ]
+  },
+  {
+    "id": "M4-021",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Rheumatology",
+    "topic": "Gout",
+    "difficulty": "moderate",
+    "stem": "A 54-year-old man presents with a first episode of acute monoarthritis of the first metatarsophalangeal joint. Joint aspiration is performed. Which serum urate value is used to confirm the diagnosis of gout in a person with compatible symptoms and signs?",
+    "image": null,
+    "options": {
+      "A": "360 micromol/L (6 mg/dL) or more",
+      "B": "420 micromol/L (7 mg/dL) or more only if measured during the acute flare",
+      "C": "540 micromol/L (9 mg/dL) or more",
+      "D": "Any value, because serum urate is normal during all acute flares and is never diagnostic",
+      "E": "Less than 300 micromol/L (5 mg/dL) is required to confirm gout"
+    },
+    "answer": "A",
+    "explanation": "NICE NG219 recommends measuring serum urate in people with symptoms and signs of gout to confirm the clinical diagnosis, using a level of 360 micromol/L (6 mg/dL) or more. If the level is below 360 micromol/L during a flare and gout is strongly suspected, the measurement should be repeated at least 2 weeks after the flare has settled. Long-term urate-lowering therapy is then offered using a treat-to-target strategy to eligible patients.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Gout: diagnosis and management - Recommendations",
+        "org": "NICE",
+        "year": 2022,
+        "url": "https://www.nice.org.uk/guidance/NG219/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-022",
+    "exams": ["NEET"],
+    "region": "Multisystem",
+    "system": "Rheumatology",
+    "topic": "Osteoarthritis",
+    "difficulty": "easy",
+    "stem": "A 63-year-old woman with painful knee osteoarthritis asks for medication. Examination shows no features of inflammatory arthritis and imaging is not required for diagnosis. Which of the following is in line with NICE guidance?",
+    "image": null,
+    "options": {
+      "A": "Start regular oral paracetamol as first-line pharmacological treatment for knee osteoarthritis",
+      "B": "Offer arthroscopic debridement before any attempt at exercise therapy",
+      "C": "Offer a topical NSAID alongside therapeutic exercise, and do not routinely offer paracetamol or weak opioids",
+      "D": "Start a weak opioid daily until pain resolves completely"
+    },
+    "answer": "C",
+    "explanation": "NICE NG226 states that the core treatments for osteoarthritis are therapeutic exercise and weight management where appropriate, with information and support. It recommends offering a topical NSAID to people with knee osteoarthritis, while paracetamol and weak opioids should not be offered routinely unless used infrequently for short-term relief when other treatments are contraindicated, not tolerated or ineffective. Imaging is usually unnecessary to confirm the diagnosis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Osteoarthritis in over 16s: diagnosis and management - Recommendations",
+        "org": "NICE",
+        "year": 2022,
+        "url": "https://www.nice.org.uk/guidance/ng226/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "M4-023",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Immunology",
+    "topic": "Anaphylaxis",
+    "difficulty": "easy",
+    "stem": "A 24-year-old man develops generalised urticaria, stridor and hypotension (blood pressure 70/40 mm Hg) within 10 minutes of eating a peanut-containing meal. Intramuscular adrenaline is indicated. Which dose should be given to an adult or teenager?",
+    "image": null,
+    "options": {
+      "A": "50 micrograms intramuscularly, because smaller doses avoid myocardial ischaemia",
+      "B": "150 micrograms intramuscularly, the dose used for infants under 6 months",
+      "C": "500 micrograms (0.5 mg) intramuscularly, that is 0.5 mL of 1 mg/mL adrenaline",
+      "D": "5 mg intravenously as a bolus to achieve rapid reversal of shock",
+      "E": "300 micrograms subcutaneously, repeating once after 15 minutes if blood pressure remains low"
+    },
+    "answer": "C",
+    "explanation": "Resuscitation Council UK advises that the recommended dose of adrenaline in teenagers and adults is 500 micrograms given intramuscularly, even though most adult auto-injectors deliver a 300 microgram dose. Evidence reviews of anaphylaxis treatment list the adult and over-12-year dose as 500 micrograms IM (0.5 mL of 1 mg/mL adrenaline), with 300 micrograms for 6-12 years and 150 micrograms for 6 months to 6 years. Intravenous adrenaline boluses are not the routine first-line treatment for anaphylaxis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Guidance: Anaphylaxis",
+        "org": "Resuscitation Council UK",
+        "year": 2021,
+        "url": "https://www.resus.org.uk/library/additional-guidance/guidance-anaphylaxis"
+      },
+      {
+        "title": "Evidence update for the treatment of anaphylaxis",
+        "org": "PubMed Central",
+        "year": 2021,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8139870/"
+      }
+    ]
+  },
+  {
+    "id": "M4-024",
+    "exams": ["USMLE"],
+    "region": "Multisystem",
+    "system": "Immunology",
+    "topic": "Immunisation Schedule",
+    "difficulty": "moderate",
+    "stem": "A 73-year-old woman attends for vaccination review. According to the UK complete routine immunisation schedule, which of the following correctly describes eligibility for shingles (herpes zoster) vaccination?",
+    "image": null,
+    "options": {
+      "A": "All adults aged 60 and over are offered the vaccine as a single catch-up dose",
+      "B": "Only adults aged 80 and over are eligible, because younger adults have sufficient immunity",
+      "C": "The programme offers live zoster vaccine to everyone aged 40 to 59 regardless of immune status",
+      "D": "Vaccination is restricted to immunocompetent adults aged 70 to 79 only, with no roll-forward cohort",
+      "E": "Individuals turning 65 from 1 September each year, those aged 70 to 79, and those severely immunosuppressed aged 18 or over are eligible for Shingrix"
+    },
+    "answer": "E",
+    "explanation": "The current UK schedule lists shingles vaccination for individuals turning 65 from 1 September each year (from 1 September 2023 onwards), for those aged 70 to 79 years, and for those severely immunosuppressed aged 18 years and over, using Shingrix. The schedule is also updated regularly, for example to reflect changes to the shingles programme from 1 September 2025. Eligibility is therefore not limited to a single decade of life.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Complete routine immunisation schedule from 1 September 2026",
+        "org": "UK Health Security Agency",
+        "year": 2026,
+        "url": "https://www.gov.uk/government/publications/the-complete-routine-immunisation-schedule/complete-routine-immunisation-schedule-from-1-july-2026"
+      },
+      {
+        "title": "Complete routine immunisation schedule",
+        "org": "UK Health Security Agency",
+        "year": 2026,
+        "url": "https://www.gov.uk/government/publications/the-complete-routine-immunisation-schedule"
+      }
+    ]
+  },
+  {
+    "id": "M4-025",
+    "exams": ["MRCP"],
+    "region": "Multisystem",
+    "system": "Immunology",
+    "topic": "Primary Immunodeficiency",
+    "difficulty": "hard",
+    "stem": "A 4-year-old boy has a history of recurrent severe bacterial skin abscesses and catalase-positive staphylococci, and neutrophil oxidative burst testing is absent, confirming chronic granulomatous disease. According to the IUIS 2022 classification of inborn errors of immunity, into which category does this disorder fall?",
+    "image": null,
+    "options": {
+      "A": "Diseases of immune dysregulation",
+      "B": "Autoinflammatory diseases",
+      "C": "Complement deficiencies",
+      "D": "Congenital defects of phagocytes",
+      "E": "Predominantly antibody deficiencies"
+    },
+    "answer": "D",
+    "explanation": "The IUIS 2022 update classifies inborn errors of immunity into 10 tables covering combined immunodeficiencies, combined immunodeficiencies with syndromic features, predominantly antibody deficiencies, diseases of immune dysregulation, congenital defects of phagocytes, defects in intrinsic and innate immunity, autoinflammatory diseases, complement deficiencies, bone marrow failure, and phenocopies, with a total of 485 disorders. Chronic granulomatous disease, a defect of the NADPH oxidase complex, belongs to congenital defects of phagocytes. Complement deficiencies would present with encapsulated bacterial infections or Neisseria infections instead.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Human Inborn Errors of Immunity: 2022 Update on the Classification from the International Union of Immunological Societies Expert Committee",
+        "org": "Journal of Clinical Immunology (Springer Nature)",
+        "year": 2022,
+        "url": "https://link.springer.com/article/10.1007/s10875-022-01289-3"
+      }
+    ]
+  },
+  {
+    "id": "M4-026",
+    "exams": ["FCPS"],
+    "region": "Multisystem",
+    "system": "Immunology",
+    "topic": "Transplant Immunosuppression",
+    "difficulty": "moderate",
+    "stem": "A 50-year-old man is discharged after kidney transplantation on maintenance therapy with tacrolimus, mycophenolate mofetil and prednisolone. Which of the following best describes the mechanism of action of tacrolimus?",
+    "image": null,
+    "options": {
+      "A": "It inhibits the mammalian target of rapamycin, blocking interleukin-2-driven T-cell proliferation",
+      "B": "It blocks calcineurin, preventing dephosphorylation and nuclear entry of NFAT and thereby reducing interleukin-2 transcription",
+      "C": "It inhibits de novo purine synthesis by blocking inosine monophosphate dehydrogenase",
+      "D": "It blocks the CD28-CD80/CD86 co-stimulatory interaction between T cell and antigen-presenting cell",
+      "E": "It depletes B cells by binding to CD20 and accelerating antibody-dependent cellular cytotoxicity"
+    },
+    "answer": "B",
+    "explanation": "Calcineurin inhibitors such as tacrolimus and cyclosporine block calcineurin, so NFAT is not dephosphorylated, cannot enter the nucleus and interleukin-2 transcription falls, reducing T-cell proliferation. Mycophenolate inhibits inosine monophosphate dehydrogenase and thus DNA synthesis, everolimus and sirolimus inhibit mTOR, corticosteroids suppress cytokine production, and belatacept blocks co-stimulation through CD28-CD80/CD86.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Maintenance Immunosuppression in Kidney Transplantation: A Review of the Current Status and Future Directions",
+        "org": "PubMed Central",
+        "year": 2025,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11943253/"
+      }
+    ]
+  }
+]

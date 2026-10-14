@@ -1,0 +1,781 @@
+[
+  {
+    "id": "C1-001",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Acute Coronary Syndromes",
+    "difficulty": "moderate",
+    "stem": "A 64-year-old man presents with crushing substernal chest pain radiating to the left arm for 40 minutes. He is diaphoretic with a blood pressure of 164/98 mm Hg. The 12-lead ECG is shown. Which of the following is the most appropriate next step in management?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/12_Lead_EKG_ST_Elevation_tracing_color_coded.jpg?width=800",
+      "alt": "12-lead ECG showing ST-segment elevation with an anterior infarct pattern",
+      "caption": "12-lead ECG demonstrating ST-segment elevation (STEMI) with anterior infarct pattern and anterior fascicular block",
+      "source": "Wikimedia Commons – File:12 Lead EKG ST Elevation tracing color coded.jpg (public domain)"
+    },
+    "options": {
+      "A": "Administer fibrinolysis immediately, because primary PCI can be delivered within 120 minutes of the time fibrinolysis could have been given",
+      "B": "Arrange immediate coronary angiography with follow-on primary PCI, because symptoms began within 12 hours and primary PCI can be delivered within 120 minutes of the time fibrinolysis could have been given",
+      "C": "Give a single 300 mg dose of aspirin and observe with serial troponins before deciding on any reperfusion strategy",
+      "D": "Start unfractionated heparin and delay invasive evaluation for 24 hours to allow the infarct to stabilise",
+      "E": "Discharge with an outpatient exercise tolerance test, because the ECG changes are nonspecific"
+    },
+    "answer": "B",
+    "explanation": "The ECG shows anterior ST-segment elevation consistent with acute STEMI, and NICE NG185 recommends immediately assessing every patient with acute STEMI for reperfusion, offering coronary angiography with follow-on primary PCI as the preferred strategy when presentation is within 12 hours of symptom onset and PCI can be delivered within 120 minutes of the time fibrinolysis could have been given. Fibrinolysis is reserved for when that 120-minute window cannot be met. A 300 mg aspirin loading dose should also be given as soon as possible unless there is clear evidence of allergy.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Acute coronary syndromes - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng185/chapter/Recommendations"
+      },
+      {
+        "title": "Recent-onset chest pain of suspected cardiac origin: assessment and diagnosis - Recommendations",
+        "org": "NICE",
+        "year": 2010,
+        "url": "https://www.nice.org.uk/guidance/cg95/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-002",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Atrial Fibrillation",
+    "difficulty": "easy",
+    "stem": "A 72-year-old woman with newly diagnosed non-valvular atrial fibrillation has hypertension, type 2 diabetes, and a prior transient ischaemic attack. Her CHA2DS2-VASc score is 5. She has normal renal function and no history of bleeding. Which of the following is the most appropriate long-term antithrombotic strategy?",
+    "image": null,
+    "options": {
+      "A": "An oral anticoagulant, preferably a direct oral anticoagulant such as apixaban, because her stroke risk clearly exceeds the treatment threshold and DOACs are preferred over warfarin in non-valvular atrial fibrillation",
+      "B": "Aspirin 75 mg daily alone, because antiplatelet therapy is sufficient at this level of stroke risk",
+      "C": "No antithrombotic therapy, because a CHA2DS2-VASc score of at least 6 is required before anticoagulation is started",
+      "D": "Dual antiplatelet therapy with aspirin and clopidogrel for stroke prevention",
+      "E": "Left atrial appendage occlusion as first-line therapy before any trial of medication"
+    },
+    "answer": "A",
+    "explanation": "The 2023 ACC/AHA/ACCP/HRS atrial fibrillation guideline recommends oral anticoagulation for patients with a CHA2DS2-VASc score of 2 or more (men) or 3 or more (women), and this patient's score of 5 far exceeds the threshold. Direct oral anticoagulants are recommended in preference to warfarin for patients without a mechanical valve or moderate-to-severe mitral stenosis. Aspirin is not recommended for stroke prevention in atrial fibrillation.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2023 Guideline for Diagnosis and Management of Atrial Fibrillation: Key Perspectives",
+        "org": "American College of Cardiology",
+        "year": 2023,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2023/11/27/19/46/2023-acc-guideline-for-af-gl-af"
+      }
+    ]
+  },
+  {
+    "id": "C1-003",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Valvular Heart Disease",
+    "difficulty": "hard",
+    "stem": "A 55-year-old woman with rheumatic moderate-to-severe mitral stenosis develops paroxysmal atrial fibrillation. She has no mechanical valve and no prior stroke. Which of the following is the most appropriate long-term anticoagulation strategy?",
+    "image": null,
+    "options": {
+      "A": "Apixaban, because direct oral anticoagulants are superior to warfarin in all forms of atrial fibrillation",
+      "B": "Aspirin and clopidogrel, because she has no history of stroke",
+      "C": "Warfarin (vitamin K antagonist), because direct oral anticoagulants are not recommended for atrial fibrillation associated with rheumatic mitral stenosis",
+      "D": "No anticoagulation until atrial fibrillation becomes persistent",
+      "E": "Reduced-dose rivaroxaban with routine anti-Xa level monitoring"
+    },
+    "answer": "C",
+    "explanation": "The 2020 ACC/AHA valvular heart disease guideline recommends vitamin K antagonist therapy for patients with atrial fibrillation and rheumatic mitral stenosis, and direct oral anticoagulants are not recommended for this population or for mechanical prosthetic valves. Anticoagulation should begin as soon as atrial fibrillation is documented, regardless of whether it is paroxysmal or persistent. DOAC trials specifically excluded patients with rheumatic mitral stenosis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2020 ACC/AHA Heart Valve Disease Guideline: Key Perspectives, Part 1",
+        "org": "American College of Cardiology",
+        "year": 2020,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2020/12/16/21/58/2020-acc-aha-vhd-gl-pt-1-gl-vhd"
+      },
+      {
+        "title": "2020 ACC/AHA Heart Valve Disease Guideline: Key Perspectives, Part 2",
+        "org": "American College of Cardiology",
+        "year": 2020,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2020/12/16/22/00/2020-acc-aha-vhd-gl-pt-2-gl-vhd"
+      }
+    ]
+  },
+  {
+    "id": "C1-004",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Acute Coronary Syndromes",
+    "difficulty": "moderate",
+    "stem": "All of the following statements about antiplatelet therapy in patients with acute coronary syndrome are true EXCEPT:",
+    "image": null,
+    "options": {
+      "A": "A single 300 mg loading dose of aspirin should be offered as soon as possible unless there is clear evidence of allergy",
+      "B": "Dual antiplatelet therapy should generally be continued for up to 12 months after myocardial infarction unless contraindicated",
+      "C": "In acute STEMI patients undergoing primary PCI who are not taking an oral anticoagulant, prasugrel is offered as part of dual antiplatelet therapy with aspirin",
+      "D": "De-escalation of dual antiplatelet therapy to aspirin monotherapy during the first 30 days is a routine, recommended strategy in all ACS patients",
+      "E": "Ticagrelor with aspirin for up to 3 years is an option after myocardial infarction for high-risk patients more than 12 months post-MI"
+    },
+    "answer": "D",
+    "explanation": "The 2023 ESC acute coronary syndromes guideline explicitly states that de-escalation of dual antiplatelet therapy to monotherapy is not recommended during the first 30 days, so routine early de-escalation in all ACS patients is false. The other statements are supported by NICE NG185: a 300 mg aspirin loading dose, DAPT for up to 12 months, prasugrel with aspirin for primary PCI in patients not on an oral anticoagulant, and ticagrelor plus aspirin for up to 3 years in high-risk patients beyond 12 months. In patients already on an oral anticoagulant, clopidogrel is used instead of prasugrel or ticagrelor.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2023 ESC Guidelines for Acute Coronary Syndromes: Key Points",
+        "org": "American College of Cardiology",
+        "year": 2023,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2023/08/29/14/01/2023-esc-guidelines-acs-esc-2023"
+      },
+      {
+        "title": "Acute coronary syndromes - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng185/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-005",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Heart Failure",
+    "difficulty": "moderate",
+    "stem": "A 58-year-old man with heart failure with reduced ejection fraction (LVEF 25%) and type 2 diabetes is being started on guideline-directed medical therapy. He takes no renin-angiotensin system inhibitor, beta-blocker, or mineralocorticoid receptor antagonist. Which of the following is the recommended first-line approach for blocking the renin-angiotensin system?",
+    "image": null,
+    "options": {
+      "A": "Initiate an ACE inhibitor alone in all patients, adding an ARB only if cough develops",
+      "B": "Initiate sacubitril/valsartan (an angiotensin receptor-neprilysin inhibitor) in place of an ACE inhibitor or ARB as first-line therapy",
+      "C": "Start an ARB together with an ACE inhibitor simultaneously for dual renin-angiotensin system blockade",
+      "D": "Begin hydralazine and isosorbide dinitrate instead of a renin-angiotensin system inhibitor"
+    },
+    "answer": "B",
+    "explanation": "The 2022 AHA/ACC/HFSA heart failure guideline gives a Class 1 recommendation to ARNI therapy with sacubitril/valsartan in place of an ACE inhibitor or ARB as first-line therapy for heart failure with reduced ejection fraction. Concurrent use of an ACE inhibitor and an ARB is not recommended, and hydralazine/isosorbide dinitrate is not a renin-angiotensin system inhibitor. Sacubitril/valsartan is therefore the correct first-line choice among the options.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2022 AHA/ACC/HFSA Heart Failure Guideline: Key Perspectives",
+        "org": "American College of Cardiology",
+        "year": 2022,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2022/03/29/19/53/2022-aha-acc-hfsa-heart-failure-guideline-gl-hf"
+      }
+    ]
+  },
+  {
+    "id": "C1-006",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Heart Failure",
+    "difficulty": "moderate",
+    "stem": "A 62-year-old man with heart failure with reduced ejection fraction (LVEF 30%) remains symptomatic on maximally tolerated lisinopril, carvedilol, and spironolactone. Which additional drug class now has a Class 1 recommendation to reduce cardiovascular death and heart failure hospitalization?",
+    "image": null,
+    "options": {
+      "A": "Intravenous iron supplementation for all patients with heart failure regardless of iron status",
+      "B": "Ivabradine as the next step in every patient with reduced ejection fraction",
+      "C": "Long-term digoxin to reduce mortality in heart failure with reduced ejection fraction",
+      "D": "A sodium-glucose cotransporter-2 inhibitor (dapagliflozin or empagliflozin)",
+      "E": "Routine addition of a loop diuretic at a fixed mortality-reducing dose"
+    },
+    "answer": "D",
+    "explanation": "The 2022 AHA/ACC/HFSA guideline defines four foundational therapy classes for HFrEF - an ARNI (or ACE inhibitor/ARB), a beta-blocker, an MRA, and an SGLT2 inhibitor - each carrying a Class 1 recommendation, and SGLT2 inhibitors are used regardless of diabetes status. An SGLT2 inhibitor is therefore the appropriate addition after the patient is already on the other three pillars. Loop diuretics relieve congestion but are not mortality-reducing foundational therapy, and digoxin, ivabradine, and routine IV iron are not among the four foundational classes.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2022 AHA/ACC/HFSA Heart Failure Guideline: Key Perspectives",
+        "org": "American College of Cardiology",
+        "year": 2022,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2022/03/29/19/53/2022-aha-acc-hfsa-heart-failure-guideline-gl-hf"
+      }
+    ]
+  },
+  {
+    "id": "C1-007",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Heart Failure",
+    "difficulty": "hard",
+    "stem": "A 74-year-old woman with heart failure with preserved ejection fraction (LVEF 60%), type 2 diabetes, and chronic kidney disease remains congested on a loop diuretic. Which of the following drug classes received a Class 2a ('may be beneficial') recommendation in the 2022 AHA/ACC/HFSA guideline for patients with HFpEF?",
+    "image": null,
+    "options": {
+      "A": "Sacubitril/valsartan",
+      "B": "Spironolactone",
+      "C": "Isosorbide dinitrate combined with hydralazine",
+      "D": "Ivabradine",
+      "E": "A sodium-glucose cotransporter-2 inhibitor (empagliflozin or dapagliflozin)"
+    },
+    "answer": "E",
+    "explanation": "In the 2022 AHA/ACC/HFSA guideline, SGLT2 inhibitors (empagliflozin or dapagliflozin) received a Class 2a recommendation for HFpEF to reduce heart failure hospitalization, and this benefit is seen both with and without diabetes. The other neurohormonal agents listed were not recommended at the Class 2a level for HFpEF in this guideline. Diuretics remain the mainstay for symptom relief of congestion.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2022 AHA/ACC/HFSA Heart Failure Guideline: Key Perspectives",
+        "org": "American College of Cardiology",
+        "year": 2022,
+        "url": "https://www.acc.org/latest-in-cardiology/ten-points-to-remember/2022/03/29/19/53/2022-aha-acc-hfsa-heart-failure-guideline-gl-hf"
+      }
+    ]
+  },
+  {
+    "id": "C1-008",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Hypertension",
+    "difficulty": "easy",
+    "stem": "A 52-year-old man has an average office blood pressure of 158/96 mm Hg on three separate readings, no target-organ damage, and no known cardiovascular disease. Lifestyle measures are being started. According to the 2025 ACC/AHA hypertension guideline, what is the recommended initial drug therapy strategy?",
+    "image": null,
+    "options": {
+      "A": "Begin a single low-dose thiazide diuretic and up-titrate monthly",
+      "B": "Start one antihypertensive drug from any class and review after 12 weeks",
+      "C": "Initiate two antihypertensive agents from different classes, preferably as a single-pill combination, alongside lifestyle changes",
+      "D": "Admit to hospital for intravenous antihypertensive therapy"
+    },
+    "answer": "C",
+    "explanation": "The 2025 ACC/AHA hypertension guideline recommends initial treatment with two antihypertensive agents from different classes - preferably combined in a single pill - for stage 2 hypertension, together with lifestyle modification. The guideline retains a blood pressure goal below 130/80 mm Hg. Monotherapy is generally reserved for stage 1 hypertension, and hospital admission is not indicated without acute target-organ damage.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2025 AHA/ACC/AANP/AAPA/ABC/ACCP/ACPM/AGS/AMA/ASPC/NMA/PCNA/SGIM Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults",
+        "org": "American College of Cardiology",
+        "year": 2025,
+        "url": "https://www.acc.org/guidelines/guidelines/2025/08/14/10/42/high-blood-pressure-in-adults-2025"
+      }
+    ]
+  },
+  {
+    "id": "C1-009",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Hypertension",
+    "difficulty": "moderate",
+    "stem": "A 58-year-old man is found to have a blood pressure of 186/118 mm Hg on repeated measurement. He has no chest pain, dyspnoea, neurological deficit, visual change, or acute kidney injury, and the examination is otherwise normal. According to the 2025 ACC/AHA hypertension guideline, what is the most appropriate management?",
+    "image": null,
+    "options": {
+      "A": "Manage as an outpatient: intensify the oral antihypertensive regimen, confirm blood pressure with out-of-office measurements, and arrange close follow-up",
+      "B": "Admit to hospital and begin an intravenous antihypertensive infusion immediately",
+      "C": "Give sublingual nifedipine in the emergency department and discharge once the reading falls below 180/110 mm Hg",
+      "D": "Administer emergency thrombolysis because of the severity of the reading",
+      "E": "Start no treatment until ambulatory blood pressure monitoring confirms sustained hypertension"
+    },
+    "answer": "A",
+    "explanation": "A hypertensive crisis above 180/120 mm Hg in the absence of acute target-organ damage is managed as an outpatient with prompt adjustment of oral therapy and close follow-up, not with admission or parenteral therapy. Out-of-office confirmation with home or ambulatory monitoring is used to exclude white-coat effects, but treatment should be intensified rather than withheld in a patient with readings this severe.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2025 AHA/ACC/AANP/AAPA/ABC/ACCP/ACPM/AGS/AMA/ASPC/NMA/PCNA/SGIM Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults",
+        "org": "American College of Cardiology",
+        "year": 2025,
+        "url": "https://www.acc.org/guidelines/guidelines/2025/08/14/10/42/high-blood-pressure-in-adults-2025"
+      }
+    ]
+  },
+  {
+    "id": "C1-010",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Resuscitation",
+    "difficulty": "moderate",
+    "stem": "A bystander finds a 45-year-old man in a restaurant who is responsive but unable to speak, cough, or breathe; he is clutching his throat. Which of the following is the recommended sequence of first aid for foreign-body airway obstruction in the 2025 resuscitation guidelines?",
+    "image": null,
+    "options": {
+      "A": "Begin with 5 chest thrusts, then reassess before any back blows",
+      "B": "Alternating cycles of 5 back blows and 5 abdominal thrusts, starting with back blows",
+      "C": "Perform a blind finger sweep of the mouth followed by 5 abdominal thrusts",
+      "D": "Begin with 5 rescue breaths and continue with abdominal thrusts only",
+      "E": "Start with 30 chest compressions as in cardiac arrest, then open the airway"
+    },
+    "answer": "B",
+    "explanation": "The 2025 American Heart Association guidelines recommend alternating cycles of 5 back blows and 5 abdominal thrusts for choking in both adults and children, always beginning with back blows. Options A, C, D, and E do not reflect this recommended sequence. Early activation of emergency medical services alongside these manoeuvres remains part of the choking response.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Updated CPR guidelines tackle choking response, opioid-related emergencies and revised chain of survival",
+        "org": "American Heart Association",
+        "year": 2025,
+        "url": "https://newsroom.heart.org/news/updated-cpr-guidelines-tackle-choking-response-opioid-related-emergencies-and-a-revised-chain-of-survival"
+      }
+    ]
+  },
+  {
+    "id": "C1-011",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Acute Coronary Syndromes",
+    "difficulty": "easy",
+    "stem": "A 60-year-old man presents with crushing chest pain of 20 minutes' duration and a suspected acute coronary syndrome. He has no known allergy to aspirin. Which of the following initial actions is correct?",
+    "image": null,
+    "options": {
+      "A": "Give a single loading dose of 300 mg aspirin as soon as possible",
+      "B": "Give 75 mg aspirin once daily as the only antiplatelet measure before hospital arrival",
+      "C": "Administer routine supplemental oxygen to every patient regardless of oxygen saturation",
+      "D": "Use the response to glyceryl trinitrate to confirm or exclude the diagnosis"
+    },
+    "answer": "A",
+    "explanation": "NICE CG95 recommends offering a single 300 mg aspirin loading dose as soon as possible in suspected ACS unless there is clear evidence of allergy; other antiplatelet agents should only be given in hospital. Routine oxygen is not administered: it is reserved for patients with saturation below 94% (target 94-98%), or 88-92% in those at risk of hypercapnic respiratory failure. A response to glyceryl trinitrate must not be used to make the diagnosis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Recent-onset chest pain of suspected cardiac origin: assessment and diagnosis - Recommendations",
+        "org": "NICE",
+        "year": 2010,
+        "url": "https://www.nice.org.uk/guidance/cg95/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-012",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Atrial Fibrillation",
+    "difficulty": "hard",
+    "stem": "A 67-year-old man with paroxysmal non-valvular atrial fibrillation on apixaban undergoes percutaneous coronary intervention with drug-eluting stenting for NSTEMI. He has normal renal function and moderate bleeding risk. Which of the following antithrombotic strategies is recommended for up to 12 months?",
+    "image": null,
+    "options": {
+      "A": "Aspirin, clopidogrel, and apixaban as full triple therapy for the entire 12 months",
+      "B": "Stop apixaban and switch to dual antiplatelet therapy with aspirin and ticagrelor",
+      "C": "Continue the oral anticoagulant with clopidogrel, and without prasugrel or ticagrelor, for up to 12 months",
+      "D": "Warfarin bridging with aspirin monotherapy after 4 weeks",
+      "E": "Clopidogrel alone for 12 months without any oral anticoagulant"
+    },
+    "answer": "C",
+    "explanation": "For patients with an ongoing indication for anticoagulation who have had PCI, NICE NG185 recommends continuing the anticoagulant with clopidogrel for up to 12 months, adjusting the DOAC dose according to bleeding, thromboembolic, and cardiovascular risk. Prasugrel and ticagrelor should not routinely be offered in combination with a needed anticoagulant because of bleeding risk, and long-term triple therapy significantly increases bleeding. Stopping anticoagulation entirely would leave the patient unprotected against AF-related stroke.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Acute coronary syndromes - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng185/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-013",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Acute Coronary Syndromes",
+    "difficulty": "moderate",
+    "stem": "A 71-year-old woman is diagnosed with NSTEMI. After aspirin and antithrombin therapy, formal risk assessment (GRACE) estimates her predicted 6-month mortality at 4.5%. She has no contraindications to angiography such as active bleeding. According to NICE NG185, which is the most appropriate revascularisation strategy?",
+    "image": null,
+    "options": {
+      "A": "Immediate coronary angiography within 2 hours, because all NSTEMI patients require emergency PCI",
+      "B": "Conservative management with no angiography, because her risk score is below 6%",
+      "C": "Elective angiography at 6 months after maximal medical therapy",
+      "D": "Consider coronary angiography, with follow-on PCI if indicated, within 72 hours of first admission",
+      "E": "Refer for exercise stress testing before any invasive evaluation"
+    },
+    "answer": "D",
+    "explanation": "A predicted 6-month mortality above 3.0% places her in the intermediate-or-higher risk band, for which NG185 advises considering coronary angiography with follow-on PCI within 72 hours of first admission when there are no contraindications. Immediate angiography is reserved for patients whose clinical condition is unstable, and patients at low risk (3.0% or below) may be managed conservatively. A score of 4.5% does not mandate emergency intervention but does warrant early invasive evaluation.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Acute coronary syndromes - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng185/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-014",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Cardiology",
+    "topic": "Hypertension",
+    "difficulty": "moderate",
+    "stem": "A 54-year-old man has an average office blood pressure of 146/88 mm Hg, no clinical cardiovascular disease or diabetes, and an estimated 10-year cardiovascular disease risk (PREVENT) of 9%. Lifestyle counselling has been provided. What does the 2025 ACC/AHA hypertension guideline recommend next?",
+    "image": null,
+    "options": {
+      "A": "Lifestyle changes only, with medication deferred unless blood pressure rises above 160/100 mm Hg",
+      "B": "Immediate hospital admission for severe hypertension",
+      "C": "Start high-intensity statin therapy only, without antihypertensive medication",
+      "D": "Refer for a low-sodium diet programme and repeat office measurement in 24 months",
+      "E": "Add antihypertensive pharmacotherapy to lifestyle changes, because the estimated 10-year cardiovascular risk is at or above the 7.5% threshold"
+    },
+    "answer": "E",
+    "explanation": "The 2025 ACC/AHA hypertension guideline uses the PREVENT risk equation and recommends offering blood pressure-lowering medication together with lifestyle therapy when stage 1 hypertension is accompanied by an estimated 10-year cardiovascular risk of 7.5% or greater in patients without clinical cardiovascular disease or diabetes. This patient's risk of 9% exceeds that threshold, so drugs should be added to lifestyle measures. The overall blood pressure goal remains below 130/80 mm Hg.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "2025 AHA/ACC/AANP/AAPA/ABC/ACCP/ACPM/AGS/AMA/ASPC/NMA/PCNA/SGIM Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults",
+        "org": "American College of Cardiology",
+        "year": 2025,
+        "url": "https://www.acc.org/guidelines/guidelines/2025/08/14/10/42/high-blood-pressure-in-adults-2025"
+      }
+    ]
+  },
+  {
+    "id": "C1-015",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Asthma",
+    "difficulty": "easy",
+    "stem": "A 19-year-old university student with newly diagnosed asthma reports wheeze about twice a month and uses her reliever infrequently. Spirometry shows variable airflow obstruction. According to the NICE/BTS/SIGN asthma guideline NG245, which of the following prescribing principles applies?",
+    "image": null,
+    "options": {
+      "A": "Do not prescribe a short-acting beta-agonist reliever without concomitant inhaled corticosteroid, at any age",
+      "B": "Offer a short-acting beta-agonist alone as needed, reserving inhaled corticosteroid for symptoms on most days",
+      "C": "Start maintenance combination inhaler therapy with a long-acting beta-agonist in all patients at diagnosis",
+      "D": "Offer oral corticosteroid therapy at diagnosis to prevent future exacerbations",
+      "E": "Prescribe antibiotics for eosinophilic airway inflammation at presentation"
+    },
+    "answer": "A",
+    "explanation": "NG245 recommendation 1.6.3 states that a short-acting beta-agonist should not be prescribed without concomitant inhaled corticosteroid in any age group. Instead, as-needed low-dose inhaled corticosteroid and formoterol is offered as the reliever for newly diagnosed asthma in patients aged 12 and over (recommendation 1.7.1). Maintenance long-acting bronchodilator therapy without an inhaled corticosteroid and routine oral steroids at diagnosis are not recommended.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Asthma: diagnosis, monitoring and chronic asthma management (BTS, NICE, SIGN) - Recommendations",
+        "org": "NICE",
+        "year": 2024,
+        "url": "https://www.nice.org.uk/guidance/ng245/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-016",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Asthma",
+    "difficulty": "moderate",
+    "stem": "A 22-year-old man is newly diagnosed with asthma; he has symptoms twice weekly with no night waking, and spirometry confirms variable airflow obstruction. According to NG245, which reliever strategy should be offered to patients aged 12 and over with newly diagnosed asthma?",
+    "image": null,
+    "options": {
+      "A": "As-needed short-acting beta-agonist alone",
+      "B": "As-needed short-acting beta-agonist plus as-needed low-dose inhaled corticosteroid taken separately",
+      "C": "As-needed low-dose inhaled corticosteroid and formoterol as the reliever",
+      "D": "As-needed long-acting muscarinic antagonist as the sole reliever",
+      "E": "Regular oral montelukast as the reliever"
+    },
+    "answer": "C",
+    "explanation": "NG245 recommendation 1.7.1 advises offering as-needed low-dose inhaled corticosteroid and formoterol (the AIR approach) as the reliever for newly diagnosed asthma in people aged 12 and over. A short-acting beta-agonist alone must not be prescribed without an inhaled corticosteroid (recommendation 1.6.3). If symptoms remain highly symptomatic on this approach, low-dose maintenance and reliever therapy is offered instead (recommendation 1.7.2).",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Asthma: diagnosis, monitoring and chronic asthma management (BTS, NICE, SIGN) - Recommendations",
+        "org": "NICE",
+        "year": 2024,
+        "url": "https://www.nice.org.uk/guidance/ng245/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-017",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Asthma",
+    "difficulty": "moderate",
+    "stem": "A 30-year-old woman has a 4-month history of cough and chest tightness with normal spirometry between episodes. According to NG245 (BTS/NICE/SIGN 2024), which single result in an adult would support a diagnosis of asthma alongside compatible symptoms?",
+    "image": null,
+    "options": {
+      "A": "Fractional exhaled nitric oxide of 25 ppb",
+      "B": "Blood eosinophil count above the laboratory reference range, or FeNO of 50 ppb or more",
+      "C": "Bronchodilator reversibility showing an FEV1 increase of 10% and 150 mL",
+      "D": "A normal peak expiratory flow diary with no variability",
+      "E": "Total serum IgE of 120 IU/mL"
+    },
+    "answer": "B",
+    "explanation": "For adults, NG245 recommendation 1.2.1 is to diagnose asthma if the blood eosinophil count is above the laboratory reference range or FeNO is 50 ppb or more, together with compatible symptoms. The guideline's bronchodilator reversibility threshold is an FEV1 increase of at least 12% and 200 mL (or at least 10% predicted), so option C does not meet it. FeNO of 25 ppb, a normal peak flow diary, and a normal-range IgE do not confirm the diagnosis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Asthma: diagnosis, monitoring and chronic asthma management (BTS, NICE, SIGN) - Recommendations",
+        "org": "NICE",
+        "year": 2024,
+        "url": "https://www.nice.org.uk/guidance/ng245/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-018",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "COPD",
+    "difficulty": "moderate",
+    "stem": "A 66-year-old man with COPD presents with his first moderate exacerbation requiring systemic corticosteroids in the past year. According to the GOLD 2026 report, how many moderate or severe exacerbations place a patient in the highest-risk Group E?",
+    "image": null,
+    "options": {
+      "A": "None - all patients who smoke and have airflow limitation are automatically Group E",
+      "B": "Two or more moderate exacerbations (or one hospitalisation), as in earlier GOLD reports",
+      "C": "Three or more moderate exacerbations in any 12-month period",
+      "D": "At least one moderate or severe exacerbation",
+      "E": "Only patients hospitalised for a severe exacerbation qualify for Group E"
+    },
+    "answer": "D",
+    "explanation": "GOLD 2026 changed the Group E threshold to one or more moderate or severe exacerbations, replacing the previous definition of two or more moderate exacerbations or one hospitalisation. This patient with a single moderate exacerbation therefore now qualifies as Group E. GOLD 2026 also introduced a disease-activity assessment and an explicit distinction between initial and follow-up treatment.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "GOLD Report 2026: Key Changes Summary",
+        "org": "Global Initiative for Chronic Obstructive Lung Disease (GOLD)",
+        "year": 2025,
+        "url": "https://goldcopd.org/wp-content/uploads/2025/11/KEY-CHANGES-GOLD-2026-10Nov2025.pdf"
+      },
+      {
+        "title": "2026 GOLD Report and Pocket Guide",
+        "org": "Global Initiative for Chronic Obstructive Lung Disease (GOLD)",
+        "year": 2025,
+        "url": "https://goldcopd.org/2026-gold-report-and-pocket-guide/"
+      }
+    ]
+  },
+  {
+    "id": "C1-019",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "COPD",
+    "difficulty": "hard",
+    "stem": "A 63-year-old man with newly diagnosed COPD falls into Group E by exacerbation history. He has never used inhalers and has no clinical features of asthma. According to GOLD 2026, which statement best describes his initial pharmacological treatment?",
+    "image": null,
+    "options": {
+      "A": "Initial treatment should be a long-acting bronchodilator - a LABA or a LAMA - with escalation assessed at follow-up if needed",
+      "B": "Initial treatment should be an ICS-containing regimen (LABA/ICS) regardless of asthma features, because exacerbations mandate early ICS",
+      "C": "Initial treatment should be a short-acting beta-agonist used regularly every four hours",
+      "D": "Initial treatment should be roflumilast combined with theophylline",
+      "E": "No inhaler should be started until spirometry is repeated after 12 weeks"
+    },
+    "answer": "A",
+    "explanation": "GOLD 2026 introduces an explicit distinction between initial and follow-up treatment (new Figures 3.7-3.9): initial therapy for Group E patients without asthma features is a long-acting bronchodilator, a LABA or LAMA, with escalation decided at follow-up. Contemporary reviews of the GOLD 2026 approach also note that initiating LABA/ICS without asthma symptoms is discouraged, making option B inappropriate. Regular short-acting bronchodilator use alone is not a maintenance strategy for COPD.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "GOLD Report 2026: Key Changes Summary",
+        "org": "Global Initiative for Chronic Obstructive Lung Disease (GOLD)",
+        "year": 2025,
+        "url": "https://goldcopd.org/wp-content/uploads/2025/11/KEY-CHANGES-GOLD-2026-10Nov2025.pdf"
+      },
+      {
+        "title": "GOLD 2026: Transforming COPD Management with Early Intervention, Multi-dimensional Assessment, and Personalized Care",
+        "org": "Drugs (Springer Nature)",
+        "year": 2026,
+        "url": "https://link.springer.com/article/10.1007/s40265-026-02303-3"
+      }
+    ]
+  },
+  {
+    "id": "C1-020",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Oxygen Therapy",
+    "difficulty": "easy",
+    "stem": "A 70-year-old with severe COPD and chronic hypercapnia presents with an acute exacerbation and is given supplemental oxygen in the emergency department. Which oxygen saturation target should be aimed for until blood gas analysis is available?",
+    "image": null,
+    "options": {
+      "A": "94% to 98%, as for all acutely ill adults",
+      "B": "100%, to maximise oxygen delivery",
+      "C": "Below 80%, to avoid hyperoxia entirely",
+      "D": "88% to 92%"
+    },
+    "answer": "D",
+    "explanation": "Patients with COPD at risk of hypercapnic respiratory failure should have oxygen titrated to a target saturation of 88-92% until arterial blood gas analysis is available, as recommended by the BTS emergency oxygen guideline and NICE CG95. Most acutely ill adults instead have a target saturation of 94-98%. The aim is to avoid both hypoxaemia and worsening hypercapnia.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "BTS Guideline for oxygen use in healthcare and emergency settings",
+        "org": "British Thoracic Society",
+        "year": 2017,
+        "url": "https://www.brit-thoracic.org.uk/clinical-resources/guidelines/emergency-oxygen/"
+      },
+      {
+        "title": "Recent-onset chest pain of suspected cardiac origin: assessment and diagnosis - Recommendations",
+        "org": "NICE",
+        "year": 2010,
+        "url": "https://www.nice.org.uk/guidance/cg95/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-021",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Oxygen Therapy",
+    "difficulty": "moderate",
+    "stem": "All of the following statements about emergency oxygen therapy in acutely ill adults are true EXCEPT:",
+    "image": null,
+    "options": {
+      "A": "Most acutely ill adults should have a target oxygen saturation of 94% to 98%",
+      "B": "Oxygen saturation should be monitored with pulse oximetry as soon as possible",
+      "C": "Patients at risk of hypercapnic respiratory failure should be targeted to 94% to 98% until blood gases are available",
+      "D": "Supplemental oxygen should only be offered when saturation is below 94% in patients not at risk of hypercapnic respiratory failure, aiming for 94% to 98%",
+      "E": "Patients with COPD at risk of hypercapnic respiratory failure should be targeted to 88% to 92% until blood gas analysis is available"
+    },
+    "answer": "C",
+    "explanation": "The correct target for patients at risk of hypercapnic respiratory failure is 88-92% (BTS emergency oxygen guideline; NICE CG95), so statement C is false - statement E is the accurate version of the same recommendation. The BTS guideline targets 94-98% for most acutely ill adults, and NICE CG95 advises monitoring saturation by pulse oximetry as soon as possible and offering supplemental oxygen only when saturation is below 94% (aiming 94-98%) in patients not at risk of hypercapnia.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "BTS Guideline for oxygen use in healthcare and emergency settings",
+        "org": "British Thoracic Society",
+        "year": 2017,
+        "url": "https://www.brit-thoracic.org.uk/clinical-resources/guidelines/emergency-oxygen/"
+      },
+      {
+        "title": "Recent-onset chest pain of suspected cardiac origin: assessment and diagnosis - Recommendations",
+        "org": "NICE",
+        "year": 2010,
+        "url": "https://www.nice.org.uk/guidance/cg95/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-022",
+    "exams": ["MRCP"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Pulmonary Embolism",
+    "difficulty": "moderate",
+    "stem": "A 44-year-old woman presents with pleuritic chest pain and breathlessness. Her heart rate is 98/min and blood pressure 124/78 mm Hg. The CT pulmonary angiogram is shown. If pulmonary embolism is confirmed and there is no contraindication to anticoagulation, which strategy should be started?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pulmonary%20embolism%20CTPA.JPEG?width=800",
+      "alt": "CT pulmonary angiogram showing a large saddle embolus at the pulmonary artery bifurcation",
+      "caption": "CTPA demonstrating a saddle pulmonary embolus filling the main pulmonary artery branches",
+      "source": "Wikimedia Commons - File:Pulmonary embolism CTPA.JPEG (CC BY 2.0)"
+    },
+    "options": {
+      "A": "Aspirin monotherapy, because she is haemodynamically stable",
+      "B": "A direct oral anticoagulant such as apixaban or rivaroxaban as first-line therapy",
+      "C": "Systemic thrombolysis, because a saddle embolus always requires fibrinolysis",
+      "D": "Inferior vena cava filter placement without anticoagulation",
+      "E": "No treatment, with repeat imaging in 6 weeks"
+    },
+    "answer": "B",
+    "explanation": "NICE NG158 recommends apixaban or rivaroxaban as first-choice treatment for patients with confirmed pulmonary embolism, with anticoagulation continued for at least 3 months. Systemic thrombolysis with unfractionated heparin is reserved for patients with haemodynamic instability, and this patient is normotensive. Although the image shows a large saddle embolus, the decision to thrombolyse is driven by haemodynamic status rather than clot burden alone.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Venous thromboembolic diseases: diagnosis, management and thrombophilia testing - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng158/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-023",
+    "exams": ["USMLE"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Pulmonary Embolism",
+    "difficulty": "hard",
+    "stem": "A 34-year-old man has a first episode of pulmonary embolism provoked by recent knee surgery. After initial treatment, the duration of anticoagulation is being decided. According to NICE NG158, what is the recommended minimum duration of anticoagulation for a first venous thromboembolism?",
+    "image": null,
+    "options": {
+      "A": "2 weeks, because provoked events resolve quickly",
+      "B": "4 weeks only",
+      "C": "6 weeks for pulmonary embolism and no duration for deep vein thrombosis",
+      "D": "Anticoagulation is not recommended beyond the acute phase for provoked events",
+      "E": "At least 3 months"
+    },
+    "answer": "E",
+    "explanation": "NICE NG158 recommends treating a first deep vein thrombosis or pulmonary embolism with anticoagulation for at least 3 months, initially with a direct oral anticoagulant such as apixaban or rivaroxaban. After this minimum period, the decision to extend therapy is reassessed according to individual bleeding and recurrence risk. Fixed courses shorter than 3 months are not recommended for a first VTE.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Venous thromboembolic diseases: diagnosis, management and thrombophilia testing - Recommendations",
+        "org": "NICE",
+        "year": 2020,
+        "url": "https://www.nice.org.uk/guidance/ng158/chapter/Recommendations"
+      }
+    ]
+  },
+  {
+    "id": "C1-024",
+    "exams": ["FCPS"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Pleural Disease",
+    "difficulty": "moderate",
+    "stem": "A 61-year-old man with weight loss and progressive dyspnoea is found to have a large unilateral pleural effusion on the chest radiograph shown. Pleural aspiration is performed. Which result, using Light's criteria, would classify the fluid as an exudate?",
+    "image": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Massive%20Effusion2008.jpg?width=800",
+      "alt": "Chest radiograph showing a massive left-sided pleural effusion with opacification of the left hemithorax",
+      "caption": "Chest X-ray demonstrating a massive left-sided pleural effusion",
+      "source": "Wikimedia Commons - File:Massive Effusion2008.jpg (CC BY-SA 3.0, James Heilman, MD)"
+    },
+    "options": {
+      "A": "Pleural fluid protein divided by serum protein of 0.35",
+      "B": "Pleural fluid LDH less than two-thirds of the upper limit of normal for serum LDH",
+      "C": "Pleural fluid protein divided by serum protein greater than 0.5",
+      "D": "Pleural fluid LDH of 100 IU/L with a serum LDH of 500 IU/L",
+      "E": "Pleural fluid-serum protein ratio of 0.4 together with a pleural LDH at half the serum LDH"
+    },
+    "answer": "C",
+    "explanation": "Light's criteria classify a pleural effusion as an exudate if any one of the following is met: pleural fluid/serum protein greater than 0.5, pleural/serum LDH greater than 0.6, or pleural fluid LDH greater than 250 IU/L (about two-thirds the upper limit of normal). A pleural-to-serum protein ratio above 0.5 therefore meets the criterion for an exudate. Effusions meeting exudate criteria require further evaluation, including assessment for malignancy and infection.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Revisiting Light's criteria: a validated blood-free triple combination matches diagnostic accuracy in over 7000 patients",
+        "org": "PubMed Central",
+        "year": 2026,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12991015/"
+      }
+    ]
+  },
+  {
+    "id": "C1-025",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Lung Cancer Screening",
+    "difficulty": "easy",
+    "stem": "A 62-year-old man who smoked 1.5 packs per day for 25 years (37.5 pack-years) quit smoking 3 years ago and has no respiratory symptoms. According to the USPSTF lung cancer screening recommendation, which screening strategy is appropriate?",
+    "image": null,
+    "options": {
+      "A": "Annual chest radiography, because he quit within 5 years",
+      "B": "Annual low-dose CT, because he is aged 50-80 with a 20 or more pack-year history and quit within the past 15 years",
+      "C": "Sputum cytology every 6 months",
+      "D": "No lung cancer screening at any age because he no longer smokes"
+    },
+    "answer": "B",
+    "explanation": "The USPSTF recommends annual screening for lung cancer with low-dose CT in adults aged 50 to 80 years who have a 20 pack-year or more smoking history and either currently smoke or have quit within the past 15 years (grade B). Because this patient quit 3 years ago and has a 37.5 pack-year history, he remains within the eligible window. He has not smoked for more than 15 years, so screening should not be discontinued on that basis.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Recommendation: Lung Cancer: Screening",
+        "org": "US Preventive Services Task Force",
+        "year": 2021,
+        "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening"
+      }
+    ]
+  },
+  {
+    "id": "C1-026",
+    "exams": ["NEET"],
+    "region": "Chest",
+    "system": "Respiratory",
+    "topic": "Asthma",
+    "difficulty": "hard",
+    "stem": "A 29-year-old woman with asthma remains highly symptomatic - daily reliever use and weekly night waking - despite adherence to moderate-dose maintenance and reliever therapy, and her FeNO is 65 ppb. According to NG245, what is the recommended next step?",
+    "image": null,
+    "options": {
+      "A": "Refer the patient to a specialist in asthma for phenotypic assessment, including consideration of biologic therapy",
+      "B": "Increase the short-acting beta-agonist reliever to use as often as needed",
+      "C": "Start long-term maintenance oral corticosteroid therapy to control symptoms",
+      "D": "Add a long-acting muscarinic antagonist without further review"
+    },
+    "answer": "A",
+    "explanation": "NG245 recommends referring patients whose asthma remains highly symptomatic on moderate-dose maintenance and reliever therapy, particularly with a raised FeNO or blood eosinophils suggesting an eosinophilic phenotype, to a specialist for assessment that includes consideration of biologic therapies. Simply escalating a short-acting beta-agonist reliever is not appropriate without an inhaled corticosteroid, and maintenance oral corticosteroids are not a guideline next step at this stage.",
+    "updated": "2026-10",
+    "references": [
+      {
+        "title": "Asthma: diagnosis, monitoring and chronic asthma management (BTS, NICE, SIGN) - Recommendations",
+        "org": "NICE",
+        "year": 2024,
+        "url": "https://www.nice.org.uk/guidance/ng245/chapter/Recommendations"
+      }
+    ]
+  }
+]

@@ -13,6 +13,10 @@ import {
 import { router } from 'expo-router';
 import { useAuth } from '../context/Auth';
 import { useTheme } from '../context/Theme';
+import { dismissKeyboardSoon } from '../lib/keyboard';
+import Card from '../components/Card';
+import Wordmark from '../components/Wordmark';
+import { SERIF } from '../theme/fonts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const LOGO = require('../../assets/icon.png');
@@ -50,6 +54,9 @@ export default function SignInScreen() {
     try {
       if (signInMode === 'register') await register(name.trim(), cleanEmail, password);
       else await login(cleanEmail, password);
+      // navigation doesn't blur the focused input - hide the keyboard here
+      // (the delayed second call covers the route change that follows)
+      dismissKeyboardSoon();
     } catch (e: any) {
       setErr(e?.message || 'Something went wrong');
     } finally {
@@ -68,7 +75,7 @@ export default function SignInScreen() {
         </Pressable>
 
         <Image source={LOGO} style={styles.logo} />
-        <Text style={[styles.h1, { color: colors.ink }]}>MedConnect</Text>
+        <Wordmark size={30} color={colors.ink} style={styles.h1} />
         <Text style={[styles.tag, { color: colors.muted }]}>Connect. Study. Succeed.</Text>
 
         <View style={styles.pitch}>
@@ -83,52 +90,54 @@ export default function SignInScreen() {
           </Text>
         </View>
 
-        {signInMode === 'register' && (
+        <Card style={styles.form}>
+          {signInMode === 'register' && (
+            <TextInput
+              style={[inputStyles.input, { backgroundColor: colors.paper, borderColor: colors.line, color: colors.ink }]}
+              placeholder="Full name"
+              placeholderTextColor={colors.subtle}
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+            />
+          )}
           <TextInput
-            style={[inputStyles.input, { backgroundColor: colors.card, borderColor: colors.line, color: colors.ink }]}
-            placeholder="Full name"
+            style={[inputStyles.input, { backgroundColor: colors.paper, borderColor: colors.line, color: colors.ink }]}
+            placeholder="Email"
             placeholderTextColor={colors.subtle}
-            value={name}
-            onChangeText={setName}
-            autoCapitalize="words"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
           />
-        )}
-        <TextInput
-          style={[inputStyles.input, { backgroundColor: colors.card, borderColor: colors.line, color: colors.ink }]}
-          placeholder="Email"
-          placeholderTextColor={colors.subtle}
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-        />
-        <View style={{ position: 'relative' }}>
-          <TextInput
-            style={[
-              inputStyles.input,
-              { backgroundColor: colors.card, borderColor: colors.line, color: colors.ink, paddingRight: 44 },
-            ]}
-            placeholder="Password"
-            placeholderTextColor={colors.subtle}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            autoComplete={signInMode === 'register' ? 'new-password' : 'password'}
-          />
-          <Pressable
-            style={styles.eye}
-            onPress={() => setShowPassword((v) => !v)}
-            accessibility-label={showPassword ? 'Hide password' : 'Show password'}
-          >
-            <Text style={{ fontSize: 16 }}>{showPassword ? '🙈' : '👁️'}</Text>
-          </Pressable>
-        </View>
+          <View style={{ position: 'relative' }}>
+            <TextInput
+              style={[
+                inputStyles.input,
+                { backgroundColor: colors.paper, borderColor: colors.line, color: colors.ink, paddingRight: 44 },
+              ]}
+              placeholder="Password"
+              placeholderTextColor={colors.subtle}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              autoComplete={signInMode === 'register' ? 'new-password' : 'password'}
+            />
+            <Pressable
+              style={styles.eye}
+              onPress={() => setShowPassword((v) => !v)}
+              accessibility-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              <Text style={{ fontSize: 16 }}>{showPassword ? '🙈' : '👁️'}</Text>
+            </Pressable>
+          </View>
 
-        {!!err && <Text style={[styles.err, { color: colors.rust }]}>{err}</Text>}
+          {!!err && <Text style={[styles.err, { color: colors.rust }]}>{err}</Text>}
+        </Card>
 
         <Pressable
-          style={[styles.btn, { backgroundColor: colors.forest, opacity: busy ? 0.6 : 1 }]}
+          style={[styles.btn, { backgroundColor: colors.ink, opacity: busy ? 0.6 : 1 }]}
           onPress={submit}
           disabled={busy}
         >
@@ -172,6 +181,14 @@ export default function SignInScreen() {
   );
 }
 
+// Display H1 - Fraunces 700. Never set fontWeight alongside it (theme/fonts.ts).
+const H1 = {
+  fontFamily: SERIF,
+  fontSize: 25,
+  lineHeight: 31,
+  letterSpacing: -0.4,
+} as const;
+
 const styles = StyleSheet.create({
   scroll: { padding: 18, paddingTop: 56, alignItems: 'center', paddingBottom: 48 },
   themeBtn: { position: 'absolute', top: 48, right: 20, padding: 8, zIndex: 10 },
@@ -180,8 +197,10 @@ const styles = StyleSheet.create({
   tag: { fontSize: 15, marginTop: 5, marginBottom: 18 },
   pitch: { marginBottom: 26, alignItems: 'center' },
   pitchLabel: { fontWeight: '700', fontSize: 13, letterSpacing: 0.5, marginBottom: 8 },
-  pitchMain: { fontSize: 15, fontWeight: '600', marginBottom: 6, textAlign: 'center' },
+  // Fraunces H1 (§6E) - fontFamily only, no weight (see theme/fonts.ts)
+  pitchMain: { ...H1, marginBottom: 6, textAlign: 'center' },
   pitchSub: { fontSize: 13.5, lineHeight: 20, textAlign: 'center' },
+  form: { width: '100%', gap: 10, marginTop: 4 },
   eye: { position: 'absolute', right: 12, top: 0, bottom: 13, justifyContent: 'center', padding: 4 },
   err: { fontSize: 13, marginBottom: 10, textAlign: 'center' },
   btn: {
@@ -213,6 +232,5 @@ const inputStyles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 14,
     fontSize: 15,
-    marginBottom: 12,
   },
 });
