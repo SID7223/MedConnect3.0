@@ -144,7 +144,7 @@ export default async function handler(req, res) {
           return res.status(200).json({ ok: true });
         }
 
-        if (action === 'delete') {
+        if (action === 'delete' || action === 'delete_group') {
           const gid = parseInt(body.groupId, 10);
           const g = await sql`SELECT creator FROM groups WHERE id = ${gid}`;
           if (!g.length || g[0].creator !== uid) return res.status(403).json({ error: 'Only the creator can delete the group' });
