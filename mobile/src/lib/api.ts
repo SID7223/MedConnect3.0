@@ -270,12 +270,6 @@ export const api = {
     invalidate('logbook');
     return req('/logbook', { method: 'POST', body: { action: 'set_target', skill, target } });
   },
-  // ---- Progress Tracker: My Study topics ----
-  topicsGet: () => cached('topics', 20000, () => req('/topics')),
-  topicCreate: (t: { name: string; startDate?: string | null; endDate?: string | null; color: string }) => {
-    invalidate('topics');
-    return req('/topics', { method: 'POST', body: { action: 'create', ...t } });
-  },
   resetRequest: (email: string) => req('/reset', { method: 'POST', body: { action: 'request', email } }),
   // One-time-code path: the 6-character code goes to the account's email.
   resetConfirm: (email: string, code: string, password: string) =>

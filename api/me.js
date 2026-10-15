@@ -6,6 +6,12 @@ export default async function handler(req, res) {
   const uid = getUserId(req);
   if (!uid) return res.status(401).json({ error: 'Not authenticated' });
 
+  // Consolidated presence endpoint (Hobby cap): /api/presence rewrites here.
+  if ((req.method === 'GET' || req.method === 'POST') && req.query.scope === 'presence') {
+    const { handlePresence } = await import('../api-shared/study.js');
+    return handlePresence(req, res, uid);
+  }
+
   const cur = await sql`SELECT * FROM users WHERE id = ${uid}`;
   if (!cur.length) return res.status(401).json({ error: 'User not found' });
   const u = cur[0];

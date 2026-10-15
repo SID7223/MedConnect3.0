@@ -22,9 +22,12 @@ Three deliberate deviations:
 - **Runtime `ALTER TABLE`.** `PUT /api/profile` used to add `focus`, `gender`,
   `study_styles` and `medical_school` lazily. Those columns are in the baseline,
   so the DDL is gone from the request path.
-- **Password reset email.** Still a TODO, exactly as before. The reset link is
-  returned in the response so the flow can be tested; wire up an email provider in
-  `routes/Auth.kt` and then drop `resetLink` from that response.
+- **Password reset is an OTP-code flow** (matches the shipped clients, which send
+  `{ action: 'confirm', email, code, password }`). Requesting a reset always
+  returns `{ ok: true }` without revealing whether the email exists; the code is
+  emailed in production and — only with `RESET_CODE_DEV_ECHO=true` — echoed as
+  `devCode` for testing. Email delivery itself is still a TODO: wire a provider
+  in `routes/Auth.kt` (a Resend-shaped TODO marks the spot).
 
 ## Requirements
 

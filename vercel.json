@@ -2,6 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/api/mcq", "destination": "/api/profile?scope=mcq" },
+    { "source": "/api/goals", "destination": "/api/profile?scope=goals" },
+    { "source": "/api/daily", "destination": "/api/profile?scope=daily" },
+    { "source": "/api/resources", "destination": "/api/profile?scope=resources" },
+    { "source": "/api/presence", "destination": "/api/me?scope=presence" },
     { "source": "/((?!.well-known/).*)", "destination": "/index.html" }
   ]
 }

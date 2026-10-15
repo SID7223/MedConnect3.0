@@ -6,6 +6,13 @@ export default async function handler(req, res) {
   const uid = getUserId(req);
   if (!uid) return res.status(401).json({ error: 'Not authenticated' });
 
+  // Consolidated study endpoints (Hobby 12-function cap: no new api/*.js files).
+  // vercel.json rewrites /api/mcq|goals|daily|resources here with ?scope=<name>.
+  if ((req.method === 'GET' || req.method === 'POST') && req.query.scope) {
+    const { handleStudyScope } = await import('../api-shared/study.js');
+    return handleStudyScope(req, res, uid);
+  }
+
   if (req.method === 'DELETE') {
     try {
       await sql`DELETE FROM users WHERE id = ${uid}`;

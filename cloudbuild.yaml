@@ -1,0 +1,28 @@
+# Google Cloud Build: builds the Ktor API image from server/Dockerfile
+# and pushes it to Artifact Registry for Cloud Run to deploy.
+#
+# One-time console setup:
+#   1. Artifact Registry -> Create repository named "medconnect" (format: Docker,
+#      region: e.g. me-central1 to sit near PK/Gulf users).
+#   2. Cloud Build -> Triggers -> connect this GitHub repo -> add this file as
+#      the build config (or just press "Run" on a manual trigger).
+#   3. Cloud Run -> Create Service -> deploy the pushed image (see server/README).
+#
+# Build context is server/ so the Dockerfile's COPY paths resolve.
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-f'
+      - 'server/Dockerfile'
+      - '-t'
+      - '${_AR_HOST}/$PROJECT_ID/medconnect/api:$SHORT_SHA'
+      - '-t'
+      - '${_AR_HOST}/$PROJECT_ID/medconnect/api:latest'
+      - 'server/'
+images:
+  - '${_AR_HOST}/$PROJECT_ID/medconnect/api:$SHORT_SHA'
+  - '${_AR_HOST}/$PROJECT_ID/medconnect/api:latest'
+substitutions:
+  # e.g. me-central1-docker.pkg.dev (must match the Artifact Registry repo location)
+  _AR_HOST: 'me-central1-docker.pkg.dev'
