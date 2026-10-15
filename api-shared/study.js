@@ -152,7 +152,7 @@ async function ensureRemoteConfig() {
       updated_at TIMESTAMPTZ DEFAULT now()
     )`;
   await sql`
-    INSERT INTO remote_config (key, value) VALUES ('resources', ${FALLBACK_RESOURCES})
+    INSERT INTO remote_config (key, value) VALUES ('resources', ${JSON.stringify(FALLBACK_RESOURCES)}::jsonb)
     ON CONFLICT (key) DO NOTHING`;
 }
 
@@ -522,7 +522,7 @@ export async function handleDaily(req, res, uid) {
       if (ext) {
         await sql`
           INSERT INTO daily_items (type, scheduled_date, specialty, content, source, reviewer, reviewed_on, status, external_id)
-          VALUES (${type}, ${date}, ${specialty}, ${content}, ${source}, ${reviewer}, ${reviewedOn || null}, ${status}, ${ext})
+          VALUES (${type}, ${date}, ${specialty}, ${JSON.stringify(content)}::jsonb, ${source}, ${reviewer}, ${reviewedOn || null}, ${status}, ${ext})
           ON CONFLICT (external_id) DO UPDATE SET type = EXCLUDED.type, scheduled_date = EXCLUDED.scheduled_date,
             specialty = EXCLUDED.specialty, content = EXCLUDED.content, source = EXCLUDED.source,
             reviewer = EXCLUDED.reviewer, reviewed_on = EXCLUDED.reviewed_on, status = EXCLUDED.status`;
@@ -530,13 +530,13 @@ export async function handleDaily(req, res, uid) {
         const existing = await sql`SELECT id FROM daily_items WHERE type = ${type} AND scheduled_date = ${date} LIMIT 1`;
         if (existing[0]) {
           await sql`
-            UPDATE daily_items SET specialty = ${specialty}, content = ${content}, source = ${source},
+            UPDATE daily_items SET specialty = ${specialty}, content = ${JSON.stringify(content)}::jsonb, source = ${source},
               reviewer = ${reviewer}, reviewed_on = ${reviewedOn || null}, status = ${status}
             WHERE id = ${existing[0].id}`;
         } else {
           await sql`
             INSERT INTO daily_items (type, scheduled_date, specialty, content, source, reviewer, reviewed_on, status)
-            VALUES (${type}, ${date}, ${specialty}, ${content}, ${source}, ${reviewer}, ${reviewedOn || null}, ${status})`;
+            VALUES (${type}, ${date}, ${specialty}, ${JSON.stringify(content)}::jsonb, ${source}, ${reviewer}, ${reviewedOn || null}, ${status})`;
         }
       }
       return res.status(200).json({ ok: true });
@@ -558,7 +558,7 @@ export async function handleDaily(req, res, uid) {
       const content = asObj(items[0].content);
       const ranked = await rankDifferentials(uid, content, entries);
       await sql`
-        INSERT INTO daily_answers (user_id, item_id, entries) VALUES (${uid}, ${id}, ${entries})
+        INSERT INTO daily_answers (user_id, item_id, entries) VALUES (${uid}, ${id}, ${JSON.stringify(entries)}::jsonb)
         ON CONFLICT (user_id, item_id) DO UPDATE SET entries = EXCLUDED.entries, answered_at = now()`;
       await markDailyDone(uid, id);
       const refs = Array.isArray(content.references) ? content.references : [];
@@ -612,7 +612,7 @@ export async function handleResources(req, res) {
     if (!expected || b.adminKey !== expected) return res.status(403).json({ error: 'Not allowed' });
     if (!Array.isArray(b.resources)) return res.status(400).json({ error: 'resources array required' });
     await sql`
-      INSERT INTO remote_config (key, value, updated_at) VALUES ('resources', ${b.resources}, now())
+      INSERT INTO remote_config (key, value, updated_at) VALUES ('resources', ${JSON.stringify(b.resources)}::jsonb, now())
       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`;
     return res.status(200).json({ ok: true });
   } catch (e) {
