@@ -564,7 +564,7 @@ export default function StudyPlannerScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: 24 },
+  scroll: { paddingBottom: 24, paddingHorizontal: 18, paddingTop: 10 },
   hero: {
     paddingHorizontal: 20,
     paddingTop: 18,
@@ -574,15 +574,15 @@ const styles = StyleSheet.create({
   },
   heroEmoji: { position: 'absolute', right: -6, bottom: -14, fontSize: 84, opacity: 0.1 },
   eyebrow: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 7 },
-  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 24, lineHeight: 25 },
+  h1: { letterSpacing: -0.4, fontFamily: SERIF, fontSize: 24, lineHeight: 30, marginBottom: 12 },
   examRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6, marginTop: 8 },
   examNum: { fontFamily: SERIF, fontSize: 20 },
   examText: { fontSize: 12, opacity: 0.85 },
   sheet: {
-    marginTop: -20,
+    marginTop: 0,
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
-    paddingHorizontal: 14,
+    paddingHorizontal: 0,
     paddingTop: 18,
     paddingBottom: 90,
   },

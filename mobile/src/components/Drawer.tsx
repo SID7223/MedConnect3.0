@@ -110,7 +110,7 @@ export default function DrawerHost() {
       { icon: 'insights', label: 'Clinical Insights', path: '/clinical-insights', tileBg: wash(colors.forest) },
       { icon: 'notes', label: 'Notes Vault', path: '/notes', tileBg: wash(colors.heroNotes) },
       { icon: 'logbook', label: 'Logbook', path: '/logbook', tileBg: colors.tintBlue },
-      { icon: 'planner', label: 'Study Planner', path: '/planner', tileBg: wash(colors.heroPlanner) },
+      { icon: 'focus', label: 'Focus Timer', path: '/focus', tileBg: wash(colors.heroFocus) },
     ]},
     { title: 'Grow', items: [
       { icon: 'invite', label: 'Invite a colleague', action: inviteFriend, tileBg: colors.tintGreen },

@@ -15,7 +15,6 @@ import ContextualPrompt from '../components/ContextualPrompt';
 import NotifyPrompt from '../components/NotifyPrompt';
 import { LockedHomeFeed, UnlockTutorialModal } from '../components/HomeUnlock';
 import { useAuth } from '../context/Auth';
-import { useDrawer } from '../context/Drawer';
 import { useSettings } from '../context/Settings';
 import { useTheme } from '../context/Theme';
 import { api } from '../lib/api';
@@ -70,12 +69,10 @@ function feedTap(card: string) {
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
-          <SvgCircle
-            cx={size / 2}
-            cy={size / 2}
-            r={R}
-            fill={colors.ink}
-          />
+          {/* No filled disc: this ring always sits on the dark forest hero
+              card (which never inverts), so a theme-following fill turns the
+              disc light in dark mode and swallows the % text. The card shows
+              through instead - readable in both themes. */}
           <SvgCircle
             cx={size / 2}
             cy={size / 2}
@@ -108,8 +105,7 @@ function feedTap(card: string) {
 
 export default function HomeScreen() {
   const { user, setUser } = useAuth();
-  const { setOpen: setDrawerOpen } = useDrawer();
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const { get, loaded } = useSettings();
 
   // §6D contextual prompts - the four deferred profile questions
@@ -132,9 +128,16 @@ export default function HomeScreen() {
   // done for users who never acted.
   const [partnerActivity, setPartnerActivity] = useState(false);
   const [connectedCount, setConnectedCount] = useState(0);
+  // per-source success flags: the unlock gate may only judge on REAL data.
+  // A failed load (offline, cold start, 5xx) must never read as "0 progress"
+  // and flash a false lock screen - that is exactly the reported flapping.
+  const [qOk, setQOk] = useState(false);
+  const [cOk, setCOk] = useState(false);
+  const [dOk, setDOk] = useState(false);
   const [connectedSample, setConnectedSample] = useState<{ name: string; avatar: string }[]>([]);
   const loadConnections = useCallback(() => {
     api.connections().then((d: any) => {
+      setCOk(true);
       const out = Array.isArray(d.pending) ? d.pending.length : 0;
       const list = Array.isArray(d.connected) ? d.connected : [];
       setConnectedCount(list.length);
@@ -209,6 +212,8 @@ export default function HomeScreen() {
   const loadQbank = useCallback(() => {
     api.qbankGet().then((d: any) => {
       const rows = d.progress || [];
+      setQOk(true); // success even when empty (genuinely new user) - only
+      // a failed request leaves us unknown, never "zero"
       if (!rows.length) { setQStats({ empty: true }); return; }
       const practice = rows.find((r: any) => r.bank === 'Practice' && r.topic === 'App practice');
       const t = practice
@@ -234,6 +239,7 @@ export default function HomeScreen() {
   const [deckCount, setDeckCount] = useState(0);
   const loadDecks = useCallback(() => {
     api.decksGet().then((d: any) => {
+      setDOk(true);
       const list: Deck[] = d.decks || [];
       setDeckCount(list.length);
       setDueCount(list.reduce((a, x) => a + (Number(x.due_count) || 0), 0));
@@ -269,7 +275,12 @@ export default function HomeScreen() {
     { key: 'f', letter: 'F', title: 'Make a flashcard deck', sub: 'Plan a deck in seconds', tint: colors.tintRust, done: deckCount > 0, to: '/flashcards' },
   ];
   const stepsDone = steps.filter((s) => s.done).length;
-  const calm = !hasExam || stepsDone < 3;
+  // The gate judges only on confirmed data. Until all three sources answer
+  // at least once, the verdict is "unknown" - and unknown renders the full
+  // home (possibly with empty states), never the lock tutorial. A user who
+  // earned 3/3 can therefore never flap back to locked on a bad network.
+  const statsReady = qOk && cOk && dOk;
+  const calm = !hasExam || (statsReady && stepsDone < 3);
 
   // exam countdown (days to exam_date, YYYY-MM-DD); hidden via the
   // Profile "Show exam countdown" tile (tile_prefs.hide_countdown === '1')
@@ -517,9 +528,6 @@ export default function HomeScreen() {
 
               <View style={styles.sectionHead}>
                 <Text style={[styles.sectionTitle, { color: colors.ink }]}>Your toolkit</Text>
-                <Pressable onPress={() => setDrawerOpen(true)} accessibilityRole="link">
-                  <Text style={[styles.sectionLink, { color: colors.skyDeep }]}>See all</Text>
-                </Pressable>
               </View>
               <View style={extra.toolRow}>
                 <ToolButton icon="qbank" label="Qbank" bg={colors.tileQbank} to="/qbank" />
@@ -582,7 +590,7 @@ export default function HomeScreen() {
                 </Text>
               </View>
               <View style={styles.bento}>
-                <BentoCard span={2} bg="solid" color={colors.orangeHot} tone="bright" eyebrow="OSCE" title="Practise stations" sub="Timed mock stations" onPress={() => { feedTap('osce'); router.push('/osce'); }} />
+                <BentoCard span={2} bg="solid" color={colors.tileOsce} tone="dark" eyebrow="OSCE" title="Practise stations" sub="Timed mock stations" softColor={mode === 'dark' ? colors.onForest : undefined} onPress={() => { feedTap('osce'); router.push('/osce'); }} />
                 <BentoCard bg="solid" color={colors.forest} title="You’re not behind. You’re on your own timeline." sub="Save as wallpaper" titleLines={3} style={styles.bentoCell} onPress={() => { feedTap('encouragement'); router.push('/motivation'); }} />
                 {suggestUser && !partnerAdded ? (
                   <BentoCard bg="solid" color={colors.blue} tone="light" eyebrow="PARTNER" title={partnerBusy ? 'Sending…' : String(suggestUser.name || 'Study partner')} sub={`${String(suggestUser.exam || user?.exam || '')}`} trailing={<Sticker tone="ink" label="Add" textStyle={{ fontSize: 12 }} />} style={styles.bentoCell} onPress={() => {
@@ -802,7 +810,10 @@ const gs = StyleSheet.create({
 
 const styles = StyleSheet.create({
   scroll: { paddingBottom: space.tabClear },
-  body: { paddingHorizontal: space.screenX, gap: 12, paddingTop: 4 },
+  // vertical rhythm: heads sit close to their own content (14 below) and far
+  // from the previous block (14 + 8 above) - proximity does the grouping,
+  // so hierarchy and layout stay untouched.
+  body: { paddingHorizontal: space.screenX, gap: 14, paddingTop: 4 },
   head: { gap: 6, marginTop: 6 },
   h1: { fontFamily: SERIF, fontSize: 30, lineHeight: 34, letterSpacing: -0.6 },
   countPill: {
@@ -858,7 +869,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between',
-    marginTop: 6,
+    marginTop: 8,
   },
   sectionTitle: { fontSize: 17, lineHeight: 22, letterSpacing: -0.2, fontWeight: '700' },
   sectionMeta: { fontSize: 13, lineHeight: 16 },

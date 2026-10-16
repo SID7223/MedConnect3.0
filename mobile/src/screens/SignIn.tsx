@@ -19,7 +19,7 @@ import Wordmark from '../components/Wordmark';
 import { SERIF } from '../theme/fonts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const LOGO = require('../../assets/icon.png');
+const LOGO = require('../../assets/signin-logo.png');
 
 export default function SignInScreen() {
   const { login, register } = useAuth();

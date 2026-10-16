@@ -2,6 +2,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -233,49 +236,6 @@ export default function McqsScreen() {
                   );
                 })}
 
-                {/* mockup share sheet */}
-                {selectedIds.length > 0 && (
-                  <View style={[styles.sheet, { backgroundColor: colors.card, borderColor: colors.line }]}>
-                    <Text style={[styles.sheetTitle, { color: colors.ink }]}>{`Share ${selectedIds.length} question${selectedIds.length === 1 ? '' : 's'}`}</Text>
-                    <Text style={[styles.sub, { color: colors.muted }]}>Choose a study partner. They open the questions in MedPeers.</Text>
-                    {partners.length === 0 ? (
-                      <Text style={[styles.sub, { color: colors.muted }]}>No accepted partners yet — connect on the Partners tab first.</Text>
-                    ) : (
-                      partners.map((p, pi) => {
-                        const on = partnerId === p.id;
-                        return (
-                          <Pressable key={p.id} onPress={() => setPartnerId(on ? '' : p.id)} style={styles.partnerRow} accessibilityRole="radio" accessibilityState={{ selected: on }}>
-                            <View style={[styles.ava, { backgroundColor: AVA_TINTS[pi % AVA_TINTS.length] }]}>
-                              <Text style={[styles.avaText, { color: colors.ink }]}>{initialsOf(p.name)}</Text>
-                            </View>
-                            <Text style={[styles.partnerName, { color: colors.ink }]} numberOfLines={1}>{p.name}</Text>
-                            {!!p.exam && <Text style={[styles.partnerExam, { color: colors.muted }]} numberOfLines={1}>{p.exam}</Text>}
-                            <View style={[styles.radio, { borderColor: on ? colors.forest : colors.line }]}>
-                              {on && <View style={[styles.radioDot, { backgroundColor: colors.forest }]} />}
-                            </View>
-                          </Pressable>
-                        );
-                      })
-                    )}
-                    <TextInput
-                      value={message}
-                      onChangeText={setMessage}
-                      placeholder="Add a message (optional)"
-                      placeholderTextColor={colors.subtle}
-                      maxLength={280}
-                      style={[styles.input, { borderColor: colors.line, color: colors.ink, backgroundColor: colors.paper }]}
-                    />
-                    <Pressable
-                      onPress={doShare}
-                      disabled={sharing || !partnerId}
-                      style={[styles.cta, { backgroundColor: colors.ink, opacity: sharing || !partnerId ? 0.55 : 1 }]}
-                    >
-                      <Text style={[styles.ctaText, { color: colors.paper }]}>
-                        {sharing ? 'Sending…' : chosenPartner ? `Send to ${chosenPartner.name.split(/\s+/)[0]}` : 'Pick a partner'}
-                      </Text>
-                    </Pressable>
-                  </View>
-                )}
               </>
             )}
           </>
@@ -305,6 +265,66 @@ export default function McqsScreen() {
           </>
         )}
       </ScrollView>
+
+      {/* mockup share sheet: overlay bottom sheet (backdrop tap clears selection) */}
+      <Modal
+        visible={selectedIds.length > 0}
+        transparent
+        animationType="slide"
+        statusBarTranslucent
+        onRequestClose={() => setSelected({})}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalWrap}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setSelected({})}
+            accessibilityLabel="Close share sheet"
+          />
+          <View style={[styles.sheet, { backgroundColor: colors.card, borderColor: colors.line }]}>
+            <Text style={[styles.sheetTitle, { color: colors.ink }]}>{`Share ${selectedIds.length} question${selectedIds.length === 1 ? '' : 's'}`}</Text>
+            <Text style={[styles.sub, { color: colors.muted }]}>Choose a study partner. They open the questions in MedPeers.</Text>
+            {partners.length === 0 ? (
+              <Text style={[styles.sub, { color: colors.muted }]}>No accepted partners yet — connect on the Partners tab first.</Text>
+            ) : (
+              partners.map((p, pi) => {
+                const on = partnerId === p.id;
+                return (
+                  <Pressable key={p.id} onPress={() => setPartnerId(on ? '' : p.id)} style={styles.partnerRow} accessibilityRole="radio" accessibilityState={{ selected: on }}>
+                    <View style={[styles.ava, { backgroundColor: AVA_TINTS[pi % AVA_TINTS.length] }]}>
+                      <Text style={[styles.avaText, { color: colors.ink }]}>{initialsOf(p.name)}</Text>
+                    </View>
+                    <Text style={[styles.partnerName, { color: colors.ink }]} numberOfLines={1}>{p.name}</Text>
+                    {!!p.exam && <Text style={[styles.partnerExam, { color: colors.muted }]} numberOfLines={1}>{p.exam}</Text>}
+                    <View style={[styles.radio, { borderColor: on ? colors.forest : colors.line }]}>
+                      {on && <View style={[styles.radioDot, { backgroundColor: colors.forest }]} />}
+                    </View>
+                  </Pressable>
+                );
+              })
+            )}
+            <TextInput
+              value={message}
+              onChangeText={setMessage}
+              placeholder="Add a message (optional)"
+              placeholderTextColor={colors.subtle}
+              maxLength={280}
+              style={[styles.input, { borderColor: colors.line, color: colors.ink, backgroundColor: colors.paper }]}
+            />
+            <Pressable
+              onPress={doShare}
+              disabled={sharing || !partnerId}
+              style={[styles.cta, { backgroundColor: colors.ink, opacity: sharing || !partnerId ? 0.55 : 1 }]}
+            >
+              <Text style={[styles.ctaText, { color: colors.paper }]}>
+                {sharing ? 'Sending…' : chosenPartner ? `Send to ${chosenPartner.name.split(/\s+/)[0]}` : 'Pick a partner'}
+              </Text>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </Screen>
   );
 }
@@ -331,7 +351,20 @@ const styles = StyleSheet.create({
   stem: { fontSize: 13.5, lineHeight: 19, fontWeight: '500' },
   pill: { alignSelf: 'flex-start', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4, marginTop: 8 },
   pillText: { fontSize: 11, fontWeight: '700' },
-  sheet: { borderWidth: 1.5, borderRadius: 18, padding: 16, marginTop: 14, gap: 6 },
+  sheet: {
+    borderWidth: 1.5,
+    borderRadius: 22,
+    padding: 18,
+    marginHorizontal: 12,
+    marginBottom: 12,
+    gap: 4,
+    maxHeight: '80%',
+  },
+  modalWrap: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,.45)',
+  },
   sheetTitle: { fontFamily: SERIF, fontSize: 20, lineHeight: 24 },
   partnerRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 },
   ava: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },

@@ -102,6 +102,9 @@ export interface ThemeColors {
   tileEssentials: string;
   /** LogBook tile - sand */
   tileLogbook: string;
+  /** OSCE feed tile - flat vivid orange, same fill in light and dark so it
+      always matches the Practise AccentButton (which is also flat) */
+  tileOsce: string;
 }
 
 export const lightColors: ThemeColors = {
@@ -154,7 +157,8 @@ export const lightColors: ThemeColors = {
   tileQbank: '#CFE3D3',
   tileTracker: '#F6D8C3',
   tileEssentials: '#A4E1F4',
-  tileLogbook: '#F1ECDD',
+  tileLogbook: '#fcd258',
+  tileOsce: '#F0653A',
 };
 
 export const darkColors: ThemeColors = {
@@ -162,7 +166,7 @@ export const darkColors: ThemeColors = {
   inkSoft: '#CFC7B4',
   paper: '#161310',
   paper2: '#1E1A15',
-  card: '#231E17',
+  card: '#2C261D',
   line: '#3A3327',
 
   // forest panels do NOT invert - they are the one surface that stays dark
@@ -178,7 +182,7 @@ export const darkColors: ThemeColors = {
   orange: '#F0825A',
   orangeHot: '#F58A5E',
   gold: '#D8A84A',
-  green: '#3FBF86',
+  green: '#3CAD82',
   greenDeep: '#1E5C43',
 
   tintRust: '#3A241A',
@@ -187,7 +191,7 @@ export const darkColors: ThemeColors = {
   tintGold: '#332B1C',
 
   muted: '#A39B8B',
-  subtle: '#736C5E',
+  subtle: '#857C6D',
   onForest: '#F2ECDC',
 
   rust: '#F0825A',
@@ -208,7 +212,8 @@ export const darkColors: ThemeColors = {
   tileQbank: '#234034',
   tileTracker: '#572B1B',
   tileEssentials: '#16394E',
-  tileLogbook: '#4A3C26',
+  tileLogbook: '#8A6D1B',
+  tileOsce: '#F0653A',
 };
 
 // ============================================================================

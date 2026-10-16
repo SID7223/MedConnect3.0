@@ -21,6 +21,9 @@ interface Props {
   color?: string;
   /** text tone override - defaults to dark on `solid`, light on `tint` */
   tone?: BentoTone;
+  /** explicit text colors - default to the tone-derived ink/soft */
+  inkColor?: string;
+  softColor?: string;
   /** max lines for the title (default 2) */
   titleLines?: number;
   /** right-hand content (icon, numeral, pill) */
@@ -40,6 +43,8 @@ export default function BentoCard({
   bg = 'tint',
   color,
   tone,
+  inkColor,
+  softColor,
   titleLines = 2,
   trailing,
   children,
@@ -51,8 +56,8 @@ export default function BentoCard({
   const solid = bg === 'solid';
   const fill = color ?? (solid ? colors.forest : colors.paper2);
   const resolved = tone ?? (solid ? 'dark' : 'light');
-  const ink = resolved === 'dark' ? colors.onForest : resolved === 'bright' ? colors.forest : colors.ink;
-  const soft = resolved === 'dark' ? colors.mint : resolved === 'bright' ? colors.forest : colors.muted;
+  const ink = inkColor ?? (resolved === 'dark' ? colors.onForest : resolved === 'bright' ? colors.forest : colors.ink);
+  const soft = softColor ?? (resolved === 'dark' ? colors.mint : resolved === 'bright' ? colors.forest : colors.muted);
   const hair = resolved === 'light';
 
   const node = (

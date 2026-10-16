@@ -49,3 +49,8 @@ app/
 
 # mobile scratch
 mobile/segmented-pill-replica.html
+
+# local-only medpeers.net lander (kept out of git until launch)
+src/pages/Landing.jsx
+src/styles/landing.css
+public/favicon.png

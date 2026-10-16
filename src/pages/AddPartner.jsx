@@ -54,7 +54,7 @@ export default function AddPartner() {
             <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'var(--paper-2)', border: '2px solid var(--forest)', display: 'grid', placeItems: 'center', fontSize: 32, margin: '0 auto 10px' }}>{card.avatar || '🩺'}</div>
             <div style={{ fontSize: 18, fontWeight: 700 }}>{card.name}</div>
             <div className="meta" style={{ marginTop: 2 }}>{[card.exam, card.country].filter(Boolean).join(' · ')}</div>
-            <p className="sub" style={{ fontSize: 12.5, margin: '12px 0 2px' }}>Wants to study with you on MedConnect.</p>
+            <p className="sub" style={{ fontSize: 12.5, margin: '12px 0 2px' }}>Wants to study with you on MedPeers.</p>
             <button className="btn btn-cta" style={{ marginTop: 10 }} onClick={send}>Send connection request</button>
             <button className="btn ghost" style={{ marginTop: 8 }} onClick={() => nav('/home')}>Not now</button>
           </>

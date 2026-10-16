@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Stack, useSegments, useRouter } from 'expo-router';
-import { ActivityIndicator, Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Easing, StyleSheet, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -35,7 +35,6 @@ function BootSplash() {
   return (
     <View style={[styles.boot, { backgroundColor: colors.paper }]}>
       <Wordmark size={34} peersSize={37} color={colors.ink} style={styles.bootTitle} />
-      <Text style={[styles.bootTag, { color: colors.muted }]}>Every exam. One peer group.</Text>
       <ActivityIndicator color={colors.orange} style={styles.bootSpinner} />
     </View>
   );

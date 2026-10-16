@@ -3,7 +3,7 @@
     "name": "MedPeers",
     "slug": "medconnect",
     "scheme": "medconnect",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -13,7 +13,7 @@
     },
     "android": {
       "package": "io.medconnect.app",
-      "versionCode": 1,
+      "versionCode": 16,
       "adaptiveIcon": {
         "backgroundColor": "#14402F",
         "foregroundImage": "./assets/android-icon-foreground.png"
@@ -48,9 +48,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#14402F",
+          "backgroundColor": "#FFFFFF",
           "dark": {
-            "backgroundColor": "#1B4E3B"
+            "backgroundColor": "#FFFFFF"
           },
           "image": "./assets/splash.png",
           "imageWidth": 400,

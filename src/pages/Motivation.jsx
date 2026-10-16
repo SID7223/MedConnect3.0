@@ -72,9 +72,9 @@ export default function Motivation({ onBack }) {
     }
     // footer brand
     x.fillStyle = theme.accent; x.font = '700 34px Georgia, serif';
-    x.fillText('MedConnect', 540, 980);
+    x.fillText('MedPeers', 540, 980);
     const link = document.createElement('a');
-    link.download = 'medconnect-motivation.png';
+    link.download = 'medpeers-motivation.png';
     link.href = c.toDataURL('image/png');
     link.click();
   };
@@ -101,7 +101,7 @@ export default function Motivation({ onBack }) {
               <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 30, fontWeight: 700, color: theme.accent, verticalAlign: '-11px', lineHeight: 0, marginRight: 2 }}>“</span>{today.text}<span style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 30, fontWeight: 700, color: theme.accent, verticalAlign: '-11px', lineHeight: 0, marginLeft: 2 }}>”</span>
             </p>
             {today.author && <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 14, fontStyle: 'italic', color: theme.accent, marginBottom: 16 }}>{today.author}</p>}
-            <div style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 13, fontWeight: 700, color: theme.accent, opacity: 0.85 }}>MedConnect</div>
+            <div style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: 13, fontWeight: 700, color: theme.accent, opacity: 0.85 }}>MedPeers</div>
           </div>
 
           {/* background theme picker */}

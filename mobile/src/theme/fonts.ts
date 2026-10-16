@@ -50,6 +50,18 @@ export const NEWSREADER_ITALIC = Platform.select({
   default: 'Newsreader_500Medium_Italic',
 });
 
+// Joining script - the "Peers" half of the MedPeers wordmark only.
+// Pacifico 400 (OFL, render-verified: genuinely connected letterforms).
+// Referenced by filename with fontWeight left at default, or Android hunts
+// for a missing variant and falls back to system sans. iOS: add the file to
+// the Xcode project / UIAppFonts on next native touch (iOS is not built
+// locally).
+export const SCRIPT = Platform.select({
+  ios: 'Pacifico_400Regular',
+  android: 'Pacifico_400Regular',
+  default: 'Pacifico_400Regular',
+});
+
 // Montserrat (TTFs bundled in android/app/src/main/assets/fonts).
 // The italic is a separate asset, so it is referenced by its own family name
 // and must NOT also set fontStyle: 'italic' (that would look for a missing

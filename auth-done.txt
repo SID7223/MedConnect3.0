@@ -1,0 +1,7 @@
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Go to the following link in your browser, and complete the sign-in prompts:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=0qTdDGQsAMcBQKfDi2RBnzZB08VrLo&prompt=consent&token_usage=remote&access_type=offline&code_challenge=fkCL8aG322I0uepDYesnCuzsdKazdxSVEuGciCoqo2A&code_challenge_method=S256
+
+Once finished, enter the verification code provided in your browser: ERROR: There was a problem with web authentication.
+ERROR: (gcloud.auth.login) (invalid_grant) Invalid code verifier.

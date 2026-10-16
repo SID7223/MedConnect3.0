@@ -14,7 +14,7 @@ import { border } from '../theme/tokens';
 // Tab roots - shared with Back.tsx so the hardware-back exit gate and the
 // TopBar burger/back swap agree on what "root" means. Keep in sync with
 // TAB_META in app/(main)/(tabs)/_layout.tsx.
-export const TAB_ROOTS = ['/', '/partners', '/osce', '/chat', '/focus'];
+export const TAB_ROOTS = ['/', '/partners', '/osce', '/chat', '/study'];
 
 // Top app bar - burger on root tabs, back on pushed screens.
 //

@@ -1,4 +1,4 @@
-// API client — talks to the MedConnect backend at /api/*.
+// API client — talks to the MedPeers backend at /api/*.
 //
 // Defaults to same-origin, which is what production uses: `vercel.json` rewrites
 // /api/* through to the Kotlin/Ktor server, so the web app needs no CORS round

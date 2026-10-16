@@ -13,7 +13,7 @@ export default function Legal() {
 
         <h2 style={{ fontSize: 17, fontWeight: 700, margin: '14px 0 6px' }}>Privacy</h2>
         <p style={{ fontSize: 14, lineHeight: 1.6 }}>
-          MedConnect collects the information you provide, your name, email, exam, country, timezone,
+          MedPeers collects the information you provide, your name, email, exam, country, timezone,
           study preferences, optional registration details, and the messages you send. We use this only
           to match you with study partners and run the service. We do not sell your data or use it for advertising.
           Your password is stored securely (hashed). You can edit or remove your information from your profile,
@@ -22,9 +22,9 @@ export default function Legal() {
 
         <h2 style={{ fontSize: 17, fontWeight: 700, margin: '16px 0 6px' }}>Terms of Use</h2>
         <p style={{ fontSize: 14, lineHeight: 1.6 }}>
-          MedConnect is a peer study-networking tool for medical professionals and exam candidates.
+          MedPeers is a peer study-networking tool for medical professionals and exam candidates.
           It does not verify medical credentials, registration details are self-reported, and you should
-          use your own judgement before sharing personal information with other users. MedConnect is not a
+          use your own judgement before sharing personal information with other users. MedPeers is not a
           source of medical advice, and any study material or discussion is for educational support only.
           Be respectful; harassment, impersonation, or misuse may result in removal. The service is provided
           "as is" without guarantees of availability.

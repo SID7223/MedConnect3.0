@@ -17,8 +17,8 @@ export default function Pro() {
   const isPro = false;
 
   const notify = () => {
-    const subject = encodeURIComponent('Notify me about MedConnect Pro');
-    const body = encodeURIComponent("Hi MedConnect team,\n\nI'd love to be notified when MedConnect Pro becomes available.\n\nThanks!");
+    const subject = encodeURIComponent('Notify me about MedPeers Pro');
+    const body = encodeURIComponent("Hi MedPeers team,\n\nI'd love to be notified when MedPeers Pro becomes available.\n\nThanks!");
     window.location.href = `mailto:medconnectsupport.io@gmail.com?subject=${subject}&body=${body}`;
   };
 
@@ -32,10 +32,10 @@ export default function Pro() {
         <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, color: 'var(--gold)', textTransform: 'uppercase', marginBottom: 7, position: 'relative' }}>
           {isPro ? '✦ Active' : '✦ Coming soon'}
         </div>
-        <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1, position: 'relative' }}>MedConnect Pro</h1>
+        <h1 style={{ fontFamily: "'Fraunces',Georgia,serif", fontWeight: 900, fontSize: 26, lineHeight: 1, position: 'relative' }}>MedPeers Pro</h1>
         <p style={{ fontSize: 12.5, opacity: .85, marginTop: 6, lineHeight: 1.55, maxWidth: '84%', position: 'relative' }}>
           {isPro
-            ? "You're a Pro member. Thank you for supporting MedConnect 💛"
+            ? "You're a Pro member. Thank you for supporting MedPeers 💛"
             : 'Built for doctors who are serious about their exams: more tools, deeper content, no compromises.'}
         </p>
       </div>

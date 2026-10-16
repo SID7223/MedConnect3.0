@@ -1,0 +1,15 @@
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Updated property [core/project].
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+ERROR: (gcloud.services.enable) FAILED_PRECONDITION: Billing account for project '222156064743' is not found. Billing must be enabled for activation of service(s) 'artifactregistry.googleapis.com,cloudbuild.googleapis.com,run.googleapis.com,containerregistry.googleapis.com' to proceed.
+Help Token: Ad9DraCBbSCtcjnlw3rj3qg-r98JUu17EiSkHZggvDkS-CVib1t3DR_Cld_dTmRjhd2FZjoLJtmCF-kSmujA9daVSpQxOqsLq4UN6cXLLV6molzU
+- '@type': type.googleapis.com/google.rpc.PreconditionFailure
+  violations:
+  - subject: ?error_code=390001&project=222156064743&services=artifactregistry.googleapis.com&services=cloudbuild.googleapis.com&services=run.googleapis.com&services=containerregistry.googleapis.com
+    type: googleapis.com/billing-enabled
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: serviceusage.googleapis.com/billing-enabled
+  metadata:
+    project: '222156064743'
+    services: artifactregistry.googleapis.com,cloudbuild.googleapis.com,run.googleapis.com,containerregistry.googleapis.com
+  reason: UREQ_PROJECT_BILLING_NOT_FOUND

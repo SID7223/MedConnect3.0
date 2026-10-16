@@ -1,0 +1,6 @@
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Create in progress for [https://cloudresourcemanager.googleapis.com/v1/projects/medpeers-api].
+Waiting for [operations/create_project.global.8457045091563761097] to finish...
+..done.
+Enabling service [cloudapis.googleapis.com] on project [medpeers-api]...
+Operation "operations/acat.p2-222156064743-73c1482c-22a5-4a82-b588-8bf5a4698b43" finished successfully.

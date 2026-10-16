@@ -16,7 +16,7 @@ const IND = 30;
 
 const TAB_META: Record<string, { icon: IconName; label: string }> = {
   index: { icon: 'home', label: 'Home' },
-  focus: { icon: 'study', label: 'Study' },
+  study: { icon: 'study', label: 'Study' },
   partners: { icon: 'partners', label: 'Partners' },
   chat: { icon: 'chat', label: 'Messages' },
   osce: { icon: 'osce', label: 'OSCE' },
@@ -121,18 +121,6 @@ function TabBar({ state, navigation }: TabBarProps) {
               {route.name === 'partners' && hasRequests && (
                 <View style={[styles.dot, { backgroundColor: colors.orange, borderColor: colors.card }]} />
               )}
-              {route.name === 'focus' && running && (
-                <Animated.View
-                  style={[
-                    styles.liveDot,
-                    { backgroundColor: colors.orange, borderColor: colors.card },
-                    {
-                      transform: [{ scale: pulse }],
-                      opacity: pulse.interpolate({ inputRange: [1, 1.45], outputRange: [1, 0.65] }),
-                    },
-                  ]}
-                />
-              )}
             </View>
             <Text style={[styles.label, { color: focused ? colors.ink : colors.muted }]}>
               {meta.label}
@@ -149,13 +137,15 @@ export default function TabsLayout() {
   const { colors } = useTheme();
   if (loading || !user || !user.profile_complete) return null;
 
-  return (
+    return (
     <Tabs backBehavior="history" screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: colors.paper } }} tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen name="index" />
-      <Tabs.Screen name="focus" />
+      <Tabs.Screen name="study" />
       <Tabs.Screen name="partners" />
       <Tabs.Screen name="chat" />
       <Tabs.Screen name="osce" />
+      {/* Focus timer lives in the drawer now — hidden from the bar, still routable */}
+      <Tabs.Screen name="focus" options={{ href: null }} />
     </Tabs>
   );
 }

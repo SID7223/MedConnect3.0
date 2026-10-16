@@ -77,10 +77,10 @@ export default function Profile() {
   const [, setTilePrefs] = useState(0); // re-render when tile prefs change
   const [homeOpen, setHomeOpen] = useState(false); // collapsible home-screen settings
   const [shareOpen, setShareOpen] = useState(false);
-  const shareLink = `https://med-connect3-0.vercel.app/add/${user?.id}`;
+  const shareLink = `https://medpeers.net/add/${user?.id}`;
   const shareProfile = async () => {
     try {
-      if (navigator.share) { await navigator.share({ title: 'Add me on MedConnect', text: `Hi, it's ${user?.name}. Add me as a study partner on MedConnect`, url: shareLink }); return; }
+      if (navigator.share) { await navigator.share({ title: 'Add me on MedPeers', text: `Hi, it's ${user?.name}. Add me as a study partner on MedPeers`, url: shareLink }); return; }
     } catch (e) { if (e?.name === 'AbortError') return; }
     try { await navigator.clipboard.writeText(shareLink); window.alert('Profile link copied!'); } catch (e) {}
   };
@@ -257,7 +257,7 @@ export default function Profile() {
       {shareOpen && (
         <div onClick={() => setShareOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.55)', display: 'grid', placeItems: 'center', zIndex: 100, padding: 24 }}>
           <div onClick={(e) => e.stopPropagation()} className="card" style={{ maxWidth: 320, width: '100%', textAlign: 'center', animation: 'popIn .3s cubic-bezier(0.34, 1.56, 0.64, 1) both', margin: 0 }}>
-            <h2 style={{ fontSize: 17, fontWeight: 700 }}>Add me on MedConnect</h2>
+            <h2 style={{ fontSize: 17, fontWeight: 700 }}>Add me on MedPeers</h2>
             <p className="sub" style={{ fontSize: 12, marginTop: 2, marginBottom: 12 }}>Scan to send {user?.name} a connection request.</p>
             <div style={{ background: '#fff', borderRadius: 16, padding: 12, display: 'inline-block' }}>
               <img alt="Profile QR" width="200" height="200" style={{ display: 'block' }}
@@ -319,11 +319,11 @@ export default function Profile() {
       <div style={{ textAlign:'center', marginTop:18 }}>
         <button className="link" onClick={() => nav('/legal')}>Privacy & Terms</button>
         <span className="meta" style={{ margin:'0 8px' }}>·</span>
-        <button className="link" onClick={() => { window.location.href = 'mailto:medconnectsupport.io@gmail.com?subject=MedConnect%20feature%20request'; }}>Request a feature</button>
+        <button className="link" onClick={() => { window.location.href = 'mailto:medconnectsupport.io@gmail.com?subject=MedPeers%20feature%20request'; }}>Request a feature</button>
       </div>
 
       <button className="link" style={{ display:'block', margin:'14px auto 0', color: busy ? 'var(--muted)' : 'var(--subtle)', fontSize:13 }} onClick={askDeleteAccount}>{busy ? 'Deleting…' : 'Delete my account'}</button>
-      <p className="meta" style={{ textAlign:'center', marginTop:20, fontSize:11, opacity:0.7 }}>MedConnect v{APP_VERSION}</p>
+      <p className="meta" style={{ textAlign:'center', marginTop:20, fontSize:11, opacity:0.7 }}>MedPeers v{APP_VERSION}</p>
       {ConfirmDialog}
     </div>
   );
@@ -378,7 +378,7 @@ function NotifToggle() {
             // First: test if THIS device can show a notification at all (via the service worker)
             try {
               const reg = await navigator.serviceWorker.ready;
-              await reg.showNotification('MedConnect local test 🔔', { body: 'If you see THIS, your device can show notifications. (This is a local test.)', icon: '/pwa-192.png' });
+              await reg.showNotification('MedPeers local test 🔔', { body: 'If you see THIS, your device can show notifications. (This is a local test.)', icon: '/pwa-192.png' });
             } catch (e) {
               alert('Local notification failed: ' + (e.message || e) + '\n\nThis means notifications are blocked at the device/browser level.');
               return;

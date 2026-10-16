@@ -1,0 +1,8 @@
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+billingAccountName: ''
+billingEnabled: false
+name: projects/medpeers-api/billingInfo
+projectId: medpeers-api
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+ACCOUNT_ID            NAME                OPEN   MASTER_ACCOUNT_ID
+01F858-6D03CD-C738A8  My Billing Account  False

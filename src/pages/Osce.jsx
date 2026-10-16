@@ -36,7 +36,7 @@ const EXAM_MINUTES = {
   'ADC Exam': 8,
 };
 
-// what MedConnect Pro unlocks (shown under locked stations)
+// what MedPeers Pro unlocks (shown under locked stations)
 const PRO_FEATURES = [
   'All OSCE stations for every exam (not just 3)',
   'Full marking schemes & model answers',
@@ -123,7 +123,7 @@ export default function Osce() {
             <div style={{ display:'grid', placeItems:'center', color:'var(--forest)' }}><LockIcon size={34} /></div>
             <h2 className="serif" style={{ fontSize:20, fontWeight:700, margin:'8px 0' }}>This is a Pro station</h2>
             <p className="sub" style={{ fontSize:14, lineHeight:1.5, marginBottom:12 }}>
-              You've got {FREE} free stations. MedConnect Pro unlocks <strong>{TOTAL_STATIONS[exam] || '200+'} {exam.split('—')[0].trim()} stations</strong> plus:
+              You've got {FREE} free stations. MedPeers Pro unlocks <strong>{TOTAL_STATIONS[exam] || '200+'} {exam.split('—')[0].trim()} stations</strong> plus:
             </p>
             <div style={{ textAlign:'left', margin:'0 auto 4px', maxWidth:260 }}>
               {PRO_FEATURES.map((f) => (

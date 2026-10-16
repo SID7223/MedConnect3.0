@@ -914,9 +914,9 @@ export default function Home() {
   // native share sheet on Android & iOS; clipboard fallback elsewhere
   const inviteFriend = async () => {
     const data = {
-      title: 'MedConnect',
-      text: "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me:",
-      url: 'https://med-connect3-0.vercel.app',
+      title: 'MedPeers',
+      text: "I'm using MedPeers to find study partners for medical exams. Doctors only, matched by exam. Join me:",
+      url: 'https://medpeers.net',
     };
     try {
       if (navigator.share) { await navigator.share(data); return; }

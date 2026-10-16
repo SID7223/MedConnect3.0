@@ -7,6 +7,7 @@ import { useTimer } from './context/Timer.jsx';
 import { FocusLockProvider, useFocusLock } from './context/FocusLock.jsx';
 import { api } from './lib/api';
 import SignIn from './pages/SignIn.jsx';
+import Landing from './pages/Landing.jsx';
 import Setup from './pages/Setup.jsx';
 import Home from './pages/Home.jsx';
 import Partners from './pages/Partners.jsx';
@@ -67,9 +68,9 @@ function Drawer({ open, onClose, user }) {
   // native share sheet (same as the home invite card)
   const inviteFriend = async () => {
     const data = {
-      title: 'MedConnect',
-      text: "I'm using MedConnect to find study partners for medical exams. Doctors only, matched by exam. Join me:",
-      url: 'https://med-connect3-0.vercel.app',
+      title: 'MedPeers',
+      text: "I'm using MedPeers to find study partners for medical exams. Doctors only, matched by exam. Join me:",
+      url: 'https://medpeers.net',
     };
     try { if (navigator.share) { await navigator.share(data); return; } }
     catch (e) { if (e?.name === 'AbortError') return; }
@@ -159,12 +160,12 @@ function Drawer({ open, onClose, user }) {
           </button>
           <div className="drawer-div" />
           <button className="drawer-item" onClick={() => go('/pro')} style={{ color: 'var(--gold)' }}>
-            <svg viewBox="0 0 24 24" style={{ stroke: 'var(--gold)' }}><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></svg>MedConnect Pro
+            <svg viewBox="0 0 24 24" style={{ stroke: 'var(--gold)' }}><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></svg>MedPeers Pro
           </button>
           <div className="drawer-div" />
           <div className="drawer-sect">App</div>
           <button className="drawer-item" onClick={() => go('/about')}>
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>About MedConnect
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>About MedPeers
           </button>
           <button className="drawer-item" onClick={() => go('/about-dev')}>
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>About the developer
@@ -177,7 +178,7 @@ function Drawer({ open, onClose, user }) {
             <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5M21 12H9" /></svg>Log out
           </button>
         </div>
-        <div className="drawer-foot">MedConnect v{APP_VERSION} · Connect. Study. Succeed.</div>
+        <div className="drawer-foot">MedPeers v{APP_VERSION} · Connect. Study. Succeed.</div>
       </aside>
 
       {confirmLogout && (
@@ -257,7 +258,7 @@ function TopBar({ user }) {
                 <span /><span /><span />
               </button>}
         </div>
-        <div className="topbar-title" style={barColor ? { color: '#fff' } : undefined}>MedConnect</div>
+        <div className="topbar-title" style={barColor ? { color: '#fff' } : undefined}>MedPeers</div>
         <div style={{ width: 76, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8 }}>
           {user && !onProfile && (
             <button onClick={() => { const opening = !bellOpen; setBellOpen(opening); if (opening) loadNotifs.current(); }} aria-label="Notifications"
@@ -523,8 +524,8 @@ function AppInner() {
   if (loading || !splashDone) return (
     <div className="app">
       <div className="center splash" style={{ flexDirection: 'column', gap: 14 }}>
-        <img src="/pwa-192.png" alt="MedConnect" className="splash-logo" />
-        <div className="splash-brand">MedConnect</div>
+        <img src="/pwa-192.png" alt="MedPeers" className="splash-logo" />
+        <div className="splash-brand">MedPeers</div>
         <div className="splash-tag"><span>Connect.</span> <span>Study.</span> <span>Succeed.</span></div>
       </div>
     </div>
@@ -535,10 +536,14 @@ function AppInner() {
       <div className="app">
         <button className="themebtn" onClick={toggle}>{mode === 'dark' ? '☀️' : '🌙'}</button>
         <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/welcome" element={<Landing />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/login" element={<SignIn />} />
           <Route path="/legal" element={<Legal />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/add/:id" element={<SignIn />} />
-          <Route path="*" element={<SignIn />} />
+          <Route path="*" element={<Landing />} />
         </Routes>
       </div>
     );
@@ -561,6 +566,8 @@ function AppInner() {
       <OfflineBanner />
       {!immersive && <TopBar user={user} />}
       <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/welcome" element={<Landing />} />
         <Route path="/home" element={<Home />} />
         <Route path="/partners" element={<Partners />} />
         <Route path="/osce" element={<Osce />} />

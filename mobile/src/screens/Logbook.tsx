@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
 import Screen from '../components/Screen';
 import Card from '../components/Card';
 import ContextualPrompt from '../components/ContextualPrompt';
@@ -29,6 +29,20 @@ import { analytics } from '../lib/analytics';
 import { useTheme } from '../context/Theme';
 import { useKeyboardLift } from '../lib/keyboard';
 import { api } from '../lib/api';
+import {
+  drainOutbox,
+  enqueueCreate,
+  enqueueDelete,
+  enqueueTarget,
+  enqueueUpdate,
+  isLocalId,
+  queuedCreates,
+  queuedDeletedIds,
+  queuedTargets,
+  queuedUpdates,
+  readOutbox,
+  type PendingOp,
+} from '../lib/logbookQueue';
 import { SERIF } from '../theme/fonts';
 import { border, radius } from '../theme/tokens';
 
@@ -87,7 +101,6 @@ function fmtDate(d?: string | null): string {
 
 export default function LogbookScreen() {
   const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
 
   const [kind, setKind] = useState<'procedure' | 'research'>('procedure');
   const [data, setData] = useState<Res | null>(null);
@@ -96,6 +109,10 @@ export default function LogbookScreen() {
   const loading = !loadedKinds[kind];
 
   const activeRef = useRef<string>('procedure');
+  const [pendingOps, setPendingOps] = useState<PendingOp[]>([]);
+  const refreshQueue = useCallback(() => {
+    readOutbox().then(setPendingOps).catch(() => {});
+  }, []);
 
   const load = useCallback(async (k: 'procedure' | 'research') => {
     let r: Res | undefined;
@@ -111,13 +128,41 @@ export default function LogbookScreen() {
       stats: r?.stats || { total: 0, thisMonth: 0, types: 0, bySkill: {} },
     });
     setLoadedKinds((m) => (m[k] ? m : { ...m, [k]: true }));
+    // server answered: replay anything saved offline, then refresh from truth
+    if (r !== undefined) {
+      try {
+        const { synced } = await drainOutbox();
+        if (synced > 0 && activeRef.current === k) {
+          const fresh = await api.logbookGet(k).catch(() => undefined);
+          if (fresh && activeRef.current === k) {
+            setData({
+              entries: fresh.entries || [],
+              targets: fresh.targets || [],
+              stats: fresh.stats || { total: 0, thisMonth: 0, types: 0, bySkill: {} },
+            });
+          }
+        }
+      } catch { /* replay failures stay queued for next time */ }
+      readOutbox()
+        .then((ops) => {
+          if (activeRef.current === k) setPendingOps(ops);
+        })
+        .catch(() => {});
+    }
   }, []);
 
-  useEffect(() => {
-    activeRef.current = kind;
-    if (kind === 'procedure') analytics.track('logbook_viewed');
-    load(kind);
-  }, [kind, load]);
+  useFocusEffect(
+    useCallback(() => {
+      activeRef.current = kind;
+      if (kind === 'procedure') analytics.track('logbook_viewed');
+      load(kind);
+      readOutbox()
+        .then((ops) => {
+          if (activeRef.current === kind) setPendingOps(ops);
+        })
+        .catch(() => {});
+    }, [kind, load]),
+  );
 
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<Entry | null>(null);
@@ -152,22 +197,29 @@ export default function LogbookScreen() {
     const title = fTitle.trim();
     if (!title || saving) return;
     setSaving(true);
+    const payload = {
+      kind: formKind,
+      title,
+      status: fStatus,
+      date: fDate || null,
+      time: fTime,
+      detail: fDetail,
+      notes: fNotes,
+    };
     try {
-      const payload = {
-        kind: formKind,
-        title,
-        status: fStatus,
-        date: fDate || null,
-        time: fTime,
-        detail: fDetail,
-        notes: fNotes,
-      };
       if (editing) await api.logbookUpdate(editing.id, payload);
       else await api.logbookCreate(payload);
       setEditorOpen(false);
       await load(kind);
     } catch {
-      Alert.alert('Could not save', 'Check your connection and try again.');
+      // offline: keep it on the device, show it now, sync on next load
+      try {
+        if (editing) await enqueueUpdate(editing.id, payload);
+        else await enqueueCreate(payload);
+      } catch { /* storage full: fall through to the alert */ }
+      setEditorOpen(false);
+      refreshQueue();
+      Alert.alert('Saved on device', 'No connection right now — it will sync automatically.');
     } finally {
       setSaving(false);
     }
@@ -180,9 +232,27 @@ export default function LogbookScreen() {
       confirmLabel: 'Delete',
     });
     if (!ok) return;
-    await api.logbookDelete(editing.id);
-    setEditorOpen(false);
-    await load(kind);
+    // never reached the server: just drop its queued ops, nothing to sync
+    if (isLocalId(editing.id)) {
+      try {
+        await enqueueDelete(editing.id);
+      } catch { /* ignore */ }
+      setEditorOpen(false);
+      await load(kind);
+      return;
+    }
+    try {
+      await api.logbookDelete(editing.id);
+      setEditorOpen(false);
+      await load(kind);
+    } catch {
+      try {
+        await enqueueDelete(editing.id);
+      } catch { /* storage full: fall through to the alert */ }
+      setEditorOpen(false);
+      refreshQueue();
+      Alert.alert('Deleted on device', 'No connection right now — it will sync automatically.');
+    }
   };
 
   const [targetSkill, setTargetSkill] = useState<string | null>(null);
@@ -202,6 +272,13 @@ export default function LogbookScreen() {
       await api.logbookSetTarget(targetSkill, parseInt(fTarget, 10) || 0);
       setTargetSkill(null);
       await load(kind);
+    } catch {
+      try {
+        await enqueueTarget(targetSkill, parseInt(fTarget, 10) || 0);
+      } catch { /* storage full: fall through */ }
+      setTargetSkill(null);
+      refreshQueue();
+      Alert.alert('Saved on device', 'No connection right now — it will sync automatically.');
     } finally {
       setSavingTarget(false);
     }
@@ -210,6 +287,12 @@ export default function LogbookScreen() {
   const stats = data?.stats;
   const targetMap: Record<string, number> = {};
   for (const t of data?.targets || []) targetMap[t.skill] = Number(t.target) || 0;
+  // optimistic overlay: queued creates show now, queued deletes hide, queued
+  // updates/targets win until the server confirms (stats recalc on sync)
+  const hidden = queuedDeletedIds(pendingOps);
+  const overlays = queuedUpdates(pendingOps);
+  for (const [skill, target] of queuedTargets(pendingOps)) targetMap[skill] = target;
+  const pendingCount = pendingOps.length;
 
   const skills = Object.keys({ ...(data?.stats.bySkill || {}), ...targetMap })
     .map((name) => ({ name, n: data?.stats.bySkill[name] || 0, target: targetMap[name] || 0 }))
@@ -217,7 +300,14 @@ export default function LogbookScreen() {
     .sort((a, b) => b.n - a.n)
     .slice(0, 3);
 
-  const entries = data?.entries || [];
+  const serverEntries = (data?.entries || []).filter((e) => !hidden.has(String(e.id)));
+  const entries = [
+    ...serverEntries.map((e) => {
+      const over = overlays.get(String(e.id));
+      return over ? { ...e, ...over, id: e.id, kind: e.kind } : e;
+    }),
+    ...queuedCreates(pendingOps, kind),
+  ];
 
   return (
     <Screen>
@@ -244,6 +334,23 @@ export default function LogbookScreen() {
               </Svg>
             </Pressable>
           </View>
+
+          {pendingCount > 0 && (
+            <View
+              accessibilityRole="text"
+              style={{
+                backgroundColor: colors.paper2,
+                borderRadius: 10,
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+                marginBottom: 10,
+              }}
+            >
+              <Text style={{ color: colors.muted, fontSize: 12.5 }}>
+                {pendingCount} change{pendingCount === 1 ? '' : 's'} saved on device — will sync automatically.
+              </Text>
+            </View>
+          )}
 
           <SegmentedPill
             options={[
@@ -339,22 +446,6 @@ export default function LogbookScreen() {
             </>
           )}
         </ScrollView>
-
-        <View
-          style={[
-            s.footer,
-            {
-              backgroundColor: colors.paper,
-              borderTopColor: colors.line,
-              paddingBottom: insets.bottom + 14,
-            },
-          ]}
-        >
-          <PrimaryButton
-            label={kind === 'research' ? '+ Add entry' : '+ Add procedure'}
-            onPress={() => openEditor(null)}
-          />
-        </View>
       </KeyboardAvoidingView>
 
       {/* add / edit */}
@@ -511,7 +602,7 @@ export default function LogbookScreen() {
 
 const s = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { paddingHorizontal: 18, paddingTop: 14, gap: 12, paddingBottom: 22 },
+  scroll: { paddingHorizontal: 18, paddingTop: 14, gap: 12, paddingBottom: 120 },
 
   head: {
     flexDirection: 'row',

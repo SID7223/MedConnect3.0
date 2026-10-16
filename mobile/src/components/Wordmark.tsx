@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleProp, Text, TextStyle } from 'react-native';
-import { NEWSREADER } from '../theme/fonts';
+import { SCRIPT } from '../theme/fonts';
 
 interface WordmarkProps {
   /** font size of the "Med" half */
@@ -11,13 +11,15 @@ interface WordmarkProps {
   style?: StyleProp<TextStyle>;
 }
 
-// The MedPeers wordmark: "Med" in the heavy platform sans + "peers" in
-// UPRIGHT (non-italic) Newsreader Medium.
+// The MedPeers wordmark: "Med" in the heavy platform sans + "Peers" in a
+// joining script hand (Pacifico Regular).
 //
-// "peers" pins fontWeight to '500' on purpose. Nested Text inherits the parent's
-// '900', and Android resolves fontWeight first - it would then hunt for a
-// `Newsreader_500Medium_bold.ttf` that does not exist and silently fall back to
-// the system sans, losing the serif entirely.
+// "Peers" pins fontWeight 'normal' on purpose. The parent carries '900', and
+// if it is inherited Android hunts a bold variant file that does not exist
+// and silently falls back to the system sans (this regressed the wordmark to
+// a plain sans the moment the pin was removed). An explicit normal-bucket
+// weight loads the asset file directly. LetterSpacing stays 0 so the
+// letterforms stay connected.
 export default function Wordmark({ size = 20, color, peersSize, style }: WordmarkProps) {
   const peers = peersSize ?? size + Math.max(1, Math.round(size * 0.08));
   const track = -size * 0.035;
@@ -29,7 +31,7 @@ export default function Wordmark({ size = 20, color, peersSize, style }: Wordmar
       style={[{ fontSize: size, fontWeight: '900', letterSpacing: track, color }, style]}
     >
       Med
-      <Text style={{ fontFamily: NEWSREADER, fontWeight: '500', fontSize: peers, letterSpacing: track * 0.6 }}>
+      <Text style={{ fontFamily: SCRIPT, fontWeight: 'normal', fontSize: peers }}>
         Peers
       </Text>
     </Text>

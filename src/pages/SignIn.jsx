@@ -64,8 +64,8 @@ export default function SignIn() {
 
   return (
     <div className="screen" style={{ paddingTop: 44, textAlign: 'center' }}>
-      <img src="/pwa-192.png" alt="MedConnect" style={{ width: 72, height: 72, borderRadius: 16, margin: '0 auto 16px', display: 'block' }} />
-      <h1 className="h1">MedConnect</h1>
+      <img src="/pwa-192.png" alt="MedPeers" style={{ width: 76, height: 76, borderRadius: 18, margin: '0 auto 16px', display: 'block' }} />
+      <h1 className="h1">MedPeers</h1>
       <p className="sub" style={{ marginBottom: 18 }}>Connect. Study. Succeed.</p>
 
       <div style={{ marginBottom: 26 }}>

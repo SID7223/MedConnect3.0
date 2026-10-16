@@ -1,13 +1,13 @@
 {
-  "name": "MedConnect",
-  "short_name": "MedConnect",
+  "name": "MedPeers",
+  "short_name": "MedPeers",
   "description": "Find your exam study partner, worldwide. Connect. Study. Succeed.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f4f1e8",
-  "theme_color": "#1f4d3f",
+  "theme_color": "#225041",
   "icons": [
     { "src": "/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

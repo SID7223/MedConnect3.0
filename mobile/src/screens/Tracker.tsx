@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   AppState,
   Pressable,
   ScrollView,
@@ -10,9 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import Svg, { Circle as SvgCircle } from 'react-native-svg';
 import Card from '../components/Card';
-import DatePickerField from '../components/DatePickerField';
 import Screen from '../components/Screen';
 import SegmentedPill from '../components/SegmentedPill';
 import { useTheme } from '../context/Theme';
@@ -22,71 +19,10 @@ import { analytics } from '../lib/analytics';
 import { addStudyMinutes, formatHM, localWeek } from '../lib/studyTime';
 import { SERIF } from '../theme/fonts';
 
-// Fixed palette ids (c1..c6) — stored on the topic, reused for the left
-// border + progress ring accent. Fixed hexes like the Checklist picker.
-const TOPIC_COLORS: { id: string; hex: string }[] = [
-  { id: 'c1', hex: '#2c7a4b' },
-  { id: 'c2', hex: '#2563a8' },
-  { id: 'c3', hex: '#7c3a9e' },
-  { id: 'c4', hex: '#E85C2A' },
-  { id: 'c5', hex: '#d14d6e' },
-  { id: 'c6', hex: '#8a8f98' },
-];
-
-const colorHex = (id?: string | null) =>
-  TOPIC_COLORS.find((c) => c.id === id)?.hex ?? TOPIC_COLORS[0].hex;
-
-interface Topic {
-  id: number;
-  name: string;
-  subtitle?: string | null;
-  start_date?: string | null;
-  end_date?: string | null;
-  color?: string | null;
-  progress?: number | null;
-}
-
-const day = (iso?: string | null) => (iso ? iso.slice(0, 10) : '');
-
-function TopicRing({ pct, color, track }: { pct: number; color: string; track: string }) {
-  const r = 20;
-  const c = 2 * Math.PI * r;
-  const clamped = Math.max(0, Math.min(100, pct));
-  return (
-    <View style={styles.ringWrap}>
-      <Svg width={52} height={52}>
-        <SvgCircle cx={26} cy={26} r={r} stroke={track} strokeWidth={5} fill="none" />
-        <SvgCircle
-          cx={26}
-          cy={26}
-          r={r}
-          stroke={color}
-          strokeWidth={5}
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={`${c} ${c}`}
-          strokeDashoffset={c - (c * clamped) / 100}
-          transform="rotate(-90 26 26)"
-        />
-      </Svg>
-      <Text style={[styles.ringText, { color }]}>{`${Math.round(clamped)}%`}</Text>
-    </View>
-  );
-}
-
 export default function TrackerScreen() {
   const { colors } = useTheme();
   // mockup opens Tracker on My study
   const [tab, setTab] = useState('goals');
-
-  const [topics, setTopics] = useState<Topic[] | null>(null);
-  const [topicsErr, setTopicsErr] = useState('');
-  const [name, setName] = useState('');
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
-  const [color, setColor] = useState('c1');
-  const [saving, setSaving] = useState(false);
-  const [formErr, setFormErr] = useState('');
 
   // ── ST4 Goals tab state (local-first, server-synced when deployed) ──
   const { user } = useAuth();
@@ -103,16 +39,6 @@ export default function TrackerScreen() {
 
   const load = useCallback(() => {
     analytics.track('tracker_viewed');
-    setTopicsErr('');
-    api.topicsGet()
-      .then((d: any) => setTopics(Array.isArray(d?.topics) ? d.topics : []))
-      .catch(() => {
-        // Never show raw status strings ("Request failed (404)") — they read
-        // as a server fault. Topics sync needs the backend redeploy; until
-        // then this stays honest but calm.
-        setTopics(null);
-        setTopicsErr('Could not load your topics right now. Check your connection and try again.');
-      });
   }, []);
   useFocusEffect(load);
 
@@ -203,47 +129,6 @@ export default function TrackerScreen() {
     }
   };
 
-  const resetForm = () => {
-    setName('');
-    setStart('');
-    setEnd('');
-    setColor('c1');
-    setFormErr('');
-  };
-
-  const create = async () => {
-    const clean = name.trim();
-    if (!clean) {
-      setFormErr('Give the topic a name.');
-      return;
-    }
-    if (start && end && end < start) {
-      setFormErr('End date is before the start date.');
-      return;
-    }
-    setSaving(true);
-    setFormErr('');
-    try {
-      await api.topicCreate({
-        name: clean,
-        startDate: start || null,
-        endDate: end || null,
-        color,
-      });
-      resetForm();
-      load();
-    } catch (e: any) {
-      const m = String(e?.message || '');
-      setFormErr(
-        /Request failed \(\d+\)/.test(m)
-          ? 'Could not reach the server. Try again in a moment.'
-          : (m || 'Could not create the topic.'),
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <Screen>
       <ScrollView
@@ -257,7 +142,6 @@ export default function TrackerScreen() {
         <SegmentedPill
           options={[
             { key: 'goals', label: 'My study' },
-            { key: 'study', label: 'Topics' },
             { key: 'reminders', label: 'Reminders' },
           ]}
           value={tab}
@@ -299,112 +183,6 @@ export default function TrackerScreen() {
             onReminder={setReminder}
             onSave={() => saveGoal(goalMins)}
           />
-        ) : tab === 'study' ? (
-          <>
-            <Card style={styles.form}>
-              <Text style={[styles.formTitle, { color: colors.ink }]}>Create new topic</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  { backgroundColor: colors.paper, borderColor: colors.line, color: colors.ink },
-                ]}
-                placeholder="e.g. Cardiology, Pharmacology…"
-                placeholderTextColor={colors.subtle}
-                value={name}
-                onChangeText={(t) => {
-                  setName(t);
-                  setFormErr('');
-                }}
-                returnKeyType="done"
-              />
-              <View style={styles.dateRow}>
-                <View style={styles.dateCell}>
-                  <Text style={[styles.fieldLabel, { color: colors.muted }]}>Start date</Text>
-                  <DatePickerField value={start} onPick={setStart} placeholder="Select date" />
-                </View>
-                <View style={styles.dateCell}>
-                  <Text style={[styles.fieldLabel, { color: colors.muted }]}>End date</Text>
-                  <DatePickerField value={end} onPick={setEnd} placeholder="Select date" />
-                </View>
-              </View>
-              <Text style={[styles.fieldLabel, { color: colors.muted }]}>Choose color</Text>
-              <View style={styles.colorRow}>
-                {TOPIC_COLORS.map((c) => {
-                  const on = color === c.id;
-                  return (
-                    <Pressable
-                      key={c.id}
-                      onPress={() => setColor(c.id)}
-                      accessibilityRole="radio"
-                      accessibilityState={{ selected: on }}
-                      accessibilityLabel={`Color ${c.id}`}
-                      style={[
-                        styles.dot,
-                        { backgroundColor: c.hex },
-                        on && styles.dotOn,
-                        on && { borderColor: colors.ink },
-                      ]}
-                    />
-                  );
-                })}
-              </View>
-              {!!formErr && <Text style={styles.err}>{formErr}</Text>}
-              <View style={styles.btnRow}>
-                <Pressable
-                  style={[styles.btnGhost, { borderColor: colors.line }]}
-                  onPress={resetForm}
-                  disabled={saving}
-                >
-                  <Text style={[styles.btnGhostText, { color: colors.ink }]}>Cancel</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.btnSolid, { backgroundColor: colors.forest, opacity: saving ? 0.6 : 1 }]}
-                  onPress={create}
-                  disabled={saving}
-                >
-                  <Text style={[styles.btnText, { color: colors.onForest }]}>
-                    {saving ? 'Saving…' : '+ Start tracking'}
-                  </Text>
-                </Pressable>
-              </View>
-            </Card>
-
-            <Text style={[styles.sectionHead, { color: colors.muted }]}>ACTIVE TOPICS</Text>
-            {topics === null && !topicsErr && (
-              <ActivityIndicator style={styles.loader} color={colors.muted} />
-            )}
-            {!!topicsErr && <Text style={styles.err}>{topicsErr}</Text>}
-            {topics !== null && topics.length === 0 && (
-              <Text style={[styles.empty, { color: colors.muted }]}>
-                No topics yet — create your first one above and it will appear here.
-              </Text>
-            )}
-            {(topics ?? []).map((t) => {
-              const hex = colorHex(t.color);
-              const range = [day(t.start_date), day(t.end_date)].filter(Boolean).join(' → ');
-              return (
-                <View
-                  key={t.id}
-                  style={[
-                    styles.topic,
-                    { backgroundColor: colors.card, borderColor: colors.line, borderLeftColor: hex },
-                  ]}
-                >
-                  <View style={styles.topicBody}>
-                    <Text style={[styles.topicName, { color: colors.ink }]} numberOfLines={1}>
-                      {t.name}
-                    </Text>
-                    {!!range && (
-                      <Text style={[styles.topicSub, { color: colors.muted }]} numberOfLines={1}>
-                        {range}
-                      </Text>
-                    )}
-                  </View>
-                  <TopicRing pct={Number(t.progress) || 0} color={hex} track={colors.line} />
-                </View>
-              );
-            })}
-          </>
         ) : null}
       </ScrollView>
     </Screen>
