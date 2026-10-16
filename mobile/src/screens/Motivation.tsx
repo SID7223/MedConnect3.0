@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path } from 'react-native-svg';
+import { useLocalSearchParams } from 'expo-router';
 import Screen from '../components/Screen';
 import SegmentedPill from '../components/SegmentedPill';
 import Wordmark from '../components/Wordmark';
@@ -63,7 +64,13 @@ function Star({
 
 export default function MotivationScreen() {
   const { colors } = useTheme();
-  const today = quoteOfTheDay();
+  const params = useLocalSearchParams<{ id?: string }>();
+  // The home card navigates with the quote's real id so the card and this
+  // screen always show the same line. Direct opens (no id) fall back to the
+  // deterministic quote-of-the-day.
+  const parsedId = params.id != null ? Number(params.id) : NaN;
+  const byId = Number.isInteger(parsedId) ? quoteById(parsedId) : null;
+  const today: Quote = byId && byId.text ? byId : quoteOfTheDay();
   const [favIds, setFavIds] = useState<number[]>([]);
   const [tab, setTab] = useState<'today' | 'favs'>('today');
   const [theme, setTheme] = useState<QuoteTheme>(THEMES[0]);
@@ -101,7 +108,8 @@ export default function MotivationScreen() {
       const uri = await captureRef(cardRef, { format: 'png', quality: 1 });
       await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Save wallpaper' });
     } catch {
-      // capture or share unavailable - ignore
+      // capture or share failed - tell the user instead of failing silently
+      Alert.alert('Could not save wallpaper', 'Please try again.');
     }
     setSavingWallpaper(false);
   };
@@ -136,6 +144,10 @@ export default function MotivationScreen() {
             <View>
               <View
                 ref={cardRef}
+                // Required by react-native-view-shot on Android: without this
+                // the OS can optimise the view out of the native hierarchy and
+                // the snapshot comes back as a blank/colour-only image.
+                collapsable={false}
                 style={[
                   styles.card,
                   { backgroundColor: theme.bg, borderColor: colors.line, padding: 28, alignItems: 'center' },

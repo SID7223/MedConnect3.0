@@ -23,6 +23,7 @@ import { usePrompts } from '../lib/prompts';
 import Celebration from '../components/Celebration';
 import { DENTAL_EXAMS, EXAMS, needsSubject, subjectOptionsFor } from '../lib/profile-data';
 import { QUESTIONS } from '../lib/qbank';
+import { quoteOfTheDay } from '../lib/quotes';
 import { SERIF } from '../theme/fonts';
 import { border, radius, space } from '../theme/tokens';
 
@@ -107,6 +108,9 @@ export default function HomeScreen() {
   const { user, setUser } = useAuth();
   const { colors, mode } = useTheme();
   const { get, loaded } = useSettings();
+  // Daily motivation shown on the bento card - same deterministic pick the
+  // Motivation screen resolves by id, so the card and the detail never drift.
+  const dailyQuote = quoteOfTheDay();
 
   // §6D contextual prompts - the four deferred profile questions
   const { dismiss, open: promptOpen, homeOpens, bumpHomeOpens, answer } = usePrompts();
@@ -591,7 +595,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.bento}>
                 <BentoCard span={2} bg="solid" color={colors.tileOsce} tone="dark" eyebrow="OSCE" title="Practise stations" sub="Timed mock stations" softColor={mode === 'dark' ? colors.onForest : undefined} onPress={() => { feedTap('osce'); router.push('/osce'); }} />
-                <BentoCard bg="solid" color={colors.forest} title="You’re not behind. You’re on your own timeline." sub="Save as wallpaper" titleLines={3} style={styles.bentoCell} onPress={() => { feedTap('encouragement'); router.push('/motivation'); }} />
+                <BentoCard bg="solid" color={colors.forest} title={dailyQuote.text} sub="Save as wallpaper" titleLines={3} style={styles.bentoCell} onPress={() => { feedTap('encouragement'); router.push({ pathname: '/motivation', params: { id: String(dailyQuote.id) } } as never); }} />
                 {suggestUser && !partnerAdded ? (
                   <BentoCard bg="solid" color={colors.blue} tone="light" eyebrow="PARTNER" title={partnerBusy ? 'Sending…' : String(suggestUser.name || 'Study partner')} sub={`${String(suggestUser.exam || user?.exam || '')}`} trailing={<Sticker tone="ink" label="Add" textStyle={{ fontSize: 12 }} />} style={styles.bentoCell} onPress={() => {
                     feedTap('partner');
