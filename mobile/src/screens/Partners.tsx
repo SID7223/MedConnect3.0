@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Animated, Easing, Pressable, ScrollView, StyleSheet, Text, TextInput, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
 import Screen from '../components/Screen';
@@ -104,6 +104,44 @@ export default function PartnersScreen() {
   const [examFilter, setExamFilter] = useState<string | null | undefined>(undefined);
   const [searchOpen, setSearchOpen] = useState(false);
   const [search, setSearch] = useState('');
+
+  // §04 exam rail: segments scroll under a track that runs flush off the right
+  // screen edge; once the list end is reached - or the options all fit without
+  // scrolling - the track draws its own right border + cap so it reads as a
+  // finished pill. (An overlay can't do it: RN clips overflow:hidden children to
+  // the padding box, so a cover-up leaves the rail's border rows showing past it.)
+  const [trayFits, setTrayFits] = useState(false);
+  const [trayAtEnd, setTrayAtEnd] = useState(false);
+  const trayViewportW = useRef(0);
+  const trayContentW = useRef(0);
+  const trayScrollX = useRef(0);
+  const trayScrollRef = useRef<ScrollView>(null);
+  const wasClosed = useRef(false);
+  const trayClosed = trayFits || trayAtEnd;
+  const syncTrayEnd = () => {
+    // closing the track pulls its right edge 18dp in, so judge fit/end against
+    // the open width - otherwise the width change would flip the flags back and
+    // the track would flicker between open and closed
+    const vw = trayViewportW.current + (trayClosed ? 18 : 0);
+    const cw = trayContentW.current;
+    if (vw <= 0 || cw <= 0) return;
+    const fits = cw <= vw + 1;
+    setTrayFits(fits);
+    setTrayAtEnd(fits || trayScrollX.current + vw >= cw - 2);
+  };
+  const onTrayScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    trayScrollX.current = e.nativeEvent.contentOffset.x;
+    syncTrayEnd();
+  };
+  useEffect(() => {
+    if (trayClosed && !wasClosed.current) {
+      // closing hides 18dp of viewport; carry the offset so the last pill keeps
+      // its gap from the new cap instead of sliding under it
+      const next = trayScrollX.current + 18;
+      requestAnimationFrame(() => trayScrollRef.current?.scrollTo({ x: next, animated: false }));
+    }
+    wasClosed.current = trayClosed;
+  }, [trayClosed]);
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [conns, setConns] = useState<{ connected: any[]; pending: any[]; requests: any[] }>({
@@ -385,20 +423,46 @@ export default function PartnersScreen() {
           )}
 
           {/* the exam filter is this screen's primary control (§04: SegmentedPill
-              "All | USMLE | PLAB | AMC | …"). Natural-width segments in a horizontal
-              scroll so a long exam list reads as a cut-off row, not a squashed one. */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.examSegRow}
+              "All | USMLE | PLAB | AMC | …"). The track starts with its rounded
+              cap at the left page margin and runs flush off the right screen edge
+              while segments scroll under it; when the end of the list is reached
+              - or the options all fit without scrolling - the track pulls its
+              right edge back to the page margin and grows its own right border +
+              cap, closing the rail as a finished pill. */}
+          <View
+            style={[
+              styles.examTrack,
+              trayClosed && styles.examTrackClosed,
+              { backgroundColor: colors.card, borderColor: colors.line },
+            ]}
           >
-            <SegmentedPill
-              value={activeExam ?? 'All'}
-              onChange={(key) => setExamFilter(key === 'All' ? null : key)}
-              options={examSegOptions}
-              segmentStyle={styles.examSeg}
-            />
-          </ScrollView>
+            <ScrollView
+              ref={trayScrollRef}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.examSegRow}
+              scrollEventThrottle={16}
+              onLayout={(e) => {
+                trayViewportW.current = e.nativeEvent.layout.width;
+                syncTrayEnd();
+              }}
+              onContentSizeChange={(w) => {
+                trayContentW.current = w;
+                syncTrayEnd();
+              }}
+              onScroll={onTrayScroll}
+            >
+              <SegmentedPill
+                variant="flush"
+                style={styles.examSegTrack}
+                value={activeExam ?? 'All'}
+                onChange={(key) => setExamFilter(key === 'All' ? null : key)}
+                options={examSegOptions}
+                segmentStyle={styles.examSeg}
+                textStyle={styles.examSegText}
+              />
+            </ScrollView>
+          </View>
 
           {/* tabs */}
           <SegmentedPill
@@ -770,9 +834,33 @@ const styles = StyleSheet.create({
   bannerBody: { flex: 1, minWidth: 0 },
   bannerTitle: { fontSize: 14.5, fontWeight: '700', lineHeight: 18, letterSpacing: -0.2 },
   bannerSub: { fontSize: 12.5, lineHeight: 16, marginTop: 2 },
-  // the exam row bleeds past the screen padding so it can cut off at the edge
-  examSegRow: { marginHorizontal: -18, paddingLeft: 18, paddingRight: 18 },
-  examSeg: { flex: 0 },
+  // the exam filter track is a rail: rounded cap on the left where it starts,
+  // open and unrounded on the right where it runs to the screen edge; the
+  // closed variant (examTrackClosed) pulls that edge back to the page margin
+  // and grows a matching right cap, so the finished list reads as a pill
+  examTrack: {
+    marginRight: -18,
+    borderWidth: 1.5,
+    borderRightWidth: 0,
+    borderTopLeftRadius: 999,
+    borderBottomLeftRadius: 999,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    overflow: 'hidden',
+  },
+  examTrackClosed: {
+    marginRight: 0,
+    borderRightWidth: 1.5,
+    borderTopRightRadius: 999,
+    borderBottomRightRadius: 999,
+  },
+  // trailing padding keeps the last pill clear of the cap when the rail closes
+  examSegRow: { paddingTop: 5, paddingBottom: 5, paddingLeft: 5, paddingRight: 12 },
+  examSegTrack: { backgroundColor: 'transparent', padding: 0, gap: 7 },
+  // roomy h-padding stops short labels ("All") from collapsing into a sliver -
+  // the selected thumb lands as a full circle, matching the design
+  examSeg: { flex: 0, paddingVertical: 10, paddingHorizontal: 10 },
+  examSegText: { fontSize: 14, fontWeight: '600' },
   matchNote: { fontSize: 11.5, lineHeight: 17, marginBottom: -2 },
   loading: { minHeight: 160, alignItems: 'center', justifyContent: 'center' },
   errWrap: { minHeight: 200, alignItems: 'center', justifyContent: 'center', gap: 10 },

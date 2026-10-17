@@ -250,6 +250,8 @@ export default function ResetScreen() {
                   value={pw}
                   onChangeText={setPw}
                   secureTextEntry
+                  autoCapitalize="none"
+                  autoCorrect={false}
                   autoComplete="new-password"
                 />
                 <TextInput
@@ -262,6 +264,8 @@ export default function ResetScreen() {
                   value={pw2}
                   onChangeText={setPw2}
                   secureTextEntry
+                  autoCapitalize="none"
+                  autoCorrect={false}
                   autoComplete="new-password"
                 />
                 <Pressable

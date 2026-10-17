@@ -122,6 +122,8 @@ export default function SignInScreen() {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              autoCorrect={false}
               autoComplete={signInMode === 'register' ? 'new-password' : 'password'}
             />
             <Pressable

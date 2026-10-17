@@ -234,6 +234,16 @@ export default function SegmentedPill({
     options.findIndex((o) => o.key === value)
   );
   const thumbBox = (boxes[targetIdx] ?? b0) as Box;
+  // RN interpolation needs at least 2 points - a single-option pill (e.g. only
+  // "All" while matches load) would otherwise produce NaN and the thumb
+  // silently disappears (dev throws, release just drops the view). Also stay
+  // off the boxes until every segment has been measured - a null box would
+  // crash reading its x offset.
+  const glideIn = options.length > 1 ? options.map((_, i) => i) : [0, 1];
+  const glideOut =
+    options.length > 1 && ready && b0
+      ? boxes.map((b) => (b as Box).x - b0.x)
+      : [0, 0];
   const thumb =
     ready && b0 ? (
       <Animated.View
@@ -251,8 +261,8 @@ export default function SegmentedPill({
             transform: [
               {
                 translateX: pos.interpolate({
-                  inputRange: options.map((_, i) => i),
-                  outputRange: boxes.map((b) => (b as Box).x - b0.x),
+                  inputRange: glideIn,
+                  outputRange: glideOut,
                   extrapolate: 'clamp',
                 }),
               },
